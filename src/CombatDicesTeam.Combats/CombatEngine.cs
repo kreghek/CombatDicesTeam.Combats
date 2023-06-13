@@ -26,7 +26,7 @@ public class CombatEngine
     {
         get
         {
-            var aliveUnits = _allCombatantList.Where(x => !x.IsDead).ToArray();
+            var aliveUnits = _allCombatantList.Where(x => !x.IsInactive).ToArray();
 
             return aliveUnits.All(x => x.Team == aliveUnits.First().Team);
         }
@@ -64,7 +64,7 @@ public class CombatEngine
                 return;
             }
 
-            if (_roundQueue.First().IsDead)
+            if (_roundQueue.First().IsInactive)
             {
                 RemoveCurrentCombatantFromRoundQueue();
             }
@@ -88,7 +88,7 @@ public class CombatEngine
 
     public CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
     {
-        CurrentCombatant.Stats.Single(x => x.Type == UnitStatType.Resolve).Value.Consume(1);
+        SpendStatsOnCombatMovement();
 
         var handSlotIndex = CurrentCombatant.DropMovementFromHand(movement);
 
@@ -163,6 +163,11 @@ public class CombatEngine
         return movementExecution;
     }
 
+    private void SpendStatsOnCombatMovement()
+    {
+        CurrentCombatant.Stats.Single(x => x.Type == UnitStatType.Resolve).Value.Consume(1);
+    }
+
     public ITargetSelectorContext GetCurrentSelectorContext()
     {
         return GetSelectorContext(CurrentCombatant);
@@ -228,7 +233,7 @@ public class CombatEngine
 
     private CombatFinishResult CalcResult()
     {
-        var aliveUnits = _allCombatantList.Where(x => !x.IsDead).ToArray();
+        var aliveUnits = _allCombatantList.Where(x => !x.IsInactive).ToArray();
         var playerUnits = aliveUnits.Where(x => x.IsPlayerControlled);
         var hasPlayerUnits = playerUnits.Any();
 
@@ -358,13 +363,13 @@ public class CombatEngine
         _roundQueue.Clear();
 
         var orderedByResolve = _allCombatantList
-            .Where(x => !x.IsDead)
+            .Where(x => !x.IsInactive)
             .OrderByDescending(x => x.Stats.Single(s => s.Type == UnitStatType.Resolve).Value.Current)
             .ThenByDescending(x => x.IsPlayerControlled)
             .ToArray();
 
         foreach (var unit in orderedByResolve)
-            if (!unit.IsDead)
+            if (!unit.IsInactive)
                 _roundQueue.Add(unit);
     }
 
@@ -404,7 +409,7 @@ public class CombatEngine
 
     private void RestoreStatOfAllCombatants(UnitStatType statType)
     {
-        var combatants = _allCombatantList.Where(x => !x.IsDead);
+        var combatants = _allCombatantList.Where(x => !x.IsInactive);
         foreach (var combatant in combatants)
         {
             var stat = combatant.Stats.Single(x => x.Type == statType);
@@ -443,7 +448,7 @@ public class CombatEngine
         ICombatantEffectLifetimeDispelContext context)
     {
         foreach (var combatant in _allCombatantList)
-            if (!combatant.IsDead)
+            if (!combatant.IsInactive)
                 combatant.UpdateEffects(updateType, context);
     }
 
@@ -458,4 +463,73 @@ public class CombatEngine
     public event EventHandler<CombatantInterruptedEventArgs>? CombatantInterrupted;
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantAssignedNewMove;
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantUsedMove;
+}
+
+public sealed class CombatMovementInstance
+{
+    public CombatMovementInstance(CombatMovement sourceMovement)
+    {
+        SourceMovement = sourceMovement;
+        Effects = sourceMovement.Effects.Select(x => x.CreateInstance()).ToArray();
+        AutoDefenseEffects = sourceMovement.AutoDefenseEffects.Select(x => x.CreateInstance()).ToArray();
+
+        Cost = new CombatMovementCost(new StatValue(sourceMovement.Cost.Amount.Current));
+    }
+
+    public IReadOnlyCollection<IEffectInstance> AutoDefenseEffects { get; }
+
+    public CombatMovementCost Cost { get; }
+
+    public IReadOnlyCollection<IEffectInstance> Effects { get; }
+
+    public CombatMovement SourceMovement { get; }
+}
+
+public sealed class CombatMovement
+{
+    public CombatMovement(CombatMovementSid sid, CombatMovementCost cost, CombatMovementEffectConfig effectConfig)
+    {
+        Sid = sid;
+        Cost = cost;
+        Effects = effectConfig.Effects;
+        AutoDefenseEffects = effectConfig.AutoDefenseEffects;
+    }
+
+    public IReadOnlyCollection<IEffect> AutoDefenseEffects { get; }
+    public CombatMovementCost Cost { get; }
+    public IReadOnlyCollection<IEffect> Effects { get; }
+    public CombatMovementSid Sid { get; }
+    public CombatMovementTags Tags { get; init; }
+}
+
+public interface IEffect
+{
+    IReadOnlyCollection<IEffectCondition> ImposeConditions { get; }
+    ITargetSelector Selector { get; }
+
+    IEffectInstance CreateInstance();
+}
+
+public interface ITargetSelector
+{
+    /// <summary>
+    /// Get estimate target to visualize before execution.
+    /// </summary>
+    IReadOnlyList<CombatMoveTargetEstimate> GetEstimate(ICombatant actor, ITargetSelectorContext context)
+    {
+        return GetMaterialized(actor, context)
+            .Select(x => new CombatMoveTargetEstimate(x, CombatMoveTargetEstimateType.Exactly))
+            .ToArray();
+    }
+
+    IReadOnlyList<Combatant> GetMaterialized(Combatant actor, ITargetSelectorContext context);
+}
+
+public sealed record CombatMoveTargetEstimate(ICombatant Target, CombatMoveTargetEstimateType EstimateType);
+
+public interface ITargetSelectorContext
+{
+    CombatFieldSide ActorSide { get; }
+    IDice Dice { get; }
+    CombatFieldSide EnemySide { get; }
 }
