@@ -1,4 +1,4 @@
-namespace CombatDicesTeam.Combats;
+namespace Core.Combats;
 
 public sealed record CombatMovementCost(IStatValue Amount)
 {

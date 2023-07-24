@@ -1,4 +1,4 @@
-namespace CombatDicesTeam.Combats;
+﻿namespace Core.Combats;
 
 public class CombatFinishedEventArgs : EventArgs
 {
@@ -8,11 +8,4 @@ public class CombatFinishedEventArgs : EventArgs
     }
 
     public CombatFinishResult Result { get; }
-}
-
-public sealed class CombatantTurnStartedEventArgs : CombatantEventArgsBase
-{
-    public CombatantTurnStartedEventArgs(ICombatant combatant) : base(combatant)
-    {
-    }
 }

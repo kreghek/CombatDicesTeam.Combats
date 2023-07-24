@@ -1,4 +1,4 @@
-namespace CombatDicesTeam.Combats;
+﻿namespace Core.Combats;
 
 public abstract class CombatantEventArgsBase : EventArgs
 {

@@ -1,14 +1,14 @@
-namespace CombatDicesTeam.Combats;
+namespace Core.Combats;
 
 public class StatValue : IStatValue
 {
-    private readonly IList<IStatModifier> _modifiers;
+    private readonly IList<IUnitStatModifier> _modifiers;
 
     public StatValue(int baseValue)
     {
         Base = baseValue;
         Current = Base;
-        _modifiers = new List<IStatModifier>();
+        _modifiers = new List<IUnitStatModifier>();
     }
 
     private int Base { get; set; }
@@ -17,7 +17,7 @@ public class StatValue : IStatValue
 
     public int Current { get; private set; }
 
-    public void AddModifier(IStatModifier modifier)
+    public void AddModifier(IUnitStatModifier modifier)
     {
         _modifiers.Add(modifier);
         if (Current > ActualMax)
@@ -25,7 +25,7 @@ public class StatValue : IStatValue
             Current = ActualMax;
         }
 
-        ModifierAdded?.Invoke(this, EventArgs.Empty);
+        ModifierAdded?.Invoke(this, new EventArgs());
     }
 
     public void ChangeBase(int newBase)
@@ -58,7 +58,7 @@ public class StatValue : IStatValue
         }
     }
 
-    public void RemoveModifier(IStatModifier modifier)
+    public void RemoveModifier(IUnitStatModifier modifier)
     {
         _modifiers.Remove(modifier);
     }

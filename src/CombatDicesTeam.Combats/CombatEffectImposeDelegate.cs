@@ -1,3 +1,3 @@
-namespace CombatDicesTeam.Combats;
+﻿namespace Core.Combats;
 
 public delegate void CombatEffectImposeDelegate(ICombatant target);

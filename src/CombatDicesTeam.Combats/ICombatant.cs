@@ -1,42 +1,73 @@
-namespace CombatDicesTeam.Combats;
+﻿namespace Core.Combats;
 
 public interface ICombatant
 {
-    bool IsInactive { get; }
+    /// <summary>
+    /// Activity source of the combatant. May be CPU-driven or wait player's intentions.
+    /// </summary>
+    ICombatActorBehaviour Behaviour { get; }
 
-    ITeam Team { get; }
+    /// <summary>
+    /// Identifier of class.
+    /// Class is the group of combatant.
+    /// </summary>
+    string ClassSid { get; }
 
-    void UpdateEffects(CombatantEffectUpdateType updateType,
-        ICombatantEffectLifetimeDispelContext effectLifetimeDispelContext);
+    /// <summary>
+    /// Identifier for debug.
+    /// </summary>
+// ReSharper disable once UnusedAutoPropertyAccessor.Global
+    string? DebugSid { get; init; }
 
-    IReadOnlyCollection<IStat> Stats { get; }
-}
+    /// <summary>
+    /// Is the combatant active?
+    /// </summary>
+    bool IsDead { get; }
 
-public interface IStat
-{
-    IStatType Type { get; }
-    IStatValue Value { get; }
-}
+    /// <summary>
+    /// Combatant side. Player of CPU.
+    /// </summary>
+    bool IsPlayerControlled { get; init; }
 
-public interface IStatType
-{
-}
+    /// <summary>
+    /// Current combatant stats.
+    /// </summary>
+    IReadOnlyCollection<IUnitStat> Stats { get; }
 
-public interface IStatValue
-{
-    int ActualMax { get; }
-    int Current { get; }
-    void AddModifier(IStatModifier modifier);
-    void ChangeBase(int newBase);
-    void Consume(int value);
-    void CurrentChange(int newCurrent);
-    void RemoveModifier(IStatModifier modifier);
-    void Restore(int value);
+    /// <summary>
+    /// Current combatant effects.
+    /// </summary>
+    IReadOnlyCollection<ICombatantStatus> Statuses { get; }
 
-    event EventHandler? ModifierAdded;
-}
+    /// <summary>
+    /// Add effect to combatant.
+    /// </summary>
+    /// <param name="effect">Effect instance.</param>
+    /// <param name="lifetimeImposeContext">
+    /// Content to add effect. To handle some reaction on new effects (change stats, moves, other
+    /// effects).
+    /// </param>
+    void AddStatus(ICombatantStatus effect, ICombatantStatusImposeContext effectImposeContext,
+        ICombatantStatusLifetimeImposeContext lifetimeImposeContext);
 
-public interface IStatModifier
-{
-    int Value { get; }
+    /// <summary>
+    /// Initial method to make combatant ready to fight.
+    /// </summary>
+    void PrepareToCombat(ICombatantStartupContext context);
+
+    void RemoveStatus(ICombatantStatus effect, ICombatantStatusLifetimeDispelContext context);
+
+    /// <summary>
+    /// Deactivate combatant.
+    /// He is not combatant yet.
+    /// </summary>
+    void SetDead();
+
+    /// <summary>
+    /// Update combatant effects.
+    /// </summary>
+    void UpdateStatuses(CombatantStatusUpdateType updateType,
+        ICombatantStatusLifetimeDispelContext effectLifetimeDispelContext);
+
+    IReadOnlyCollection<ICombatMovementContainer> CombatMovementContainers { get; }
 }

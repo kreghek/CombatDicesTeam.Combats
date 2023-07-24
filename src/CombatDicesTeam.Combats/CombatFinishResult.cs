@@ -1,5 +1,8 @@
-namespace CombatDicesTeam.Combats;
+﻿namespace Core.Combats;
 
-public sealed record CombatFinishResult
+public enum CombatFinishResult
 {
+    HeroesAreWinners,
+    MonstersAreWinners,
+    Draw
 }

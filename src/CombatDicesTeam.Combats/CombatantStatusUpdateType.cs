@@ -1,6 +1,6 @@
-namespace CombatDicesTeam.Combats;
+namespace Core.Combats;
 
-public enum CombatantEffectUpdateType
+public enum CombatantStatusUpdateType
 {
     StartRound,
     EndRound,
