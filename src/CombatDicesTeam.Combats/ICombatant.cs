@@ -13,10 +13,12 @@ public interface ICombatant
     /// </summary>
     string ClassSid { get; }
 
+    IReadOnlyCollection<ICombatMovementContainer> CombatMovementContainers { get; }
+
     /// <summary>
     /// Identifier for debug.
     /// </summary>
-// ReSharper disable once UnusedAutoPropertyAccessor.Global
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     string? DebugSid { get; init; }
 
     /// <summary>
@@ -68,6 +70,4 @@ public interface ICombatant
     /// </summary>
     void UpdateStatuses(CombatantStatusUpdateType updateType,
         ICombatantStatusLifetimeDispelContext effectLifetimeDispelContext);
-
-    IReadOnlyCollection<ICombatMovementContainer> CombatMovementContainers { get; }
 }

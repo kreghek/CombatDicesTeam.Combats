@@ -3,9 +3,9 @@
 public interface ICombatMovementContainer
 {
     ICombatMovementContainerType Type { get; }
+    void AppendMove(CombatMovementInstance? combatMovement);
     IReadOnlyList<CombatMovementInstance?> GetItems();
+    void RemoveAt(int index);
 
     void SetMove(CombatMovementInstance? combatMovement, int index);
-    void RemoveAt(int index);
-    void AppendMove(CombatMovementInstance? combatMovement);
 }

@@ -7,7 +7,8 @@ public sealed class ModifyEffectsCombatantStatus : CombatantStatusBase
 {
     private readonly IUnitStatModifier _statModifier;
 
-    public ModifyEffectsCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime, int value) : base(sid, lifetime)
+    public ModifyEffectsCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime, int value) :
+        base(sid, lifetime)
     {
         Value = value;
         _statModifier = new StatModifier(Value);
@@ -32,7 +33,6 @@ public sealed class ModifyEffectsCombatantStatus : CombatantStatusBase
                 }
             }
         }
-
     }
 
     public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)

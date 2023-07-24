@@ -20,18 +20,6 @@ public abstract class CombatEngineBase
         _roundQueue = new List<ICombatant>();
     }
 
-    protected void DoCombatMovementAddToContainer(ICombatant combatant, CombatMovementInstance nextMove, int handSlotIndex)
-    {
-        CombatantAssignedNewMove?.Invoke(this,
-            new CombatantHandChangedEventArgs(combatant, nextMove, handSlotIndex));
-    }
-
-    protected void DoCombatantUsedMovement(ICombatant combatant, CombatMovementInstance movement, int handSlotIndex)
-    {
-        CombatantUsedMove?.Invoke(this,
-            new CombatantHandChangedEventArgs(combatant, movement, handSlotIndex));
-    }
-
     /// <summary>
     /// Current active combatant.
     /// </summary>
@@ -248,6 +236,69 @@ public abstract class CombatEngineBase
         CompleteTurn();
     }
 
+    protected void DoCombatantUsedMovement(ICombatant combatant, CombatMovementInstance movement, int handSlotIndex)
+    {
+        CombatantUsedMove?.Invoke(this,
+            new CombatantHandChangedEventArgs(combatant, movement, handSlotIndex));
+    }
+
+    protected void DoCombatMovementAddToContainer(ICombatant combatant, CombatMovementInstance nextMove,
+        int handSlotIndex)
+    {
+        CombatantAssignedNewMove?.Invoke(this,
+            new CombatantHandChangedEventArgs(combatant, nextMove, handSlotIndex));
+    }
+
+    protected ITargetSelectorContext GetCurrentSelectorContext()
+    {
+        return GetSelectorContext(CurrentCombatant);
+    }
+
+    protected ITargetSelectorContext GetSelectorContext(ICombatant combatant)
+    {
+        if (combatant.IsPlayerControlled)
+        {
+            return new TargetSelectorContext(Field.HeroSide, Field.MonsterSide, _dice);
+        }
+
+        return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice);
+    }
+
+    protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
+        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
+    {
+        if (sourceCoords == destinationCoords && sourceFieldSide == destinationFieldSide)
+        {
+            return;
+        }
+
+        var sourceCombatant = sourceFieldSide[sourceCoords].Combatant;
+        var targetCombatant = destinationFieldSide[destinationCoords].Combatant;
+
+        destinationFieldSide[destinationCoords].Combatant = sourceCombatant;
+
+        if (sourceCombatant is not null)
+        {
+            CombatantHasChangePosition?.Invoke(this,
+                new CombatantHasChangedPositionEventArgs(sourceCombatant, destinationFieldSide, destinationCoords));
+        }
+
+        sourceFieldSide[sourceCoords].Combatant = targetCombatant;
+
+        if (targetCombatant is not null)
+        {
+            CombatantHasChangePosition?.Invoke(this,
+                new CombatantHasChangedPositionEventArgs(targetCombatant, sourceFieldSide, sourceCoords));
+        }
+    }
+
+    protected abstract void PrepareCombatantsToNextRound();
+
+    protected void RemoveCombatantFromQueue(ICombatant combatant)
+    {
+        _roundQueue.Remove(combatant);
+    }
+
     private CombatFinishResult CalcResult()
     {
         var aliveUnits = _allCombatantList.Where(x => !x.IsDead).ToArray();
@@ -326,26 +377,6 @@ public abstract class CombatEngineBase
         throw new InvalidOperationException();
     }
 
-    protected ITargetSelectorContext GetCurrentSelectorContext()
-    {
-        return GetSelectorContext(CurrentCombatant);
-    }
-
-    protected void RemoveCombatantFromQueue(ICombatant combatant)
-    {
-        _roundQueue.Remove(combatant);
-    }
-
-    protected ITargetSelectorContext GetSelectorContext(ICombatant combatant)
-    {
-        if (combatant.IsPlayerControlled)
-        {
-            return new TargetSelectorContext(Field.HeroSide, Field.MonsterSide, _dice);
-        }
-
-        return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice);
-    }
-
     private static CombatFieldSide GetTargetSide(ICombatant target, CombatField field)
     {
         try
@@ -357,34 +388,6 @@ public abstract class CombatEngineBase
         {
             var _ = field.MonsterSide.GetCombatantCoords(target);
             return field.MonsterSide;
-        }
-    }
-
-    protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
-        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
-    {
-        if (sourceCoords == destinationCoords && sourceFieldSide == destinationFieldSide)
-        {
-            return;
-        }
-
-        var sourceCombatant = sourceFieldSide[sourceCoords].Combatant;
-        var targetCombatant = destinationFieldSide[destinationCoords].Combatant;
-
-        destinationFieldSide[destinationCoords].Combatant = sourceCombatant;
-
-        if (sourceCombatant is not null)
-        {
-            CombatantHasChangePosition?.Invoke(this,
-                new CombatantHasChangedPositionEventArgs(sourceCombatant, destinationFieldSide, destinationCoords));
-        }
-
-        sourceFieldSide[sourceCoords].Combatant = targetCombatant;
-
-        if (targetCombatant is not null)
-        {
-            CombatantHasChangePosition?.Invoke(this,
-                new CombatantHasChangedPositionEventArgs(targetCombatant, sourceFieldSide, sourceCoords));
         }
     }
 
@@ -450,8 +453,6 @@ public abstract class CombatEngineBase
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn,
             combatantEffectLifetimeDispelContext);
     }
-
-    protected abstract void PrepareCombatantsToNextRound();
 
     private static (int result, bool isTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
     {

@@ -6,4 +6,7 @@ public interface ICombatantStartupContext
     ICombatantStatusLifetimeImposeContext ImposeStatusLifetimeContext { get; }
 }
 
-public sealed record CombatantStartupContext(ICombatantStatusImposeContext ImposeStatusContext, ICombatantStatusLifetimeImposeContext ImposeStatusLifetimeContext) : ICombatantStartupContext { }
+public sealed record CombatantStartupContext(ICombatantStatusImposeContext ImposeStatusContext,
+    ICombatantStatusLifetimeImposeContext ImposeStatusLifetimeContext) : ICombatantStartupContext
+{
+}

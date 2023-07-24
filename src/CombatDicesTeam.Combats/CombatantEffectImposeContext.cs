@@ -10,6 +10,7 @@ public sealed class CombatantEffectImposeContext : ICombatantStatusImposeContext
     }
 
     public CombatEngineBase Combat { get; }
+
     public void ImposeCombatantStatus(ICombatant target, ICombatantStatusFactory combatantStatusFactory)
     {
         Combat.ImposeCombatantEffect(target, combatantStatusFactory.Create());

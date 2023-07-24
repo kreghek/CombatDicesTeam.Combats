@@ -1,6 +1,6 @@
-namespace CombatDicesTeam.Combats.Effects;
-
 using CombatDicesTeam.Utils;
+
+namespace CombatDicesTeam.Combats.Effects;
 
 public interface IDamageEffectModifier
 {

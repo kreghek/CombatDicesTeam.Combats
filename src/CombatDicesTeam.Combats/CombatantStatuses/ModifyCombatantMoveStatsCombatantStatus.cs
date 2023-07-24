@@ -57,6 +57,7 @@ public sealed class ModifyCombatantMoveStatsCombatantStatus : CombatantStatusBas
 
     private static IEnumerable<CombatMovementInstance> GetAllCombatMoves(ICombatant combatant)
     {
-        return combatant.CombatMovementContainers.SelectMany(x => x.GetItems()).Where(x => x is not null).Select(x => x!);
+        return combatant.CombatMovementContainers.SelectMany(x => x.GetItems()).Where(x => x is not null)
+            .Select(x => x!);
     }
 }

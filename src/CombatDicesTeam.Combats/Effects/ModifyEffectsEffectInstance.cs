@@ -6,7 +6,8 @@ public sealed class ModifyEffectsEffectInstance : EffectInstanceBase<ModifyEffec
 {
     private readonly ICombatantStatusSid _imposedStatusSid;
 
-    public ModifyEffectsEffectInstance(ICombatantStatusSid imposedStatusSid, ModifyEffectsEffect baseEffect) : base(baseEffect)
+    public ModifyEffectsEffectInstance(ICombatantStatusSid imposedStatusSid, ModifyEffectsEffect baseEffect) :
+        base(baseEffect)
     {
         _imposedStatusSid = imposedStatusSid;
     }
