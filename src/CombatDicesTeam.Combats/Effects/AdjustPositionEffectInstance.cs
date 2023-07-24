@@ -1,4 +1,4 @@
-namespace Core.Combats.Effects;
+namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPositionEffect>
 {
@@ -15,9 +15,9 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
         var heroSide = context.Field.HeroSide;
 
         var isHeroOnTheList = heroSide[currentCoords with
-                              {
-                                  ColumentIndex = 0
-                              }].Combatant is not null ||
+        {
+            ColumentIndex = 0
+        }].Combatant is not null ||
                               heroSide[currentCoords with
                               {
                                   ColumentIndex = 1

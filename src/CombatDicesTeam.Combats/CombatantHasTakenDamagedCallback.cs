@@ -1,4 +1,4 @@
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 public delegate int CombatantHasTakenDamagedCallback(ICombatant targetCombatant, ICombatantStatType damagedStat,
     int damageValue);

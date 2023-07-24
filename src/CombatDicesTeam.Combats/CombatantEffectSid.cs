@@ -1,4 +1,4 @@
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 public record CombatantEffectSid(string Value) : ICombatantStatusSid, IComparable
 {

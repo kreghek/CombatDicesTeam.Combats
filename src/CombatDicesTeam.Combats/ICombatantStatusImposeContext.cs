@@ -1,6 +1,6 @@
-﻿using Core.Combats.CombatantStatuses;
+﻿using CombatDicesTeam.Combats.CombatantStatuses;
 
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 public interface ICombatantStatusImposeContext
 {

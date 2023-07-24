@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 
 using CombatDicesTeam.Dices;
 
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 public abstract class CombatEngineBase
 {
@@ -19,13 +19,13 @@ public abstract class CombatEngineBase
         _allCombatantList = new Collection<ICombatant>();
         _roundQueue = new List<ICombatant>();
     }
-    
+
     protected void DoCombatMovementAddToContainer(ICombatant combatant, CombatMovementInstance nextMove, int handSlotIndex)
     {
         CombatantAssignedNewMove?.Invoke(this,
             new CombatantHandChangedEventArgs(combatant, nextMove, handSlotIndex));
     }
-    
+
     protected void DoCombatantUsedMovement(ICombatant combatant, CombatMovementInstance movement, int handSlotIndex)
     {
         CombatantUsedMove?.Invoke(this,
@@ -197,7 +197,7 @@ public abstract class CombatEngineBase
     {
         InitializeCombatFieldSide(heroes, Field.HeroSide);
         InitializeCombatFieldSide(monsters, Field.MonsterSide);
-        
+
         foreach (var combatant in _allCombatantList)
         {
             var startUpContext = new CombatantStartupContext(new CombatantEffectImposeContext(this),
@@ -335,7 +335,7 @@ public abstract class CombatEngineBase
     {
         _roundQueue.Remove(combatant);
     }
-    
+
     protected ITargetSelectorContext GetSelectorContext(ICombatant combatant)
     {
         if (combatant.IsPlayerControlled)

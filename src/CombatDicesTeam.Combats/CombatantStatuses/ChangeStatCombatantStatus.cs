@@ -1,4 +1,4 @@
-namespace Core.Combats.CombatantStatuses;
+namespace CombatDicesTeam.Combats.CombatantStatuses;
 
 /// <summary>
 /// Change max value of specified combatant's stat.

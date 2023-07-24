@@ -1,4 +1,4 @@
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 // ReSharper disable once InconsistentNaming
 public static class IStatValueExtensions

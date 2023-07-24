@@ -1,4 +1,4 @@
-namespace Core.Combats.Effects;
+namespace CombatDicesTeam.Combats.Effects;
 
 public abstract class EffectInstanceBase<TEffect> : IEffectInstance where TEffect : IEffect
 {

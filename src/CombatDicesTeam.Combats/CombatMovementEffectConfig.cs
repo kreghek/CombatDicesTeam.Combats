@@ -1,4 +1,4 @@
-﻿namespace Core.Combats;
+﻿namespace CombatDicesTeam.Combats;
 
 public sealed record CombatMovementEffectConfig(IReadOnlyCollection<IEffect> Effects,
     IReadOnlyCollection<IEffect> AutoDefenseEffects)

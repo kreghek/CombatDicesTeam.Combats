@@ -1,7 +1,7 @@
 using CombatDicesTeam.Dices;
 using CombatDicesTeam.Utils;
 
-namespace Core.Combats.Effects;
+namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 {

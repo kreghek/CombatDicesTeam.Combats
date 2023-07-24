@@ -1,6 +1,6 @@
-﻿namespace Core.Combats;
+﻿namespace CombatDicesTeam.Combats;
 
 public interface ICombatMovementContainerType
 {
-    
+
 }

@@ -1,4 +1,4 @@
-﻿namespace Core.Combats.CombatantStatuses;
+﻿namespace CombatDicesTeam.Combats.CombatantStatuses;
 
 public sealed class ModifyEffectsCombatantStatusFactory : ICombatantStatusFactory
 {

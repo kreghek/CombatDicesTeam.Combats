@@ -1,4 +1,4 @@
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 /// <summary>
 /// Status assigned on a combatant.

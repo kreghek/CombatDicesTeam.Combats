@@ -1,4 +1,4 @@
-﻿namespace Core.Combats;
+﻿namespace CombatDicesTeam.Combats;
 
 public sealed class CombatFieldSide
 {
@@ -11,10 +11,10 @@ public sealed class CombatFieldSide
         _matrix = new Matrix<FormationSlot>(COLUMN_COUNT, LINE_COUNT);
 
         for (var columnIndex = 0; columnIndex < COLUMN_COUNT; columnIndex++)
-        for (var lineIndex = 0; lineIndex < LINE_COUNT; lineIndex++)
-        {
-            _matrix[columnIndex, lineIndex] = new FormationSlot(columnIndex, lineIndex);
-        }
+            for (var lineIndex = 0; lineIndex < LINE_COUNT; lineIndex++)
+            {
+                _matrix[columnIndex, lineIndex] = new FormationSlot(columnIndex, lineIndex);
+            }
     }
 
     public int ColumnCount => _matrix.Width;

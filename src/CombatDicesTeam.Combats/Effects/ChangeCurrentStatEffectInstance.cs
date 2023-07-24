@@ -1,6 +1,6 @@
 using CombatDicesTeam.Dices;
 
-namespace Core.Combats.Effects;
+namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeCurrentStatEffect>
 {

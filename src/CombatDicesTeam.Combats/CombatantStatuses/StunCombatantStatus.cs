@@ -1,11 +1,11 @@
-﻿namespace Core.Combats.CombatantStatuses;
+﻿namespace CombatDicesTeam.Combats.CombatantStatuses;
 
 /// <summary>
 /// Combatant with tis condition will pass next turn.
 /// </summary>
 public class StunCombatantStatus : CombatantStatusBase
 {
-    public StunCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime): base(sid, lifetime)
+    public StunCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime) : base(sid, lifetime)
     {
     }
 

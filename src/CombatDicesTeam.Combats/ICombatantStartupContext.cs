@@ -1,4 +1,4 @@
-﻿namespace Core.Combats;
+﻿namespace CombatDicesTeam.Combats;
 
 public interface ICombatantStartupContext
 {
@@ -6,4 +6,4 @@ public interface ICombatantStartupContext
     ICombatantStatusLifetimeImposeContext ImposeStatusLifetimeContext { get; }
 }
 
-public sealed record CombatantStartupContext(ICombatantStatusImposeContext ImposeStatusContext, ICombatantStatusLifetimeImposeContext ImposeStatusLifetimeContext):ICombatantStartupContext{}
+public sealed record CombatantStartupContext(ICombatantStatusImposeContext ImposeStatusContext, ICombatantStatusLifetimeImposeContext ImposeStatusLifetimeContext) : ICombatantStartupContext { }

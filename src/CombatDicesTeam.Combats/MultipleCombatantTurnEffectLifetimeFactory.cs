@@ -1,6 +1,6 @@
-using Core.Combats.CombatantEffectLifetimes;
+using CombatDicesTeam.Combats.CombatantEffectLifetimes;
 
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 public sealed class MultipleCombatantTurnEffectLifetimeFactory : ICombatantStatusLifetimeFactory
 {

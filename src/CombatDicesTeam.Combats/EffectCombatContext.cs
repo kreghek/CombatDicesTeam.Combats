@@ -1,6 +1,6 @@
 ﻿using CombatDicesTeam.Dices;
 
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 public sealed class EffectCombatContext : IStatusCombatContext
 {

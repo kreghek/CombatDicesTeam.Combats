@@ -1,6 +1,6 @@
-using Core.Combats.CombatantStatuses;
+using CombatDicesTeam.Combats.CombatantStatuses;
 
-namespace Core.Combats.Effects;
+namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class AddCombatantStatusEffect : IEffect
 {

@@ -1,3 +1,3 @@
-﻿namespace Core.Combats;
+﻿namespace CombatDicesTeam.Combats;
 
 public record CombatActorBehaviourDataSkill(CombatMovementInstance CombatMovement);

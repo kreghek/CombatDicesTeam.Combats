@@ -1,4 +1,4 @@
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 /// <summary>
 /// Event argumanets to pass combatant effect in a effect's events.

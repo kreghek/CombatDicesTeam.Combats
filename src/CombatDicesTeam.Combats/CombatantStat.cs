@@ -1,4 +1,4 @@
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 public sealed class CombatantStat : IUnitStat
 {

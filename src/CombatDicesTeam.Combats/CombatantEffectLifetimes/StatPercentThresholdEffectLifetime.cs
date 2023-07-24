@@ -1,4 +1,4 @@
-﻿namespace Core.Combats.CombatantEffectLifetimes;
+﻿namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 
 internal class StatPercentThresholdEffectLifetime : ICombatantStatusLifetime
 {

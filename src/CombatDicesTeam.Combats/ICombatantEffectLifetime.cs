@@ -1,4 +1,4 @@
-namespace Core.Combats;
+namespace CombatDicesTeam.Combats;
 
 /// <summary>
 /// Combatant's status lifetime to control the status must be dispelled.
