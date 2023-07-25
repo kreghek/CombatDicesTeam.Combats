@@ -32,6 +32,11 @@ public abstract class CombatEngineBase
     public IReadOnlyCollection<ICombatant> CurrentCombatants => _allCombatantList.ToArray();
 
     /// <summary>
+    /// Current combat queue of turns.
+    /// </summary>
+    public IReadOnlyList<ICombatant> CurrentRoundQueue => _roundQueue.ToArray();
+
+    /// <summary>
     /// Combat field.
     /// </summary>
     public CombatField Field { get; }
@@ -65,11 +70,6 @@ public abstract class CombatEngineBase
             return false;
         }
     }
-
-    /// <summary>
-    /// Current combat queue of turns.
-    /// </summary>
-    public IReadOnlyList<ICombatant> CurrentRoundQueue => _roundQueue.ToArray();
 
     /// <summary>
     /// Complete current turn of combat.
