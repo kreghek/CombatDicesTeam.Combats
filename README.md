@@ -1,3 +1,3 @@
 # CombatDicesTeam.Combats
 
-The library to implement turn-based combats.
+The framework to implement a turn-based tactical combats for indie game devs.
