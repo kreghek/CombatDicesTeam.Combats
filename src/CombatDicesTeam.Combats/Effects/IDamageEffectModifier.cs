@@ -1,8 +1,8 @@
-using CombatDicesTeam.Utils;
+using CombatDicesTeam.GenericRanges;
 
 namespace CombatDicesTeam.Combats.Effects;
 
 public interface IDamageEffectModifier
 {
-    Range<int> Process(Range<int> damage);
+    GenericRange<int> Process(GenericRange<int> damage);
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CombatDicesTeam.Combats", "src\CombatDicesTeam.Combats\CombatDicesTeam.Combats.csproj", "{A659BE77-E9DD-4D4D-82E4-BB59B2933D77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CombatDicesTeam.Utils", "src\CombatDicesTeam.Utils\CombatDicesTeam.Utils.csproj", "{2B236B45-D899-4CAE-959F-5FACE46CD588}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CombatDicesTeam.GenericRanges", "src\CombatDicesTeam.GenericRanges\CombatDicesTeam.GenericRanges.csproj", "{2B236B45-D899-4CAE-959F-5FACE46CD588}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

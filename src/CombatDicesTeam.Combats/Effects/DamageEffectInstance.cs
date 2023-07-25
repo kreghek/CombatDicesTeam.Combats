@@ -1,5 +1,5 @@
 using CombatDicesTeam.Dices;
-using CombatDicesTeam.Utils;
+using CombatDicesTeam.GenericRanges;
 
 namespace CombatDicesTeam.Combats.Effects;
 
@@ -7,10 +7,10 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 {
     public DamageEffectInstance(DamageEffect damageEffect) : base(damageEffect)
     {
-        Damage = new Range<IStatValue>(new StatValue(damageEffect.Damage.Min), new StatValue(damageEffect.Damage.Max));
+        Damage = new GenericRange<IStatValue>(new StatValue(damageEffect.Damage.Min), new StatValue(damageEffect.Damage.Max));
     }
 
-    public Range<IStatValue> Damage { get; }
+    public GenericRange<IStatValue> Damage { get; }
 
     public override void AddModifier(IUnitStatModifier modifier)
     {

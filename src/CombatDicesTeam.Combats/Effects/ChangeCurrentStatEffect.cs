@@ -1,18 +1,18 @@
-using CombatDicesTeam.Utils;
+using CombatDicesTeam.GenericRanges;
 
 namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class ChangeCurrentStatEffect : IEffect
 {
     public ChangeCurrentStatEffect(ITargetSelector selector, ICombatantStatType statType,
-        Range<int> statValue)
+        GenericRange<int> statValue)
     {
         TargetStatType = statType;
         Selector = selector;
         StatValue = statValue;
     }
 
-    public Range<int> StatValue { get; }
+    public GenericRange<int> StatValue { get; }
     public ICombatantStatType TargetStatType { get; }
     public ITargetSelector Selector { get; }
 

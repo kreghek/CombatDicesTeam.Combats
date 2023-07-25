@@ -1,4 +1,4 @@
-using CombatDicesTeam.Utils;
+using CombatDicesTeam.GenericRanges;
 
 namespace CombatDicesTeam.Combats.Effects;
 
@@ -11,8 +11,8 @@ public sealed class MarkDamageEffectModifier : IDamageEffectModifier
         _bonus = bonus;
     }
 
-    public Range<int> Process(Range<int> damage)
+    public GenericRange<int> Process(GenericRange<int> damage)
     {
-        return new Range<int>(damage.Min + _bonus, damage.Max + _bonus);
+        return new GenericRange<int>(damage.Min + _bonus, damage.Max + _bonus);
     }
 }

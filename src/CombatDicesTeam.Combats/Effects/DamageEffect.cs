@@ -1,10 +1,10 @@
-using CombatDicesTeam.Utils;
+using CombatDicesTeam.GenericRanges;
 
 namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class DamageEffect : IEffect
 {
-    public DamageEffect(ITargetSelector selector, DamageType damageType, Range<int> damage)
+    public DamageEffect(ITargetSelector selector, DamageType damageType, GenericRange<int> damage)
     {
         Selector = selector;
         DamageType = damageType;
@@ -12,7 +12,7 @@ public sealed class DamageEffect : IEffect
         Modifiers = ArraySegment<IDamageEffectModifier>.Empty;
     }
 
-    public DamageEffect(ITargetSelector selector, DamageType damageType, Range<int> damage,
+    public DamageEffect(ITargetSelector selector, DamageType damageType, GenericRange<int> damage,
         IReadOnlyList<IDamageEffectModifier> modifiers)
     {
         Selector = selector;
@@ -21,7 +21,7 @@ public sealed class DamageEffect : IEffect
         Modifiers = modifiers;
     }
 
-    public Range<int> Damage { get; }
+    public GenericRange<int> Damage { get; }
     public DamageType DamageType { get; }
     public IReadOnlyList<IDamageEffectModifier> Modifiers { get; }
 

@@ -54,9 +54,7 @@
 	</ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CombatDicesTeam.Utils\CombatDicesTeam.Utils.csproj">
-          <PrivateAssets>all</PrivateAssets>
-      </ProjectReference>
+      <ProjectReference Include="..\CombatDicesTeam.GenericRanges\CombatDicesTeam.GenericRanges.csproj" />
     </ItemGroup>
 
 </Project>

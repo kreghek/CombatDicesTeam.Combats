@@ -1,16 +1,16 @@
-﻿using CombatDicesTeam.Utils;
+﻿using CombatDicesTeam.GenericRanges;
 
 namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class LifeDrawEffect : IEffect
 {
-    public LifeDrawEffect(ITargetSelector selector, Range<int> damage)
+    public LifeDrawEffect(ITargetSelector selector, GenericRange<int> damage)
     {
         Selector = selector;
         Damage = damage;
     }
 
-    public Range<int> Damage { get; }
+    public GenericRange<int> Damage { get; }
 
     public ITargetSelector Selector { get; }
 
