@@ -40,7 +40,7 @@ public abstract class CombatEngineBase
     /// Check the combat is finished.
     /// </summary>
     //TODO Change to combat state (via interface) - inprogress, victory, failure, draw in current game. 
-    public bool Finished
+    public bool IsFinished
     {
         get
         {
@@ -69,7 +69,7 @@ public abstract class CombatEngineBase
     /// <summary>
     /// Current combat queue of turns.
     /// </summary>
-    public IReadOnlyList<ICombatant> RoundQueue => _roundQueue.ToArray();
+    public IReadOnlyList<ICombatant> CurrentRoundQueue => _roundQueue.ToArray();
 
     /// <summary>
     /// Complete current turn of combat.
@@ -94,7 +94,7 @@ public abstract class CombatEngineBase
             {
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
-                if (Finished)
+                if (IsFinished)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -114,7 +114,7 @@ public abstract class CombatEngineBase
             }
             else
             {
-                if (Finished)
+                if (IsFinished)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
