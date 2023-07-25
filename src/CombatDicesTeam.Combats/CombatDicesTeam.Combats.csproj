@@ -39,7 +39,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup>
