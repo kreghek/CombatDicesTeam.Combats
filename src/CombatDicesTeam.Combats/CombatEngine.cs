@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats;
 
 public class CombatEngine
@@ -16,13 +18,14 @@ public class CombatEngine
         _roundQueue = new List<ICombatant>();
     }
 
+    [PublicAPI]
     public IReadOnlyCollection<ICombatant> Combatants => _allCombatantList.ToArray();
 
     public ICombatant CurrentCombatant => _roundQueue.FirstOrDefault() ?? throw new InvalidOperationException();
 
     public ICombatField Field { get; }
 
-    public bool Finished
+    public bool IsFinished
     {
         get
         {
@@ -32,7 +35,8 @@ public class CombatEngine
         }
     }
 
-    public IReadOnlyList<ICombatant> RoundQueue => _roundQueue.ToArray();
+    [PublicAPI]
+    public IReadOnlyList<ICombatant> CurrentRoundQueue => _roundQueue.ToArray();
 
     public void CompleteTurn()
     {
@@ -50,7 +54,7 @@ public class CombatEngine
             {
                 UpdateAllCombatantEffects(CombatantEffectUpdateType.EndRound, context);
 
-                if (Finished)
+                if (IsFinished)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -70,7 +74,7 @@ public class CombatEngine
             }
             else
             {
-                if (Finished)
+                if (IsFinished)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
