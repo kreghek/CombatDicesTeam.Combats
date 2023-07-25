@@ -47,7 +47,8 @@ public interface ICombatant
     /// <param name="effect">Effect instance.</param>
     /// <param name="effectImposeContext">
     /// Context to add status. To handle some reaction on new effects (change stats, moves, other
-    /// effects).</param>
+    /// effects).
+    /// </param>
     /// <param name="lifetimeImposeContext">
     /// Context to add status. To handle some reaction on new effects (change stats, moves, other
     /// effects).
