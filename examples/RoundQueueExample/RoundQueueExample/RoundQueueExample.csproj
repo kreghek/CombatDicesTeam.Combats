@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\CombatDicesTeam.Combats\CombatDicesTeam.Combats.csproj" />
+    <ProjectReference Include="..\..\..\src\CombatDicesTeam.GenericRanges\CombatDicesTeam.GenericRanges.csproj" />
+  </ItemGroup>
+
+</Project>

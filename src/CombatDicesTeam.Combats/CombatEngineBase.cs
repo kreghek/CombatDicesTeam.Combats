@@ -4,16 +4,23 @@ using CombatDicesTeam.Dices;
 
 namespace CombatDicesTeam.Combats;
 
+public interface IRoundQueueResolver
+{
+    IReadOnlyList<ICombatant> GetCurrentRoundQueue(IReadOnlyCollection<ICombatant> combatants);
+}
+
 public abstract class CombatEngineBase
 {
     protected readonly IList<ICombatant> _allCombatantList;
 
     protected readonly IDice _dice;
+    private readonly IRoundQueueResolver _roundQueueResolver;
     private readonly IList<ICombatant> _roundQueue;
 
-    public CombatEngineBase(IDice dice)
+    public CombatEngineBase(IDice dice, IRoundQueueResolver roundQueueResolver)
     {
         _dice = dice;
+        _roundQueueResolver = roundQueueResolver;
         Field = new CombatField();
 
         _allCombatantList = new Collection<ICombatant>();
@@ -413,13 +420,9 @@ public abstract class CombatEngineBase
     {
         _roundQueue.Clear();
 
-        var orderedByResolve = _allCombatantList
-            .Where(x => !x.IsDead)
-            .OrderByDescending(x => x.Stats.Single(s => s.Type == CombatantStatTypes.Resolve).Value.Current)
-            .ThenByDescending(x => x.IsPlayerControlled)
-            .ToArray();
+        var combatantQueue = _roundQueueResolver.GetCurrentRoundQueue(_allCombatantList.ToArray());
 
-        foreach (var unit in orderedByResolve)
+        foreach (var unit in combatantQueue)
         {
             if (!unit.IsDead)
             {
