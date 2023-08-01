@@ -6,11 +6,6 @@ using JetBrains.Annotations;
 
 namespace CombatDicesTeam.Combats;
 
-public interface IRoundQueueResolver
-{
-    IReadOnlyList<ICombatant> GetCurrentRoundQueue(IReadOnlyCollection<ICombatant> combatants);
-}
-
 public abstract class CombatEngineBase
 {
     protected readonly IList<ICombatant> _allCombatantList;
@@ -114,6 +109,8 @@ public abstract class CombatEngineBase
                 }
 
                 StartRound(context);
+                
+                CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
 
                 return;
             }
@@ -136,6 +133,8 @@ public abstract class CombatEngineBase
         }
 
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn, context);
+        
+        CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
     /// <summary>
@@ -189,6 +188,7 @@ public abstract class CombatEngineBase
     /// </summary>
     /// <param name="heroes">Combatants of hero side (player)</param>
     /// <param name="monsters">Combatants of monster side (CPU).</param>
+    [PublicAPI]
     public void Initialize(IReadOnlyCollection<FormationSlot> heroes, IReadOnlyCollection<FormationSlot> monsters)
     {
         InitializeCombatFieldSide(heroes, Field.HeroSide);
@@ -203,6 +203,8 @@ public abstract class CombatEngineBase
 
         var context = new CombatantEffectLifetimeDispelContext(this);
         StartRound(context);
+        
+        CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
     /// <summary>
@@ -456,8 +458,6 @@ public abstract class CombatEngineBase
         UpdateAllCombatantEffects(CombatantStatusUpdateType.StartRound, combatantEffectLifetimeDispelContext);
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn,
             combatantEffectLifetimeDispelContext);
-        
-        CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
     private static (int result, bool isTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
