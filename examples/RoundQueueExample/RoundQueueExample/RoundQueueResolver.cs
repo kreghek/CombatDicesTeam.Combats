@@ -1,10 +1,6 @@
 ﻿using CombatDicesTeam.Combats;
 
 namespace RoundQueueExample;
-public class Class1
-{
-
-}
 
 public sealed class RoundQueueResolver : IRoundQueueResolver
 {

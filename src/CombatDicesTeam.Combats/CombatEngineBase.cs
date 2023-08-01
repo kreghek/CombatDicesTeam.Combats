@@ -9,8 +9,8 @@ namespace CombatDicesTeam.Combats;
 public abstract class CombatEngineBase
 {
     protected readonly IList<ICombatant> _allCombatantList;
-
     protected readonly IDice _dice;
+    
     private readonly IRoundQueueResolver _roundQueueResolver;
     private readonly IList<ICombatant> _roundQueue;
 
@@ -419,7 +419,7 @@ public abstract class CombatEngineBase
         }
     }
 
-    private void MakeUnitRoundQueue()
+    private void MakeCombatantRoundQueue()
     {
         _roundQueue.Clear();
 
@@ -427,10 +427,7 @@ public abstract class CombatEngineBase
 
         foreach (var unit in combatantQueue)
         {
-            if (!unit.IsDead)
-            {
-                _roundQueue.Add(unit);
-            }
+            _roundQueue.Add(unit);
         }
     }
 
@@ -452,7 +449,7 @@ public abstract class CombatEngineBase
 
     private void StartRound(ICombatantStatusLifetimeDispelContext combatantEffectLifetimeDispelContext)
     {
-        MakeUnitRoundQueue();
+        MakeCombatantRoundQueue();
         PrepareCombatantsToNextRound();
 
         UpdateAllCombatantEffects(CombatantStatusUpdateType.StartRound, combatantEffectLifetimeDispelContext);
