@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 
 using CombatDicesTeam.Dices;
 
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats;
 
 public interface IRoundQueueResolver
@@ -36,16 +38,19 @@ public abstract class CombatEngineBase
     /// <summary>
     /// All combatants in the combat.
     /// </summary>
+    [PublicAPI]
     public IReadOnlyCollection<ICombatant> CurrentCombatants => _allCombatantList.ToArray();
 
     /// <summary>
     /// Current combat queue of turns.
     /// </summary>
+    [PublicAPI]
     public IReadOnlyList<ICombatant> CurrentRoundQueue => _roundQueue.ToArray();
 
     /// <summary>
     /// Combat field.
     /// </summary>
+    [PublicAPI]
     public CombatField Field { get; }
 
     /// <summary>
@@ -110,8 +115,6 @@ public abstract class CombatEngineBase
 
                 StartRound(context);
 
-                CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
-
                 return;
             }
 
@@ -133,8 +136,6 @@ public abstract class CombatEngineBase
         }
 
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn, context);
-
-        CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
     /// <summary>
@@ -202,8 +203,6 @@ public abstract class CombatEngineBase
 
         var context = new CombatantEffectLifetimeDispelContext(this);
         StartRound(context);
-
-        CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
     /// <summary>
@@ -256,11 +255,13 @@ public abstract class CombatEngineBase
             new CombatantHandChangedEventArgs(combatant, nextMove, handSlotIndex));
     }
 
+    [PublicAPI]
     protected ITargetSelectorContext GetCurrentSelectorContext()
     {
         return GetSelectorContext(CurrentCombatant);
     }
 
+    [PublicAPI]
     protected ITargetSelectorContext GetSelectorContext(ICombatant combatant)
     {
         if (combatant.IsPlayerControlled)
@@ -270,7 +271,7 @@ public abstract class CombatEngineBase
 
         return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice);
     }
-
+    
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
     {
@@ -455,6 +456,8 @@ public abstract class CombatEngineBase
         UpdateAllCombatantEffects(CombatantStatusUpdateType.StartRound, combatantEffectLifetimeDispelContext);
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn,
             combatantEffectLifetimeDispelContext);
+        
+        CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
     private static (int result, bool isTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
@@ -486,17 +489,42 @@ public abstract class CombatEngineBase
         }
     }
 
+    [PublicAPI]
     public event EventHandler<CombatantHasBeenAddedEventArgs>? CombatantHasBeenAdded;
+    
+    [PublicAPI]
     public event EventHandler<CombatantTurnStartedEventArgs>? CombatantStartsTurn;
+    
+    [PublicAPI]
     public event EventHandler<CombatantEndsTurnEventArgs>? CombatantEndsTurn;
+    
+    [PublicAPI]
     public event EventHandler<CombatantDamagedEventArgs>? CombatantHasBeenDamaged;
+    
+    [PublicAPI]
     public event EventHandler<CombatantDefeatedEventArgs>? CombatantHasBeenDefeated;
+    
+    [PublicAPI]
     public event EventHandler<CombatantShiftShapedEventArgs>? CombatantShiftShaped;
+    
+    [PublicAPI]
     public event EventHandler<CombatantHasChangedPositionEventArgs>? CombatantHasChangePosition;
+    
+    [PublicAPI]
     public event EventHandler<CombatFinishedEventArgs>? CombatFinished;
+    
+    [PublicAPI]
     public event EventHandler<CombatantInterruptedEventArgs>? CombatantInterrupted;
+    
+    [PublicAPI]
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantAssignedNewMove;
+    
+    [PublicAPI]
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantUsedMove;
+    
+    [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenImposed;
+    
+    [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
 }
