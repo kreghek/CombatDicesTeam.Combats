@@ -1,6 +1,9 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 
-public sealed class CombatantActiveCombatantEffectLifetime : ICombatantStatusLifetime
+[PublicAPI]
+public sealed class OwnerBoundCombatantEffectLifetime : ICombatantStatusLifetime
 {
     private void CombatCore_CombatantHasBeenDefeated(object? sender, CombatantDefeatedEventArgs e)
     {

@@ -1,5 +1,8 @@
-﻿namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
+﻿using JetBrains.Annotations;
 
+namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
+
+[PublicAPI]
 internal class StatPercentThresholdEffectLifetime : ICombatantStatusLifetime
 {
     private readonly float _minShare;

@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 
+[PublicAPI]
 public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatusLifetime
 {
     private readonly IReadOnlyCollection<ICombatMovePredicate> _combatMovePredicates;
