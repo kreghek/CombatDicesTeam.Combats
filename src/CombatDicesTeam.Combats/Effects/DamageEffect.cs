@@ -4,8 +4,12 @@ namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class DamageEffect : IEffect
 {
-    public DamageEffect(ITargetSelector selector, DamageType damageType, GenericRange<int> damage)
+    private readonly DamageEffectConfig _statConfig;
+
+    public DamageEffect(ITargetSelector selector, DamageType damageType, GenericRange<int> damage, DamageEffectConfig statConfig)
     {
+        _statConfig = statConfig;
+        
         Selector = selector;
         DamageType = damageType;
         Damage = damage;
@@ -13,8 +17,11 @@ public sealed class DamageEffect : IEffect
     }
 
     public DamageEffect(ITargetSelector selector, DamageType damageType, GenericRange<int> damage,
+        DamageEffectConfig statConfig,
         IReadOnlyList<IDamageEffectModifier> modifiers)
     {
+        _statConfig = statConfig;
+        
         Selector = selector;
         DamageType = damageType;
         Damage = damage;
@@ -31,6 +38,6 @@ public sealed class DamageEffect : IEffect
 
     public IEffectInstance CreateInstance()
     {
-        return new DamageEffectInstance(this);
+        return new DamageEffectInstance(this, _statConfig);
     }
 }

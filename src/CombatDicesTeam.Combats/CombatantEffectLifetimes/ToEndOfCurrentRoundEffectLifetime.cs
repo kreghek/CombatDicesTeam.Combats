@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 
+[PublicAPI]
 public sealed class ToEndOfCurrentRoundEffectLifetime : ICombatantStatusLifetime
 {
     public void Update(CombatantStatusUpdateType updateType, ICombatantStatusLifetimeUpdateContext context)

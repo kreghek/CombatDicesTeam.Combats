@@ -2,18 +2,22 @@ using System.Collections.ObjectModel;
 
 using CombatDicesTeam.Dices;
 
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats;
 
 public abstract class CombatEngineBase
 {
     protected readonly IList<ICombatant> _allCombatantList;
-
     protected readonly IDice _dice;
+    
+    private readonly IRoundQueueResolver _roundQueueResolver;
     private readonly IList<ICombatant> _roundQueue;
 
-    public CombatEngineBase(IDice dice)
+    public CombatEngineBase(IDice dice, IRoundQueueResolver roundQueueResolver)
     {
         _dice = dice;
+        _roundQueueResolver = roundQueueResolver;
         Field = new CombatField();
 
         _allCombatantList = new Collection<ICombatant>();
@@ -29,16 +33,19 @@ public abstract class CombatEngineBase
     /// <summary>
     /// All combatants in the combat.
     /// </summary>
+    [PublicAPI]
     public IReadOnlyCollection<ICombatant> CurrentCombatants => _allCombatantList.ToArray();
 
     /// <summary>
     /// Current combat queue of turns.
     /// </summary>
+    [PublicAPI]
     public IReadOnlyList<ICombatant> CurrentRoundQueue => _roundQueue.ToArray();
 
     /// <summary>
     /// Combat field.
     /// </summary>
+    [PublicAPI]
     public CombatField Field { get; }
 
     /// <summary>
@@ -102,7 +109,7 @@ public abstract class CombatEngineBase
                 }
 
                 StartRound(context);
-
+                
                 CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
 
                 return;
@@ -126,7 +133,7 @@ public abstract class CombatEngineBase
         }
 
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn, context);
-
+        
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
@@ -150,7 +157,7 @@ public abstract class CombatEngineBase
             CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageAmount));
         }
 
-        if (combatant.Stats.Single(x => x.Type == CombatantStatTypes.HitPoints).Value.Current <= 0)
+        if (DetectCombatantIsDead(combatant))
         {
             var shiftShape = DetectShapeShifting();
             if (shiftShape)
@@ -169,6 +176,8 @@ public abstract class CombatEngineBase
         return remains;
     }
 
+    protected abstract bool DetectCombatantIsDead(ICombatant combatant);
+
     public void ImposeCombatantEffect(ICombatant targetCombatant, ICombatantStatus combatantEffect)
     {
         targetCombatant.AddStatus(combatantEffect, new CombatantEffectImposeContext(this),
@@ -181,6 +190,7 @@ public abstract class CombatEngineBase
     /// </summary>
     /// <param name="heroes">Combatants of hero side (player)</param>
     /// <param name="monsters">Combatants of monster side (CPU).</param>
+    [PublicAPI]
     public void Initialize(IReadOnlyCollection<FormationSlot> heroes, IReadOnlyCollection<FormationSlot> monsters)
     {
         InitializeCombatFieldSide(heroes, Field.HeroSide);
@@ -195,7 +205,7 @@ public abstract class CombatEngineBase
 
         var context = new CombatantEffectLifetimeDispelContext(this);
         StartRound(context);
-
+        
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
@@ -223,25 +233,32 @@ public abstract class CombatEngineBase
 
         HandleSwapFieldPositions(currentCoords, side, targetCoords, side);
 
-        CurrentCombatant.Stats.Single(x => x.Type == CombatantStatTypes.Maneuver).Value.Consume(1);
+        SpendManeuverResources();
     }
+
+    protected abstract void SpendManeuverResources();
 
     /// <summary>
     /// Used by combatants to restore Resolve stat.
     /// </summary>
+    [PublicAPI]
     public void Wait()
     {
-        RestoreStatOfAllCombatants(CombatantStatTypes.Resolve);
+        RestoreStatsOnWait();
 
         CompleteTurn();
     }
 
+    protected abstract void RestoreStatsOnWait();
+
+    [PublicAPI]
     protected void DoCombatantUsedMovement(ICombatant combatant, CombatMovementInstance movement, int handSlotIndex)
     {
         CombatantUsedMove?.Invoke(this,
             new CombatantHandChangedEventArgs(combatant, movement, handSlotIndex));
     }
 
+    [PublicAPI]
     protected void DoCombatMovementAddToContainer(ICombatant combatant, CombatMovementInstance nextMove,
         int handSlotIndex)
     {
@@ -249,11 +266,13 @@ public abstract class CombatEngineBase
             new CombatantHandChangedEventArgs(combatant, nextMove, handSlotIndex));
     }
 
+    [PublicAPI]
     protected ITargetSelectorContext GetCurrentSelectorContext()
     {
         return GetSelectorContext(CurrentCombatant);
     }
 
+    [PublicAPI]
     protected ITargetSelectorContext GetSelectorContext(ICombatant combatant)
     {
         if (combatant.IsPlayerControlled)
@@ -263,7 +282,7 @@ public abstract class CombatEngineBase
 
         return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice);
     }
-
+    
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
     {
@@ -409,22 +428,15 @@ public abstract class CombatEngineBase
         }
     }
 
-    private void MakeUnitRoundQueue()
+    private void MakeCombatantRoundQueue()
     {
         _roundQueue.Clear();
 
-        var orderedByResolve = _allCombatantList
-            .Where(x => !x.IsDead)
-            .OrderByDescending(x => x.Stats.Single(s => s.Type == CombatantStatTypes.Resolve).Value.Current)
-            .ThenByDescending(x => x.IsPlayerControlled)
-            .ToArray();
+        var combatantQueue = _roundQueueResolver.GetCurrentRoundQueue(_allCombatantList.ToArray());
 
-        foreach (var unit in orderedByResolve)
+        foreach (var unit in combatantQueue)
         {
-            if (!unit.IsDead)
-            {
-                _roundQueue.Add(unit);
-            }
+            _roundQueue.Add(unit);
         }
     }
 
@@ -446,7 +458,7 @@ public abstract class CombatEngineBase
 
     private void StartRound(ICombatantStatusLifetimeDispelContext combatantEffectLifetimeDispelContext)
     {
-        MakeUnitRoundQueue();
+        MakeCombatantRoundQueue();
         PrepareCombatantsToNextRound();
 
         UpdateAllCombatantEffects(CombatantStatusUpdateType.StartRound, combatantEffectLifetimeDispelContext);
@@ -483,17 +495,42 @@ public abstract class CombatEngineBase
         }
     }
 
+    [PublicAPI]
     public event EventHandler<CombatantHasBeenAddedEventArgs>? CombatantHasBeenAdded;
+    
+    [PublicAPI]
     public event EventHandler<CombatantTurnStartedEventArgs>? CombatantStartsTurn;
+    
+    [PublicAPI]
     public event EventHandler<CombatantEndsTurnEventArgs>? CombatantEndsTurn;
+    
+    [PublicAPI]
     public event EventHandler<CombatantDamagedEventArgs>? CombatantHasBeenDamaged;
+    
+    [PublicAPI]
     public event EventHandler<CombatantDefeatedEventArgs>? CombatantHasBeenDefeated;
+    
+    [PublicAPI]
     public event EventHandler<CombatantShiftShapedEventArgs>? CombatantShiftShaped;
+    
+    [PublicAPI]
     public event EventHandler<CombatantHasChangedPositionEventArgs>? CombatantHasChangePosition;
+    
+    [PublicAPI]
     public event EventHandler<CombatFinishedEventArgs>? CombatFinished;
+    
+    [PublicAPI]
     public event EventHandler<CombatantInterruptedEventArgs>? CombatantInterrupted;
+    
+    [PublicAPI]
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantAssignedNewMove;
+    
+    [PublicAPI]
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantUsedMove;
+    
+    [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenImposed;
+    
+    [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
 }

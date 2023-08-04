@@ -1,9 +1,12 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 
-public sealed class CombatantActiveCombatantEffectLifetimeFactory : ICombatantStatusLifetimeFactory
+[PublicAPI]
+public sealed class OwnerBoundCombatantStatusLifetimeFactory : ICombatantStatusLifetimeFactory
 {
     public ICombatantStatusLifetime Create()
     {
-        return new CombatantActiveCombatantEffectLifetime();
+        return new OwnerBoundCombatantEffectLifetime();
     }
 }

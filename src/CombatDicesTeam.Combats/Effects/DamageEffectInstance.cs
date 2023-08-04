@@ -5,8 +5,11 @@ namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 {
-    public DamageEffectInstance(DamageEffect damageEffect) : base(damageEffect)
+    private readonly DamageEffectConfig _damageEffectConfig;
+
+    public DamageEffectInstance(DamageEffect damageEffect, DamageEffectConfig damageEffectConfig) : base(damageEffect)
     {
+        _damageEffectConfig = damageEffectConfig;
         Damage = new GenericRange<IStatValue>(new StatValue(damageEffect.Damage.Min),
             new StatValue(damageEffect.Damage.Max));
     }
@@ -24,9 +27,9 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
         var rolledDamage = context.Dice.Roll(Damage.Min.ActualMax, Damage.Max.ActualMax);
 
         var absorbedDamage =
-            Math.Max(rolledDamage - target.Stats.Single(x => x.Type == CombatantStatTypes.Defense).Value.ActualMax, 0);
+            Math.Max(rolledDamage - target.Stats.Single(x => x.Type == _damageEffectConfig.AbsorptionStatType).Value.ActualMax, 0);
 
-        var damageRemains = context.DamageCombatantStat(target, CombatantStatTypes.ShieldPoints, absorbedDamage);
+        var damageRemains = context.DamageCombatantStat(target, _damageEffectConfig.ProtectionStatType, absorbedDamage);
 
         if (BaseEffect.DamageType == DamageType.ShieldsOnly)
         {
@@ -35,7 +38,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 
         if (damageRemains > 0)
         {
-            context.DamageCombatantStat(target, CombatantStatTypes.HitPoints, damageRemains);
+            context.DamageCombatantStat(target, _damageEffectConfig.MainStatType, damageRemains);
         }
     }
 

@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 
+[PublicAPI]
 public sealed class ToNextCombatantTurnEffectLifetime : ICombatantStatusLifetime
 {
     private bool _currentRoundEnd;
