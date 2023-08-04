@@ -10,9 +10,9 @@ public abstract class CombatEngineBase
 {
     protected readonly IList<ICombatant> _allCombatantList;
     protected readonly IDice _dice;
-    
-    private readonly IRoundQueueResolver _roundQueueResolver;
     private readonly IList<ICombatant> _roundQueue;
+
+    private readonly IRoundQueueResolver _roundQueueResolver;
 
     public CombatEngineBase(IDice dice, IRoundQueueResolver roundQueueResolver)
     {
@@ -109,7 +109,7 @@ public abstract class CombatEngineBase
                 }
 
                 StartRound(context);
-                
+
                 CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
 
                 return;
@@ -133,7 +133,7 @@ public abstract class CombatEngineBase
         }
 
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn, context);
-        
+
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
@@ -176,8 +176,6 @@ public abstract class CombatEngineBase
         return remains;
     }
 
-    protected abstract bool DetectCombatantIsDead(ICombatant combatant);
-
     public void ImposeCombatantEffect(ICombatant targetCombatant, ICombatantStatus combatantEffect)
     {
         targetCombatant.AddStatus(combatantEffect, new CombatantEffectImposeContext(this),
@@ -205,7 +203,7 @@ public abstract class CombatEngineBase
 
         var context = new CombatantEffectLifetimeDispelContext(this);
         StartRound(context);
-        
+
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
@@ -236,8 +234,6 @@ public abstract class CombatEngineBase
         SpendManeuverResources();
     }
 
-    protected abstract void SpendManeuverResources();
-
     /// <summary>
     /// Used by combatants to restore Resolve stat.
     /// </summary>
@@ -249,7 +245,7 @@ public abstract class CombatEngineBase
         CompleteTurn();
     }
 
-    protected abstract void RestoreStatsOnWait();
+    protected abstract bool DetectCombatantIsDead(ICombatant combatant);
 
     [PublicAPI]
     protected void DoCombatantUsedMovement(ICombatant combatant, CombatMovementInstance movement, int handSlotIndex)
@@ -282,7 +278,7 @@ public abstract class CombatEngineBase
 
         return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice);
     }
-    
+
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
     {
@@ -317,6 +313,10 @@ public abstract class CombatEngineBase
     {
         _roundQueue.Remove(combatant);
     }
+
+    protected abstract void RestoreStatsOnWait();
+
+    protected abstract void SpendManeuverResources();
 
     private CombatFinishResult CalcResult()
     {
@@ -497,40 +497,40 @@ public abstract class CombatEngineBase
 
     [PublicAPI]
     public event EventHandler<CombatantHasBeenAddedEventArgs>? CombatantHasBeenAdded;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantTurnStartedEventArgs>? CombatantStartsTurn;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantEndsTurnEventArgs>? CombatantEndsTurn;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantDamagedEventArgs>? CombatantHasBeenDamaged;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantDefeatedEventArgs>? CombatantHasBeenDefeated;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantShiftShapedEventArgs>? CombatantShiftShaped;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantHasChangedPositionEventArgs>? CombatantHasChangePosition;
-    
+
     [PublicAPI]
     public event EventHandler<CombatFinishedEventArgs>? CombatFinished;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantInterruptedEventArgs>? CombatantInterrupted;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantAssignedNewMove;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantUsedMove;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenImposed;
-    
+
     [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
 }

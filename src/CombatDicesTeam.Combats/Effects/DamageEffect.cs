@@ -6,10 +6,11 @@ public sealed class DamageEffect : IEffect
 {
     private readonly DamageEffectConfig _statConfig;
 
-    public DamageEffect(ITargetSelector selector, DamageType damageType, GenericRange<int> damage, DamageEffectConfig statConfig)
+    public DamageEffect(ITargetSelector selector, DamageType damageType, GenericRange<int> damage,
+        DamageEffectConfig statConfig)
     {
         _statConfig = statConfig;
-        
+
         Selector = selector;
         DamageType = damageType;
         Damage = damage;
@@ -21,7 +22,7 @@ public sealed class DamageEffect : IEffect
         IReadOnlyList<IDamageEffectModifier> modifiers)
     {
         _statConfig = statConfig;
-        
+
         Selector = selector;
         DamageType = damageType;
         Damage = damage;
