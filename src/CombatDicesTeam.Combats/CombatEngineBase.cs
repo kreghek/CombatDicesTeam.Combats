@@ -157,7 +157,7 @@ public abstract class CombatEngineBase
             CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageAmount));
         }
 
-        if (combatant.Stats.Single(x => x.Type == CombatantStatTypes.HitPoints).Value.Current <= 0)
+        if (DetectCombatantIsDead(combatant))
         {
             var shiftShape = DetectShapeShifting();
             if (shiftShape)
@@ -175,6 +175,8 @@ public abstract class CombatEngineBase
 
         return remains;
     }
+
+    protected abstract bool DetectCombatantIsDead(ICombatant combatant);
 
     public void ImposeCombatantEffect(ICombatant targetCombatant, ICombatantStatus combatantEffect)
     {
@@ -231,25 +233,32 @@ public abstract class CombatEngineBase
 
         HandleSwapFieldPositions(currentCoords, side, targetCoords, side);
 
-        CurrentCombatant.Stats.Single(x => x.Type == CombatantStatTypes.Maneuver).Value.Consume(1);
+        SpendManeuverResources();
     }
+
+    protected abstract void SpendManeuverResources();
 
     /// <summary>
     /// Used by combatants to restore Resolve stat.
     /// </summary>
+    [PublicAPI]
     public void Wait()
     {
-        RestoreStatOfAllCombatants(CombatantStatTypes.Resolve);
+        RestoreStatsOnWait();
 
         CompleteTurn();
     }
 
+    protected abstract void RestoreStatsOnWait();
+
+    [PublicAPI]
     protected void DoCombatantUsedMovement(ICombatant combatant, CombatMovementInstance movement, int handSlotIndex)
     {
         CombatantUsedMove?.Invoke(this,
             new CombatantHandChangedEventArgs(combatant, movement, handSlotIndex));
     }
 
+    [PublicAPI]
     protected void DoCombatMovementAddToContainer(ICombatant combatant, CombatMovementInstance nextMove,
         int handSlotIndex)
     {
