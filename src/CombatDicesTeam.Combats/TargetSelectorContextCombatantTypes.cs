@@ -4,6 +4,7 @@
 /// Default types of combatants in the conext.
 /// </summary>
 public static class TargetSelectorContextCombatantTypes
-{ 
-    public static ITargetSelectorContextCombatantType Attacker => new TargetSelectorContextCombatantType(nameof(Attacker));
+{
+    public static ITargetSelectorContextCombatantType Attacker =>
+        new TargetSelectorContextCombatantType(nameof(Attacker));
 }

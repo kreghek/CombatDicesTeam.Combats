@@ -12,7 +12,6 @@ public sealed class TargetSelectorContext : ITargetSelectorContext
         EnemySide = enemySide;
         Dice = dice;
 
-
         _combatants = new Dictionary<ITargetSelectorContextCombatantType, List<ICombatant>>
         {
             { TargetSelectorContextCombatantTypes.Attacker, new List<ICombatant>() }
