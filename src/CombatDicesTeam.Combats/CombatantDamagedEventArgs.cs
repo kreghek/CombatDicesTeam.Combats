@@ -1,4 +1,6 @@
-﻿namespace CombatDicesTeam.Combats;
+﻿using JetBrains.Annotations;
+
+namespace CombatDicesTeam.Combats;
 
 public sealed class CombatantDamagedEventArgs : EventArgs
 {
@@ -9,7 +11,12 @@ public sealed class CombatantDamagedEventArgs : EventArgs
         Value = value;
     }
 
+    [PublicAPI]
     public ICombatant Combatant { get; }
+
+    [PublicAPI]
     public ICombatantStatType StatType { get; }
+
+    [PublicAPI]
     public int Value { get; }
 }

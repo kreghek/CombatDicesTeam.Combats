@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats;
 
+[PublicAPI]
 public record CombatantEffectSid(string Value) : ICombatantStatusSid, IComparable
 {
     public override string ToString()
@@ -9,6 +12,6 @@ public record CombatantEffectSid(string Value) : ICombatantStatusSid, IComparabl
 
     public int CompareTo(object? obj)
     {
-        return Value.CompareTo(((CombatantEffectSid?)obj)?.Value);
+        return string.Compare(Value, ((CombatantEffectSid?)obj)?.Value, StringComparison.InvariantCultureIgnoreCase);
     }
 }
