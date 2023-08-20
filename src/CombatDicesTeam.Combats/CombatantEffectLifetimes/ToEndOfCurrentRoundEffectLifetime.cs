@@ -23,11 +23,3 @@ public sealed class ToEndOfCurrentRoundEffectLifetime : ICombatantStatusLifetime
 
     public bool IsExpired { get; private set; }
 }
-
-public sealed class ToEndOfCurrentRoundEffectLifetimeFactory : ICombatantStatusLifetimeFactory
-{
-    public ICombatantStatusLifetime Create()
-    {
-        return new ToEndOfCurrentRoundEffectLifetime();
-    }
-}

@@ -1,5 +1,8 @@
-﻿namespace CombatDicesTeam.Combats;
+﻿using JetBrains.Annotations;
 
+namespace CombatDicesTeam.Combats;
+
+[PublicAPI]
 public sealed class CombatantHandChangedEventArgs : CombatantEventArgsBase
 {
     public CombatantHandChangedEventArgs(ICombatant combatant, CombatMovementInstance move, int handSlotIndex) :
@@ -9,7 +12,9 @@ public sealed class CombatantHandChangedEventArgs : CombatantEventArgsBase
         HandSlotIndex = handSlotIndex;
     }
 
+    [PublicAPI]
     public int HandSlotIndex { get; }
 
+    [PublicAPI]
     public CombatMovementInstance Move { get; }
 }

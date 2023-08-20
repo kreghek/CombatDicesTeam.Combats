@@ -1,5 +1,8 @@
-﻿namespace CombatDicesTeam.Combats;
+﻿using JetBrains.Annotations;
 
+namespace CombatDicesTeam.Combats;
+
+[PublicAPI]
 public sealed record CombatantEffectLifetimeUpdateContext
     (ICombatant Combatant, CombatEngineBase Combat) : ICombatantStatusLifetimeUpdateContext
 {

@@ -1,7 +1,7 @@
 namespace CombatDicesTeam.Combats;
 
 /// <summary>
-/// Event argumanets to pass combatant effect in a effect's events.
+/// Event arguments to pass combatant effect in a effect's events.
 /// </summary>
 public sealed class CombatantEffectEventArgs : CombatantEventArgsBase
 {
