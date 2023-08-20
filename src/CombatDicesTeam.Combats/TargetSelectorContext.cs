@@ -3,4 +3,4 @@
 namespace CombatDicesTeam.Combats;
 
 public sealed record TargetSelectorContext
-    (CombatFieldSide ActorSide, CombatFieldSide EnemySide, IDice Dice) : ITargetSelectorContext;
+    (CombatFieldSide ActorSide, CombatFieldSide EnemySide, IDice Dice, ICombatant? Attacker) : ITargetSelectorContext;

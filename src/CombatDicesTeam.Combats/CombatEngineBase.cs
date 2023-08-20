@@ -265,18 +265,27 @@ public abstract class CombatEngineBase
     [PublicAPI]
     protected ITargetSelectorContext GetCurrentSelectorContext()
     {
-        return GetSelectorContext(CurrentCombatant);
+        return GetSelectorContext(CurrentCombatant, null);
     }
 
+    /// <summary>
+    /// Get context of the target selector.
+    /// </summary>
+    /// <param name="actor"> Actor of the combat movement. </param>
+    /// <param name="attacker"> Current attacker. </param>
+    /// <returns> Returns instance of the target selector context. </returns>
+    /// <remarks>
+    /// In the attack auto-reaction the actor and the attacker is different combatants.
+    /// </remarks>
     [PublicAPI]
-    protected ITargetSelectorContext GetSelectorContext(ICombatant combatant)
+    protected ITargetSelectorContext GetSelectorContext(ICombatant actor, ICombatant? attacker)
     {
-        if (combatant.IsPlayerControlled)
+        if (actor.IsPlayerControlled)
         {
-            return new TargetSelectorContext(Field.HeroSide, Field.MonsterSide, _dice);
+            return new TargetSelectorContext(Field.HeroSide, Field.MonsterSide, _dice, attacker);
         }
 
-        return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice);
+        return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice, attacker);
     }
 
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
