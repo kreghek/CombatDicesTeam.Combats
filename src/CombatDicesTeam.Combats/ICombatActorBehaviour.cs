@@ -2,5 +2,5 @@
 
 public interface ICombatActorBehaviour
 {
-    void HandleIntention(ICombatActorBehaviourData combatData, Action<IIntention> intentionDelegate);
+    void HandleIntention(ICombatantBehaviourData combatData, Action<IIntention> intentionDelegate);
 }
