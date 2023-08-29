@@ -1,11 +1,9 @@
 ﻿namespace CombatDicesTeam.Combats;
 
-public sealed class Singleton<T> where T : class, new()
+public static class Singleton<T> where T : class, new()
 {
-    private static readonly object _lock = new object();
+    private static readonly object _lock = new();
     private static T? _instance;
-
-    private Singleton() { }
 
     public static T Instance
     {
@@ -15,10 +13,7 @@ public sealed class Singleton<T> where T : class, new()
             {
                 lock (_lock)
                 {
-                    if (_instance == null)
-                    {
-                        _instance = new T();
-                    }
+                    _instance ??= new T();
                 }
             }
             return _instance;

@@ -13,5 +13,8 @@ public interface IStatValue
 
     event EventHandler? ModifierAdded;
 
+    /// <summary>
+    /// Current value modifiers to handle or display.
+    /// </summary>
     IReadOnlyCollection<IStatModifier> Modifiers { get; }
 }

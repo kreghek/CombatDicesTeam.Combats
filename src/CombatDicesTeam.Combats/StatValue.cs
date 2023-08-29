@@ -26,7 +26,7 @@ public class StatValue : IStatValue
             Current = ActualMax;
         }
 
-        ModifierAdded?.Invoke(this, new EventArgs());
+        ModifierAdded?.Invoke(this, EventArgs.Empty);
     }
 
     public void ChangeBase(int newBase)
