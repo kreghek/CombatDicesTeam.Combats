@@ -55,8 +55,6 @@ namespace CombatDicesTeam.Combats.Tests
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
 
             var dice = new Mock<IDice>();
-            var damageMin = new Mock<IStatValue>();
-            var damageMax = new Mock<IStatValue>();
 
             dice.Setup(d => d.Roll(It.IsAny<int>())).Returns(10);
 
@@ -96,8 +94,6 @@ namespace CombatDicesTeam.Combats.Tests
             statusCombatContextMock.Setup(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>())).Returns(10);
 
             var dice = new Mock<IDice>();
-            var damageMin = new Mock<IStatValue>();
-            var damageMax = new Mock<IStatValue>();
 
             dice.Setup(d => d.Roll(It.IsAny<int>())).Returns(10);
             
