@@ -4,11 +4,11 @@ public sealed class CombatantStatValue : IStatValue
 {
     private readonly IStatValue _baseValue;
 
-    private readonly IList<IUnitStatModifier> _modifiers;
+    private readonly IList<IStatModifier> _modifiers;
 
     public CombatantStatValue(IStatValue baseValue)
     {
-        _modifiers = new List<IUnitStatModifier>();
+        _modifiers = new List<IStatModifier>();
 
         _baseValue = baseValue;
 
@@ -28,8 +28,9 @@ public sealed class CombatantStatValue : IStatValue
     public int ActualMax => _baseValue.ActualMax + _modifiers.Sum(x => x.Value);
 
     public int Current { get; private set; }
+    public IReadOnlyCollection<IStatModifier> Modifiers => _modifiers.ToArray();
 
-    public void AddModifier(IUnitStatModifier modifier)
+    public void AddModifier(IStatModifier modifier)
     {
         _modifiers.Add(modifier);
 
@@ -61,7 +62,7 @@ public sealed class CombatantStatValue : IStatValue
         Current = Math.Min(newCurrent, ActualMax);
     }
 
-    public void RemoveModifier(IUnitStatModifier modifier)
+    public void RemoveModifier(IStatModifier modifier)
     {
         _modifiers.Remove(modifier);
     }

@@ -18,7 +18,7 @@ public sealed class ModifyCombatantMoveStatsCombatantStatus : CombatantStatusBas
     {
         _stats = stats;
 
-        _modifier = new StatModifier(value);
+        _modifier = new StatModifier(value, Singleton<NullStatModifierSource>.Instance);
     }
 
     public override void Dispel(ICombatant combatant)

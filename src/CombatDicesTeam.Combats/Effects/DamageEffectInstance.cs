@@ -16,7 +16,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 
     public GenericRange<IStatValue> Damage { get; }
 
-    public override void AddModifier(IUnitStatModifier modifier)
+    public override void AddModifier(IStatModifier modifier)
     {
         Damage.Min.AddModifier(modifier);
         Damage.Max.AddModifier(modifier);
@@ -44,7 +44,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
         }
     }
 
-    public override void RemoveModifier(IUnitStatModifier modifier)
+    public override void RemoveModifier(IStatModifier modifier)
     {
         Damage.Min.RemoveModifier(modifier);
         Damage.Max.RemoveModifier(modifier);

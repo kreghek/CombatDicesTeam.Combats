@@ -10,13 +10,13 @@ public abstract class EffectInstanceBase<TEffect> : IEffectInstance where TEffec
     public TEffect BaseEffect { get; }
     public ITargetSelector Selector => BaseEffect.Selector;
 
-    public virtual void AddModifier(IUnitStatModifier modifier)
+    public virtual void AddModifier(IStatModifier modifier)
     {
     }
 
     public abstract void Influence(ICombatant target, IStatusCombatContext context);
 
-    public virtual void RemoveModifier(IUnitStatModifier modifier)
+    public virtual void RemoveModifier(IStatModifier modifier)
     {
     }
 }

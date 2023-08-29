@@ -2,13 +2,13 @@ namespace CombatDicesTeam.Combats;
 
 public class StatValue : IStatValue
 {
-    private readonly IList<IUnitStatModifier> _modifiers;
+    private readonly IList<IStatModifier> _modifiers;
 
     public StatValue(int baseValue)
     {
         Base = baseValue;
         Current = Base;
-        _modifiers = new List<IUnitStatModifier>();
+        _modifiers = new List<IStatModifier>();
     }
 
     private int Base { get; set; }
@@ -16,8 +16,9 @@ public class StatValue : IStatValue
     public int ActualMax => Math.Max(0, Base + _modifiers.Sum(x => x.Value));
 
     public int Current { get; private set; }
+    public IReadOnlyCollection<IStatModifier> Modifiers => _modifiers.ToArray();
 
-    public void AddModifier(IUnitStatModifier modifier)
+    public void AddModifier(IStatModifier modifier)
     {
         _modifiers.Add(modifier);
         if (Current > ActualMax)
@@ -58,7 +59,7 @@ public class StatValue : IStatValue
         }
     }
 
-    public void RemoveModifier(IUnitStatModifier modifier)
+    public void RemoveModifier(IStatModifier modifier)
     {
         _modifiers.Remove(modifier);
     }
