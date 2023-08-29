@@ -286,5 +286,42 @@ namespace CombatDicesTeam.Combats.Tests
 
             statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.IsAny<int>()), Times.Never);
         }
+
+        [Test]
+        public void Influence_HasNoAbsorbtionStat_AbsorbtionIgnored()
+        {
+            // Arrange
+
+            var mainStatType = Mock.Of<ICombatantStatType>();
+            var protectionStatType = Mock.Of<ICombatantStatType>();
+            var absorptionStatType = Mock.Of<ICombatantStatType>();
+
+            var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
+            var targetMock = new Mock<ICombatant>();
+            targetMock.Setup(t => t.Stats)
+                .Returns(new[]
+                {
+                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10))
+                });
+
+            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+
+            var dice = new Mock<IDice>();
+
+            dice.Setup(d => d.Roll(It.IsAny<int>())).Returns(10);
+
+            statusCombatContextMock.Setup(c => c.Dice).Returns(dice.Object);
+
+            // Act
+
+            damageEffectInstance.Influence(targetMock.Object, statusCombatContextMock.Object);
+
+            // Assert
+
+            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>()), Times.Once);
+        }
     }
 }
