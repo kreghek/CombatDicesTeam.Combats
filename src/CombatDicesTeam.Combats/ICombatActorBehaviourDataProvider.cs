@@ -2,5 +2,5 @@
 
 public interface ICombatActorBehaviourDataProvider
 {
-    ICombatActorBehaviourData GetDataSnapshot();
+    ICombatantBehaviourData GetDataSnapshot();
 }

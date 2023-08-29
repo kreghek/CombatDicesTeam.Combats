@@ -16,7 +16,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 
     public GenericRange<IStatValue> Damage { get; }
 
-    public override void AddModifier(IUnitStatModifier modifier)
+    public override void AddModifier(IStatModifier modifier)
     {
         Damage.Min.AddModifier(modifier);
         Damage.Max.AddModifier(modifier);
@@ -26,14 +26,13 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
     {
         var rolledDamage = context.Dice.Roll(Damage.Min.ActualMax, Damage.Max.ActualMax);
 
-        var absorbedDamage =
-            Math.Max(
-                rolledDamage - target.Stats.Single(x => x.Type == _damageEffectConfig.AbsorptionStatType).Value
-                    .ActualMax, 0);
+        var absorbtionStat = target.Stats.SingleOrDefault(x => x.Type == _damageEffectConfig.AbsorptionStatType);
+        var currentAbsorbtionValue = absorbtionStat?.Value?.Current;
+        var absorbedDamage = Math.Max(rolledDamage - currentAbsorbtionValue.GetValueOrDefault(), 0);
 
         var damageRemains = context.DamageCombatantStat(target, _damageEffectConfig.ProtectionStatType, absorbedDamage);
 
-        if (BaseEffect.DamageType == DamageType.ShieldsOnly)
+        if (BaseEffect.DamageType == DamageType.ProtectionOnly)
         {
             return;
         }
@@ -44,7 +43,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
         }
     }
 
-    public override void RemoveModifier(IUnitStatModifier modifier)
+    public override void RemoveModifier(IStatModifier modifier)
     {
         Damage.Min.RemoveModifier(modifier);
         Damage.Max.RemoveModifier(modifier);

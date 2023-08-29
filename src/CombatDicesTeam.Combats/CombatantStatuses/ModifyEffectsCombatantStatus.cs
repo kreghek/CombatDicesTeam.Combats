@@ -5,13 +5,13 @@ namespace CombatDicesTeam.Combats.CombatantStatuses;
 /// </summary>
 public sealed class ModifyEffectsCombatantStatus : CombatantStatusBase
 {
-    private readonly IUnitStatModifier _statModifier;
+    private readonly IStatModifier _statModifier;
 
     public ModifyEffectsCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime, int value) :
         base(sid, lifetime)
     {
         Value = value;
-        _statModifier = new StatModifier(Value);
+        _statModifier = new StatModifier(Value, Singleton<NullStatModifierSource>.Instance);
     }
 
     public int Value { get; }

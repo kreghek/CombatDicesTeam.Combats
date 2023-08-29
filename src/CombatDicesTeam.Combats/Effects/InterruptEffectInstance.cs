@@ -6,7 +6,7 @@ public sealed class InterruptEffectInstance : EffectInstanceBase<InterruptEffect
     {
     }
 
-    public override void AddModifier(IUnitStatModifier modifier)
+    public override void AddModifier(IStatModifier modifier)
     {
     }
 
@@ -15,7 +15,7 @@ public sealed class InterruptEffectInstance : EffectInstanceBase<InterruptEffect
         context.PassTurn(target);
     }
 
-    public override void RemoveModifier(IUnitStatModifier modifier)
+    public override void RemoveModifier(IStatModifier modifier)
     {
     }
 }

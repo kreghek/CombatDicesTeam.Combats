@@ -5,7 +5,7 @@ namespace CombatDicesTeam.Combats.CombatantStatuses;
 /// </summary>
 public sealed class ChangeStatCombatantStatus : CombatantStatusBase
 {
-    private readonly IUnitStatModifier _statModifier;
+    private readonly IStatModifier _statModifier;
 
     public ChangeStatCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
         ICombatantStatType statType,
@@ -15,7 +15,7 @@ public sealed class ChangeStatCombatantStatus : CombatantStatusBase
         StatType = statType;
         Value = value;
 
-        _statModifier = new StatModifier(value);
+        _statModifier = new StatModifier(value, Singleton<NullStatModifierSource>.Instance);
     }
 
     public ICombatantStatType StatType { get; }
