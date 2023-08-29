@@ -284,7 +284,7 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, 9), Times.Never);
+            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.IsAny<int>()), Times.Never);
         }
     }
 }

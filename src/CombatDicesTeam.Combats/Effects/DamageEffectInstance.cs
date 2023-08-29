@@ -26,8 +26,9 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
     {
         var rolledDamage = context.Dice.Roll(Damage.Min.ActualMax, Damage.Max.ActualMax);
 
-        var absorbtionStat = target.Stats.Single(x => x.Type == _damageEffectConfig.AbsorptionStatType);
-        var absorbedDamage = Math.Max(rolledDamage - absorbtionStat.Value.Current, 0);
+        var absorbtionStat = target.Stats.SingleOrDefault(x => x.Type == _damageEffectConfig.AbsorptionStatType);
+        var currentAbsorbtionValue = absorbtionStat?.Value?.Current;
+        var absorbedDamage = Math.Max(rolledDamage - currentAbsorbtionValue.GetValueOrDefault(), 0);
 
         var damageRemains = context.DamageCombatantStat(target, _damageEffectConfig.ProtectionStatType, absorbedDamage);
 
