@@ -29,11 +29,11 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
         var absorbedDamage =
             Math.Max(
                 rolledDamage - target.Stats.Single(x => x.Type == _damageEffectConfig.AbsorptionStatType).Value
-                    .ActualMax, 0);
+                    .Current, 0);
 
         var damageRemains = context.DamageCombatantStat(target, _damageEffectConfig.ProtectionStatType, absorbedDamage);
 
-        if (BaseEffect.DamageType == DamageType.ShieldsOnly)
+        if (BaseEffect.DamageType == DamageType.ProtectionOnly)
         {
             return;
         }
