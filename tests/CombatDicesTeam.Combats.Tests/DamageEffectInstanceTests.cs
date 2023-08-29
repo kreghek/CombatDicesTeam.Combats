@@ -14,9 +14,11 @@ namespace CombatDicesTeam.Combats.Tests
         {
             // ARRANGE
 
-            var damageEffectConfig = new DamageEffectConfig(Mock.Of<ICombatantStatType>(), Mock.Of<ICombatantStatType>(), Mock.Of<ICombatantStatType>());
+            var damageEffectConfig = new DamageEffectConfig(Mock.Of<ICombatantStatType>(),
+                Mock.Of<ICombatantStatType>(), Mock.Of<ICombatantStatType>());
 
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(1, 1), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(1, 1), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
 
             var modifierMock = new Mock<IStatModifier>();
@@ -36,9 +38,11 @@ namespace CombatDicesTeam.Combats.Tests
         {
             // ARRANGE
 
-            var damageEffectConfig = new DamageEffectConfig(Mock.Of<ICombatantStatType>(), Mock.Of<ICombatantStatType>(), Mock.Of<ICombatantStatType>());
+            var damageEffectConfig = new DamageEffectConfig(Mock.Of<ICombatantStatType>(),
+                Mock.Of<ICombatantStatType>(), Mock.Of<ICombatantStatType>());
 
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(1, 1), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(1, 1), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
 
             var modifierMock = new Mock<IStatModifier>();
@@ -65,15 +69,19 @@ namespace CombatDicesTeam.Combats.Tests
             var absorptionStatType = Mock.Of<ICombatantStatType>();
 
             var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(10, 10), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
             var targetMock = new Mock<ICombatant>();
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>( s => s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
@@ -90,7 +98,8 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 10), Times.Once);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 10), Times.Once);
         }
 
         [Test]
@@ -103,15 +112,19 @@ namespace CombatDicesTeam.Combats.Tests
             var absorptionStatType = Mock.Of<ICombatantStatType>();
 
             var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(10, 10), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
             var targetMock = new Mock<ICombatant>();
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
@@ -128,7 +141,9 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.IsAny<int>()), Times.Never);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.IsAny<int>()),
+                Times.Never);
         }
 
         [Test]
@@ -141,24 +156,30 @@ namespace CombatDicesTeam.Combats.Tests
             var absorptionStatType = Mock.Of<ICombatantStatType>();
 
             var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(10, 10), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
             var targetMock = new Mock<ICombatant>();
             targetMock.Setup(t => t.Stats)
-                .Returns(new[] 
-                { 
-                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>( s => s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
+                .Returns(new[]
+                {
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
-            statusCombatContextMock.Setup(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>())).Returns(10);
+            statusCombatContextMock.Setup(c =>
+                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>()))
+                .Returns(10);
 
             var dice = new Mock<IDice>();
 
             dice.Setup(d => d.Roll(It.IsAny<int>())).Returns(10);
-            
+
             statusCombatContextMock.Setup(c => c.Dice).Returns(dice.Object);
 
             // Act
@@ -167,7 +188,8 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, 10), Times.Once);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, 10), Times.Once);
         }
 
         [Test]
@@ -180,19 +202,25 @@ namespace CombatDicesTeam.Combats.Tests
             var absorptionStatType = Mock.Of<ICombatantStatType>();
 
             var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(10, 10), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
             var targetMock = new Mock<ICombatant>();
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>( s => s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1))
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1))
                 });
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
-            statusCombatContextMock.Setup(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>())).Returns(10);
+            statusCombatContextMock.Setup(c =>
+                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>()))
+                .Returns(10);
 
             var dice = new Mock<IDice>();
 
@@ -206,7 +234,8 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 9), Times.Once);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 9), Times.Once);
         }
 
         [Test]
@@ -219,15 +248,20 @@ namespace CombatDicesTeam.Combats.Tests
             var absorptionStatType = Mock.Of<ICombatantStatType>();
 
             var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(10, 10), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
             var targetMock = new Mock<ICombatant>();
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>( s => s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1 && v.ActualMax == 2))
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == absorptionStatType &&
+                        s.Value == Mock.Of<IStatValue>(v => v.Current == 1 && v.ActualMax == 2))
                 });
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
@@ -244,8 +278,10 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 9), Times.Once);
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 8), Times.Never);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 9), Times.Once);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, 8), Times.Never);
         }
 
         [Test]
@@ -258,19 +294,25 @@ namespace CombatDicesTeam.Combats.Tests
             var absorptionStatType = Mock.Of<ICombatantStatType>();
 
             var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.ProtectionOnly, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.ProtectionOnly,
+                new GenericRange<int>(10, 10), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
             var targetMock = new Mock<ICombatant>();
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1)),
-                    Mock.Of<IUnitStat>( s => s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
-            statusCombatContextMock.Setup(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>())).Returns(10);
+            statusCombatContextMock.Setup(c =>
+                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>()))
+                .Returns(10);
 
             var dice = new Mock<IDice>();
 
@@ -284,7 +326,9 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.IsAny<int>()), Times.Never);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.IsAny<int>()),
+                Times.Never);
         }
 
         [Test]
@@ -297,14 +341,17 @@ namespace CombatDicesTeam.Combats.Tests
             var absorptionStatType = Mock.Of<ICombatantStatType>();
 
             var damageEffectConfig = new DamageEffectConfig(mainStatType, protectionStatType, absorptionStatType);
-            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal, new GenericRange<int>(10, 10), damageEffectConfig);
+            var damageEffect = new DamageEffect(Mock.Of<ITargetSelector>(), DamageType.Normal,
+                new GenericRange<int>(10, 10), damageEffectConfig);
             var damageEffectInstance = new DamageEffectInstance(damageEffect, damageEffectConfig);
             var targetMock = new Mock<ICombatant>();
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>( s => s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>( s => s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10))
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
+                    Mock.Of<IUnitStat>(s =>
+                        s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10))
                 });
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
@@ -321,7 +368,9 @@ namespace CombatDicesTeam.Combats.Tests
 
             // Assert
 
-            statusCombatContextMock.Verify(c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>()), Times.Once);
+            statusCombatContextMock.Verify(
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<int>()),
+                Times.Once);
         }
     }
 }

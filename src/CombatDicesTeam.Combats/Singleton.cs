@@ -16,6 +16,7 @@ public static class Singleton<T> where T : class, new()
                     _instance ??= new T();
                 }
             }
+
             return _instance;
         }
     }
