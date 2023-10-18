@@ -1,14 +1,16 @@
 ﻿using JetBrains.Annotations;
 
+using static CombatDicesTeam.Combats.CombatEngineBase;
+
 namespace CombatDicesTeam.Combats;
 
 public sealed class CombatantDamagedEventArgs : EventArgs
 {
-    public CombatantDamagedEventArgs(ICombatant combatant, ICombatantStatType statType, int value)
+    public CombatantDamagedEventArgs(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
     {
         Combatant = combatant;
         StatType = statType;
-        Value = value;
+        Damage = damage;
     }
 
     [PublicAPI]
@@ -18,5 +20,5 @@ public sealed class CombatantDamagedEventArgs : EventArgs
     public ICombatantStatType StatType { get; }
 
     [PublicAPI]
-    public int Value { get; }
+    public StatDamage Damage { get; }
 }
