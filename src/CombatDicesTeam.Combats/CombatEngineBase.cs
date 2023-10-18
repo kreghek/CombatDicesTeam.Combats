@@ -148,13 +148,15 @@ public abstract class CombatEngineBase
         CombatantEffectHasBeenDispeled?.Invoke(this, new CombatantEffectEventArgs(targetCombatant, combatantEffect));
     }
 
-    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, int damageAmount)
-    {
-        var (remains, wasTaken) = TakeStat(combatant, statType, damageAmount);
+    public record StatDamage(int Amount, int SourceAmount);
 
-        if (wasTaken)
+    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    {
+        var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
+
+        if (wasTaken && damage.SourceAmount > 0)
         {
-            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageAmount));
+            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damage));
         }
 
         if (DetectCombatantIsDead(combatant))
