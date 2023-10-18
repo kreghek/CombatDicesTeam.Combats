@@ -1,5 +1,7 @@
 ﻿using CombatDicesTeam.Dices;
 
+using static CombatDicesTeam.Combats.CombatEngineBase;
+
 namespace CombatDicesTeam.Combats;
 
 public interface IStatusCombatContext
@@ -11,7 +13,7 @@ public interface IStatusCombatContext
     ICombatantStatusImposeContext StatusImposedContext { get; }
     ICombatantStatusLifetimeImposeContext StatusLifetimeImposedContext { get; }
 
-    int DamageCombatantStat(ICombatant combatant, ICombatantStatType statType, int value);
+    int DamageCombatantStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage);
 
     void NotifySwapFieldPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide);

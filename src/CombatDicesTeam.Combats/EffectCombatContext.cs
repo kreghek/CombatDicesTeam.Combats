@@ -1,5 +1,7 @@
 ﻿using CombatDicesTeam.Dices;
 
+using static CombatDicesTeam.Combats.CombatEngineBase;
+
 namespace CombatDicesTeam.Combats;
 
 public sealed class EffectCombatContext : IStatusCombatContext
@@ -27,9 +29,9 @@ public sealed class EffectCombatContext : IStatusCombatContext
 
     public ICombatant Actor { get; }
 
-    public int DamageCombatantStat(ICombatant combatant, ICombatantStatType statType, int value)
+    public int DamageCombatantStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
     {
-        return NotifyCombatantDamagedDelegate(combatant, statType, value);
+        return NotifyCombatantDamagedDelegate(combatant, statType, damage);
     }
 
     public void NotifySwapFieldPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
