@@ -17,8 +17,8 @@ public sealed class CombatantDamagedEventArgs : EventArgs
     public ICombatant Combatant { get; }
 
     [PublicAPI]
-    public ICombatantStatType StatType { get; }
+    public StatDamage Damage { get; }
 
     [PublicAPI]
-    public StatDamage Damage { get; }
+    public ICombatantStatType StatType { get; }
 }

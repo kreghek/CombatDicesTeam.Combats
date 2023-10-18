@@ -148,8 +148,6 @@ public abstract class CombatEngineBase
         CombatantEffectHasBeenDispeled?.Invoke(this, new CombatantEffectEventArgs(targetCombatant, combatantEffect));
     }
 
-    public record StatDamage(int Amount, int SourceAmount);
-
     public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
@@ -544,4 +542,6 @@ public abstract class CombatEngineBase
 
     [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
+
+    public record StatDamage(int Amount, int SourceAmount);
 }
