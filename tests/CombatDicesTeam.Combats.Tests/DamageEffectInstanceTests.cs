@@ -176,7 +176,8 @@ namespace CombatDicesTeam.Combats.Tests
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
             statusCombatContextMock.Setup(c =>
-                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<StatDamage>()))
+                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
+                        It.IsAny<StatDamage>()))
                 .Returns(10);
 
             var dice = new Mock<IDice>();
@@ -192,7 +193,8 @@ namespace CombatDicesTeam.Combats.Tests
             // Assert
 
             statusCombatContextMock.Verify(
-                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.Is<StatDamage>(x => x.Amount == 10)), Times.Once);
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType,
+                    It.Is<StatDamage>(x => x.Amount == 10)), Times.Once);
         }
 
         [Test]
@@ -222,7 +224,8 @@ namespace CombatDicesTeam.Combats.Tests
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
             statusCombatContextMock.Setup(c =>
-                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<StatDamage>()))
+                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
+                        It.IsAny<StatDamage>()))
                 .Returns(10);
 
             var dice = new Mock<IDice>();
@@ -238,7 +241,8 @@ namespace CombatDicesTeam.Combats.Tests
             // Assert
 
             statusCombatContextMock.Verify(
-                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.Is<StatDamage>(x => x.Amount == 9)), Times.Once);
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
+                    It.Is<StatDamage>(x => x.Amount == 9)), Times.Once);
         }
 
         [Test]
@@ -282,13 +286,16 @@ namespace CombatDicesTeam.Combats.Tests
             // Assert
 
             statusCombatContextMock.Verify(
-                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.Is<StatDamage>(x => x.Amount == 9)), Times.Once);
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
+                    It.Is<StatDamage>(x => x.Amount == 9)), Times.Once);
             statusCombatContextMock.Verify(
-                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.Is<StatDamage>(x => x.Amount == 8)), Times.Never);
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
+                    It.Is<StatDamage>(x => x.Amount == 8)), Times.Never);
         }
 
         [Test]
-        public void Influence_ProtectionOnlyDamageAboveProtectionCurrentValue_ShouldDamageMainStatWithZeroAmountAndNonZeroSourceAmount()
+        public void
+            Influence_ProtectionOnlyDamageAboveProtectionCurrentValue_ShouldDamageMainStatWithZeroAmountAndNonZeroSourceAmount()
         {
             // Arrange
 
@@ -314,7 +321,8 @@ namespace CombatDicesTeam.Combats.Tests
 
             var statusCombatContextMock = new Mock<IStatusCombatContext>();
             statusCombatContextMock.Setup(c =>
-                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<StatDamage>()))
+                    c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
+                        It.IsAny<StatDamage>()))
                 .Returns(10);
 
             var dice = new Mock<IDice>();
@@ -330,7 +338,8 @@ namespace CombatDicesTeam.Combats.Tests
             // Assert
 
             statusCombatContextMock.Verify(
-                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType, It.Is<StatDamage>(x=>x.Amount == 0 && x.SourceAmount != 0)),
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.MainStatType,
+                    It.Is<StatDamage>(x => x.Amount == 0 && x.SourceAmount != 0)),
                 Times.Never);
         }
 
@@ -372,7 +381,8 @@ namespace CombatDicesTeam.Combats.Tests
             // Assert
 
             statusCombatContextMock.Verify(
-                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType, It.IsAny<StatDamage>()),
+                c => c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
+                    It.IsAny<StatDamage>()),
                 Times.Once);
         }
     }
