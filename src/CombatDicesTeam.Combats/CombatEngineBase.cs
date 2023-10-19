@@ -152,7 +152,7 @@ public abstract class CombatEngineBase
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
 
-        if (wasTaken && damage.SourceAmount > 0)
+        if (damage.SourceAmount > 0)
         {
             CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damage));
         }
