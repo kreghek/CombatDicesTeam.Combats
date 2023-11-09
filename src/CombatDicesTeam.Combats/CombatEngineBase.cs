@@ -22,6 +22,8 @@ public abstract class CombatEngineBase
 
         _allCombatantList = new Collection<ICombatant>();
         _roundQueue = new List<ICombatant>();
+
+        CurrentRoundNumber = 1;
     }
 
     /// <summary>
@@ -29,6 +31,16 @@ public abstract class CombatEngineBase
     /// </summary>
     /// <exception cref="InvalidOperationException"></exception>
     public ICombatant CurrentCombatant => _roundQueue.FirstOrDefault() ?? throw new InvalidOperationException();
+
+    /// <summary>
+    /// Current combat round.
+    /// </summary>
+    /// <remarks>
+    /// You can use it to:
+    /// - Display round number in your game client.
+    /// - Override conditions to finish combat based on round number.
+    /// </remarks>
+    public int CurrentRoundNumber { get; private set; }
 
     /// <summary>
     /// All combatants in the combat.
@@ -204,6 +216,7 @@ public abstract class CombatEngineBase
         var context = new CombatantEffectLifetimeDispelContext(this);
         StartRound(context);
 
+        CombatRoundStarted?.Invoke(this, EventArgs.Empty);
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
@@ -473,6 +486,9 @@ public abstract class CombatEngineBase
         UpdateAllCombatantEffects(CombatantStatusUpdateType.StartRound, combatantEffectLifetimeDispelContext);
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn,
             combatantEffectLifetimeDispelContext);
+
+        CurrentRoundNumber++;
+        CombatRoundStarted.Invoke(this, EventArgs.Empty);
     }
 
     private static (int result, bool isTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
@@ -542,6 +558,8 @@ public abstract class CombatEngineBase
 
     [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
+
+    public event EventHandler? CombatRoundStarted; 
 
     public sealed record StatDamage(int Amount, int SourceAmount)
     {
