@@ -19,37 +19,14 @@ public sealed class EliminatingCombatStateStrategy: ICombatStateStrategy
         // TODO Looks like XOR
         if (hasPlayerUnits && !hasCpuUnits)
         {
-            return true;
+            return CommonCombatStates.Victory;
         }
 
         if (!hasPlayerUnits && hasCpuUnits)
         {
-            return true;
+            return CommonCombatStates.Failure;
         }
 
-        return false;
+        return CommonCombatStates.InProgress;
     }
-}
-
-public interface ICombatState
-{
-    bool IsFinalState { get; }
-}
-
-public class CombatState : ICombatState
-{
-    public CombatState(bool isFinalState = true)
-    {
-        IsFinalState = isFinalState;
-    }
-
-    public bool IsFinalState { get; }
-}
-
-public static class CommonCombatStates
-{
-    public static ICombatState InProgress { get; } = new CombatState(false);
-    public static ICombatState Victory { get; } = new CombatState();
-    public static ICombatState Failure { get; } = new CombatState();
-    public static ICombatState Draw { get; } = new CombatState();
 }
