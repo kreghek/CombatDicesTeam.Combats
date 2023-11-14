@@ -1,8 +1,11 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats;
 
 /// <summary>
 /// Strategy returns victory or failure based on combatants alive.
 /// </summary>
+[PublicAPI]
 public sealed class EliminatingCombatStateStrategy: ICombatStateStrategy
 {
     /// <inheritdoc />
