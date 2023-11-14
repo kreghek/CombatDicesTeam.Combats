@@ -9,4 +9,6 @@ public interface ICombatStateStrategyContext
     /// Combat units.
     /// </summary>
     IReadOnlyCollection<ICombatant> Combatants { get; }
+
+    int CurrentRound { get; }
 }
