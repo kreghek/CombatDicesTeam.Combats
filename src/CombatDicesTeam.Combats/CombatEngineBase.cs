@@ -89,7 +89,7 @@ public abstract class CombatEngineBase
             {
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
-                if (StateStrategy.CalculateCurrentState(this).IsFinalState)
+                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants)).IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -109,7 +109,7 @@ public abstract class CombatEngineBase
             }
             else
             {
-                if (StateStrategy.CalculateCurrentState(this).IsFinalState)
+                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants)).IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
