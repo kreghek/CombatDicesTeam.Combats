@@ -6,7 +6,7 @@ namespace CombatDicesTeam.Combats;
 /// Strategy returns victory or failure based on combatants alive.
 /// </summary>
 [PublicAPI]
-public sealed class EliminatingCombatStateStrategy: ICombatStateStrategy
+public sealed class EliminatingCombatStateStrategy : ICombatStateStrategy
 {
     /// <inheritdoc />
     public ICombatState CalculateCurrentState(ICombatStateStrategyContext context)

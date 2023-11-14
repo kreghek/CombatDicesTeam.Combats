@@ -34,6 +34,12 @@ public abstract class CombatEngineBase
     public ICombatant CurrentCombatant => _roundQueue.FirstOrDefault() ?? throw new InvalidOperationException();
 
     /// <summary>
+    /// All combatants in the combat.
+    /// </summary>
+    [PublicAPI]
+    public IReadOnlyCollection<ICombatant> CurrentCombatants => _allCombatantList.ToArray();
+
+    /// <summary>
     /// Current combat round.
     /// </summary>
     /// <remarks>
@@ -42,12 +48,6 @@ public abstract class CombatEngineBase
     /// - Override conditions to finish combat based on round number.
     /// </remarks>
     public int CurrentRoundNumber { get; private set; }
-
-    /// <summary>
-    /// All combatants in the combat.
-    /// </summary>
-    [PublicAPI]
-    public IReadOnlyCollection<ICombatant> CurrentCombatants => _allCombatantList.ToArray();
 
     /// <summary>
     /// Current combat queue of turns.
@@ -524,7 +524,7 @@ public abstract class CombatEngineBase
     [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
 
-    public event EventHandler? CombatRoundStarted; 
+    public event EventHandler? CombatRoundStarted;
 
     public sealed record StatDamage(int Amount, int SourceAmount)
     {
