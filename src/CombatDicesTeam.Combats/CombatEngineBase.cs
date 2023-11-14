@@ -8,20 +8,24 @@ namespace CombatDicesTeam.Combats;
 
 public abstract class CombatEngineBase
 {
-    protected readonly IList<ICombatant> _allCombatantList;
-    protected readonly IDice _dice;
+    [PublicAPI]
+    protected readonly IList<ICombatant> AllCombatantList;
+    
+    [PublicAPI]
+    protected readonly IDice Dice;
+    
     private readonly IList<ICombatant> _roundQueue;
 
     private readonly IRoundQueueResolver _roundQueueResolver;
 
     protected CombatEngineBase(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy)
     {
-        _dice = dice;
+        Dice = dice;
         _roundQueueResolver = roundQueueResolver;
         StateStrategy = stateStrategy;
         Field = new CombatField();
 
-        _allCombatantList = new Collection<ICombatant>();
+        AllCombatantList = new Collection<ICombatant>();
         _roundQueue = new List<ICombatant>();
 
         CurrentRoundNumber = 1;
@@ -36,8 +40,11 @@ public abstract class CombatEngineBase
     /// <summary>
     /// All combatants in the combat.
     /// </summary>
+    /// <remarks>
+    /// Combat queue will create based on this list.
+    /// </remarks>
     [PublicAPI]
-    public IReadOnlyCollection<ICombatant> CurrentCombatants => _allCombatantList.ToArray();
+    public IReadOnlyCollection<ICombatant> CurrentCombatants => AllCombatantList.ToArray();
 
     /// <summary>
     /// Current combat round.
@@ -89,7 +96,7 @@ public abstract class CombatEngineBase
             {
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
-                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants)).IsFinalState)
+                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber)).IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -109,7 +116,7 @@ public abstract class CombatEngineBase
             }
             else
             {
-                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants)).IsFinalState)
+                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber)).IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -182,7 +189,7 @@ public abstract class CombatEngineBase
         InitializeCombatFieldSide(heroes, Field.HeroSide);
         InitializeCombatFieldSide(monsters, Field.MonsterSide);
 
-        foreach (var combatant in _allCombatantList)
+        foreach (var combatant in AllCombatantList)
         {
             var startUpContext = new CombatantStartupContext(new CombatantEffectImposeContext(this),
                 new CombatantEffectLifetimeImposeContext(combatant, this));
@@ -271,10 +278,10 @@ public abstract class CombatEngineBase
     {
         if (actor.IsPlayerControlled)
         {
-            return new TargetSelectorContext(Field.HeroSide, Field.MonsterSide, _dice, attacker);
+            return new TargetSelectorContext(Field.HeroSide, Field.MonsterSide, Dice, attacker);
         }
 
-        return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, _dice, attacker);
+        return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, Dice, attacker);
     }
 
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
@@ -318,7 +325,7 @@ public abstract class CombatEngineBase
 
     private CombatFinishResult CalcResult()
     {
-        var aliveUnits = _allCombatantList.Where(x => !x.IsDead).ToArray();
+        var aliveUnits = AllCombatantList.Where(x => !x.IsDead).ToArray();
         var playerUnits = aliveUnits.Where(x => x.IsPlayerControlled);
         var hasPlayerUnits = playerUnits.Any();
 
@@ -420,7 +427,7 @@ public abstract class CombatEngineBase
             var coords = new FieldCoords(slot.ColumnIndex, slot.LineIndex);
             side[coords].Combatant = slot.Combatant;
 
-            _allCombatantList.Add(slot.Combatant);
+            AllCombatantList.Add(slot.Combatant);
 
             DoCombatantHasBeenAdded(targetSide: side, targetCoords: coords, slot.Combatant);
         }
@@ -430,7 +437,7 @@ public abstract class CombatEngineBase
     {
         _roundQueue.Clear();
 
-        var combatantQueue = _roundQueueResolver.GetCurrentRoundQueue(_allCombatantList.ToArray());
+        var combatantQueue = _roundQueueResolver.GetCurrentRoundQueue(AllCombatantList.ToArray());
 
         foreach (var unit in combatantQueue)
         {
@@ -476,7 +483,7 @@ public abstract class CombatEngineBase
     private void UpdateAllCombatantEffects(CombatantStatusUpdateType updateType,
         ICombatantStatusLifetimeDispelContext context)
     {
-        foreach (var combatant in _allCombatantList)
+        foreach (var combatant in AllCombatantList)
         {
             if (!combatant.IsDead)
             {

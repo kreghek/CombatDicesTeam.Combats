@@ -3,7 +3,7 @@
 namespace CombatDicesTeam.Combats.Tests;
 
 [TestFixture]
-public class EliminatingCombatStateStrategyTests
+public sealed class EliminatingCombatStateStrategyTests
 {
     [Test]
     public void CalculateCurrentState_OnlyPlayerCombatants_ReturnsVictory()
