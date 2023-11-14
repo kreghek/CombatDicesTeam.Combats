@@ -1,6 +1,6 @@
 namespace CombatDicesTeam.Combats;
 
-public sealed class CombatStateStrategyContext: ICombatStateStrategyContext
+public sealed class CombatStateStrategyContext : ICombatStateStrategyContext
 {
     public CombatStateStrategyContext(IReadOnlyCollection<ICombatant> combatants, int currentRound)
     {
