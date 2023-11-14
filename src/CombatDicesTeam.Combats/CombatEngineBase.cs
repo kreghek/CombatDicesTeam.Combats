@@ -69,7 +69,8 @@ public abstract class CombatEngineBase
     /// <summary>
     /// Calculate the combat state like victory, is progress, ect.
     /// </summary>
-    private ICombatStateStrategy StateStrategy { get; }
+    [PublicAPI]
+    public ICombatStateStrategy StateStrategy { get; }
 
     /// <summary>
     /// Complete current turn of combat.
