@@ -8,15 +8,13 @@ namespace CombatDicesTeam.Combats;
 
 public abstract class CombatEngineBase
 {
-    [PublicAPI]
-    protected readonly IList<ICombatant> AllCombatantList;
-    
-    [PublicAPI]
-    protected readonly IDice Dice;
-    
     private readonly IList<ICombatant> _roundQueue;
 
     private readonly IRoundQueueResolver _roundQueueResolver;
+
+    [PublicAPI] protected readonly IList<ICombatant> AllCombatantList;
+
+    [PublicAPI] protected readonly IDice Dice;
 
     protected CombatEngineBase(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy)
     {
@@ -96,7 +94,9 @@ public abstract class CombatEngineBase
             {
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
-                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber)).IsFinalState)
+                if (StateStrategy
+                    .CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber))
+                    .IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -116,7 +116,9 @@ public abstract class CombatEngineBase
             }
             else
             {
-                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber)).IsFinalState)
+                if (StateStrategy
+                    .CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber))
+                    .IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
