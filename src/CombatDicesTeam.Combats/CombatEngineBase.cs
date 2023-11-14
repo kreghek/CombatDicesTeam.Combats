@@ -14,14 +14,17 @@ public abstract class CombatEngineBase
 
     private readonly IRoundQueueResolver _roundQueueResolver;
 
-    public CombatEngineBase(IDice dice, IRoundQueueResolver roundQueueResolver)
+    protected CombatEngineBase(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy)
     {
         _dice = dice;
         _roundQueueResolver = roundQueueResolver;
+        StateStrategy = stateStrategy;
         Field = new CombatField();
 
         _allCombatantList = new Collection<ICombatant>();
         _roundQueue = new List<ICombatant>();
+
+        CurrentRoundNumber = 1;
     }
 
     /// <summary>
@@ -29,6 +32,16 @@ public abstract class CombatEngineBase
     /// </summary>
     /// <exception cref="InvalidOperationException"></exception>
     public ICombatant CurrentCombatant => _roundQueue.FirstOrDefault() ?? throw new InvalidOperationException();
+
+    /// <summary>
+    /// Current combat round.
+    /// </summary>
+    /// <remarks>
+    /// You can use it to:
+    /// - Display round number in your game client.
+    /// - Override conditions to finish combat based on round number.
+    /// </remarks>
+    public int CurrentRoundNumber { get; private set; }
 
     /// <summary>
     /// All combatants in the combat.
@@ -49,34 +62,9 @@ public abstract class CombatEngineBase
     public CombatField Field { get; }
 
     /// <summary>
-    /// Check the combat is finished.
+    /// Calculate the combat state like victory, is progress, ect.
     /// </summary>
-    //TODO Change to combat state (via interface) - inprogress, victory, failure, draw in current game. 
-    public bool IsFinished
-    {
-        get
-        {
-            var aliveUnits = _allCombatantList.Where(x => !x.IsDead).ToArray();
-            var playerUnits = aliveUnits.Where(x => x.IsPlayerControlled);
-            var hasPlayerUnits = playerUnits.Any();
-
-            var cpuUnits = aliveUnits.Where(x => !x.IsPlayerControlled);
-            var hasCpuUnits = cpuUnits.Any();
-
-            // TODO Looks like XOR
-            if (hasPlayerUnits && !hasCpuUnits)
-            {
-                return true;
-            }
-
-            if (!hasPlayerUnits && hasCpuUnits)
-            {
-                return true;
-            }
-
-            return false;
-        }
-    }
+    private ICombatStateStrategy StateStrategy { get; }
 
     /// <summary>
     /// Complete current turn of combat.
@@ -101,7 +89,7 @@ public abstract class CombatEngineBase
             {
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
-                if (IsFinished)
+                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants)).IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -121,7 +109,7 @@ public abstract class CombatEngineBase
             }
             else
             {
-                if (IsFinished)
+                if (StateStrategy.CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants)).IsFinalState)
                 {
                     var combatResult = CalcResult();
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
@@ -204,6 +192,7 @@ public abstract class CombatEngineBase
         var context = new CombatantEffectLifetimeDispelContext(this);
         StartRound(context);
 
+        CombatRoundStarted?.Invoke(this, EventArgs.Empty);
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
@@ -454,17 +443,6 @@ public abstract class CombatEngineBase
         _roundQueue.RemoveAt(0);
     }
 
-    private void RestoreStatOfAllCombatants(ICombatantStatType statType)
-    {
-        var combatants = _allCombatantList.Where(x => !x.IsDead);
-        foreach (var combatant in combatants)
-        {
-            var stat = combatant.Stats.Single(x => x.Type == statType);
-            var valueToRestore = stat.Value.ActualMax - stat.Value.Current;
-            stat.Value.Restore(valueToRestore);
-        }
-    }
-
     private void StartRound(ICombatantStatusLifetimeDispelContext combatantEffectLifetimeDispelContext)
     {
         MakeCombatantRoundQueue();
@@ -473,6 +451,9 @@ public abstract class CombatEngineBase
         UpdateAllCombatantEffects(CombatantStatusUpdateType.StartRound, combatantEffectLifetimeDispelContext);
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn,
             combatantEffectLifetimeDispelContext);
+
+        CurrentRoundNumber++;
+        CombatRoundStarted?.Invoke(this, EventArgs.Empty);
     }
 
     private static (int result, bool isTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
@@ -542,6 +523,8 @@ public abstract class CombatEngineBase
 
     [PublicAPI]
     public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
+
+    public event EventHandler? CombatRoundStarted; 
 
     public sealed record StatDamage(int Amount, int SourceAmount)
     {
