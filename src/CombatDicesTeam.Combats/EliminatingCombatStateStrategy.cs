@@ -2,28 +2,6 @@ using JetBrains.Annotations;
 
 namespace CombatDicesTeam.Combats;
 
-public sealed class LimitedRoundsCombatStateStrategy : ICombatStateStrategy
-{
-    private readonly ICombatStateStrategy _baseStrategy;
-    private readonly int _maxRound;
-
-    public LimitedRoundsCombatStateStrategy(ICombatStateStrategy baseStrategy, int maxRound)
-    {
-        _baseStrategy = baseStrategy;
-        _maxRound = maxRound;
-    }
-    
-    public ICombatState CalculateCurrentState(ICombatStateStrategyContext context)
-    {
-        if (context.CurrentRound > _maxRound)
-        {
-            return CommonCombatStates.Draw;
-        }
-
-        return _baseStrategy.CalculateCurrentState(context);
-    }
-}
-
 /// <summary>
 /// Strategy returns victory or failure based on combatants alive.
 /// </summary>

@@ -40,8 +40,11 @@ public abstract class CombatEngineBase
     /// <summary>
     /// All combatants in the combat.
     /// </summary>
+    /// <remarks>
+    /// Combat queue will create based on this list.
+    /// </remarks>
     [PublicAPI]
-    public IReadOnlyCollection<ICombatant> CurrentCombatants => _allCombatantList.ToArray();
+    public IReadOnlyCollection<ICombatant> CurrentCombatants => AllCombatantList.ToArray();
 
     /// <summary>
     /// Current combat round.
