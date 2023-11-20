@@ -129,12 +129,6 @@ public abstract class CombatEngineBase
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
     }
 
-    private ICombatState CalculateCurrentCombatState()
-    {
-        var context = new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber);
-        return StateStrategy.CalculateCurrentState(context);
-    }
-
     /// <summary>
     /// Create combat move execution to visualize and apply effects in the right way.
     /// </summary>
@@ -325,6 +319,12 @@ public abstract class CombatEngineBase
     protected abstract void RestoreStatsOnWait();
 
     protected abstract void SpendManeuverResources();
+
+    private ICombatState CalculateCurrentCombatState()
+    {
+        var context = new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber);
+        return StateStrategy.CalculateCurrentState(context);
+    }
 
     private bool DetectShapeShifting()
     {
