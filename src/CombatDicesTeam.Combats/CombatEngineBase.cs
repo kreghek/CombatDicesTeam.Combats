@@ -25,8 +25,6 @@ public abstract class CombatEngineBase
 
         AllCombatantList = new Collection<ICombatant>();
         _roundQueue = new List<ICombatant>();
-
-        CurrentRoundNumber = 1;
     }
 
     /// <summary>
@@ -95,12 +93,10 @@ public abstract class CombatEngineBase
             {
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
-                if (StateStrategy
-                    .CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber))
-                    .IsFinalState)
+                var combatState = CalculateCurrentCombatState();
+                if (CalculateCurrentCombatState().IsFinalState)
                 {
-                    var combatResult = CalcResult();
-                    CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
+                    CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatState));
                     return;
                 }
 
@@ -117,12 +113,10 @@ public abstract class CombatEngineBase
             }
             else
             {
-                if (StateStrategy
-                    .CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber))
-                    .IsFinalState)
+                var combatState = CalculateCurrentCombatState();
+                if (combatState.IsFinalState)
                 {
-                    var combatResult = CalcResult();
-                    CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatResult));
+                    CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatState));
                     return;
                 }
 
@@ -133,6 +127,12 @@ public abstract class CombatEngineBase
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn, context);
 
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
+    }
+
+    private ICombatState CalculateCurrentCombatState()
+    {
+        var context = new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber);
+        return StateStrategy.CalculateCurrentState(context);
     }
 
     /// <summary>
@@ -325,29 +325,6 @@ public abstract class CombatEngineBase
     protected abstract void RestoreStatsOnWait();
 
     protected abstract void SpendManeuverResources();
-
-    private CombatFinishResult CalcResult()
-    {
-        var aliveUnits = AllCombatantList.Where(x => !x.IsDead).ToArray();
-        var playerUnits = aliveUnits.Where(x => x.IsPlayerControlled);
-        var hasPlayerUnits = playerUnits.Any();
-
-        var cpuUnits = aliveUnits.Where(x => !x.IsPlayerControlled);
-        var hasCpuUnits = cpuUnits.Any();
-
-        // TODO Looks like XOR
-        if (hasPlayerUnits && !hasCpuUnits)
-        {
-            return CombatFinishResult.HeroesAreWinners;
-        }
-
-        if (!hasPlayerUnits && hasCpuUnits)
-        {
-            return CombatFinishResult.MonstersAreWinners;
-        }
-
-        return CombatFinishResult.Draw;
-    }
 
     private bool DetectShapeShifting()
     {
