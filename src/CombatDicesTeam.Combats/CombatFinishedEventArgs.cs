@@ -2,10 +2,10 @@
 
 public class CombatFinishedEventArgs : EventArgs
 {
-    public CombatFinishedEventArgs(CombatFinishResult result)
+    public CombatFinishedEventArgs(ICombatState combatState)
     {
-        Result = result;
+        Result = combatState;
     }
 
-    public CombatFinishResult Result { get; }
+    public ICombatState Result { get; }
 }
