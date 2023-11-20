@@ -25,8 +25,6 @@ public abstract class CombatEngineBase
 
         AllCombatantList = new Collection<ICombatant>();
         _roundQueue = new List<ICombatant>();
-
-        CurrentRoundNumber = 1;
     }
 
     /// <summary>
@@ -133,8 +131,8 @@ public abstract class CombatEngineBase
 
     private ICombatState CalculateCurrentCombatState()
     {
-        return StateStrategy
-                            .CalculateCurrentState(new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber));
+        var context = new CombatStateStrategyContext(CurrentCombatants, CurrentRoundNumber);
+        return StateStrategy.CalculateCurrentState(context);
     }
 
     /// <summary>
