@@ -1,6 +1,6 @@
 namespace CombatDicesTeam.Combats;
 
-public interface IUnitStat
+public interface ICombatantStat
 {
     ICombatantStatType Type { get; }
     IStatValue Value { get; }

@@ -3,11 +3,11 @@ namespace CombatDicesTeam.Combats.CombatantStatuses;
 /// <summary>
 /// Change max value of specified combatant's stat.
 /// </summary>
-public sealed class ChangeStatCombatantStatus : CombatantStatusBase
+public sealed class ModifyStatCombatantStatus : CombatantStatusBase
 {
     private readonly IStatModifier _statModifier;
 
-    public ChangeStatCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
+    public ModifyStatCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
         ICombatantStatType statType,
         int value) :
         base(sid, lifetime)

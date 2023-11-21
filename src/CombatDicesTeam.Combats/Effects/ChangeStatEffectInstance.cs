@@ -19,7 +19,7 @@ public sealed class ChangeStatEffectInstance : EffectInstanceBase<ChangeStatEffe
     public override void Influence(ICombatant target, IStatusCombatContext context)
     {
         var combatantStatus =
-            new ChangeStatCombatantStatus(_combatantStatusSid, Lifetime, BaseEffect.TargetStatType, BaseEffect.Value);
+            new ModifyStatCombatantStatus(_combatantStatusSid, Lifetime, BaseEffect.TargetStatType, BaseEffect.Value);
 
         context.StatusLifetimeImposedContext.Combat.ImposeCombatantStatus(target, combatantStatus);
     }

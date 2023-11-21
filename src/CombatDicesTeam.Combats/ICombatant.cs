@@ -34,7 +34,7 @@ public interface ICombatant
     /// <summary>
     /// Current combatant stats.
     /// </summary>
-    IReadOnlyCollection<IUnitStat> Stats { get; }
+    IReadOnlyCollection<ICombatantStat> Stats { get; }
 
     /// <summary>
     /// Current combatant effects.
