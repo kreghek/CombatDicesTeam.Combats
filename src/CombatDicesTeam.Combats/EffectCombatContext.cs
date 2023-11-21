@@ -20,8 +20,8 @@ public sealed class EffectCombatContext : IStatusCombatContext
         NotifyCombatantDamagedDelegate = notifyCombatantDamagedDelegate;
         NotifyCombatantMovedDelegate = notifyCombatantMovedDelegate;
 
-        StatusImposedContext = new CombatantEffectImposeContext(combatCore);
-        StatusLifetimeImposedContext = new CombatantEffectLifetimeImposeContext(targetCombatant, combatCore);
+        StatusImposedContext = new CombatantStatusImposeContext(combatCore);
+        StatusLifetimeImposedContext = new CombatantStatusLifetimeImposeContext(targetCombatant, combatCore);
     }
 
     public CombatantHasTakenDamagedCallback NotifyCombatantDamagedDelegate { get; }

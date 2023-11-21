@@ -21,6 +21,6 @@ public sealed class ChangeStatEffectInstance : EffectInstanceBase<ChangeStatEffe
         var combatantStatus =
             new ChangeStatCombatantStatus(_combatantStatusSid, Lifetime, BaseEffect.TargetStatType, BaseEffect.Value);
 
-        context.StatusLifetimeImposedContext.Combat.ImposeCombatantEffect(target, combatantStatus);
+        context.StatusLifetimeImposedContext.Combat.ImposeCombatantStatus(target, combatantStatus);
     }
 }

@@ -78,7 +78,7 @@ public abstract class CombatEngineBase
     /// </summary>
     public void CompleteTurn()
     {
-        var context = new CombatantEffectLifetimeDispelContext(this);
+        var context = new CombatantStatusLifetimeDispelContext(this);
 
         CombatantEndsTurn?.Invoke(this, new CombatantEndsTurnEventArgs(CurrentCombatant));
 
@@ -136,10 +136,16 @@ public abstract class CombatEngineBase
     /// </summary>
     public abstract CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement);
 
-    public void DispelCombatantEffect(ICombatant targetCombatant, ICombatantStatus combatantEffect)
+    /// <summary>
+    /// Remove combatant status.
+    /// </summary>
+    /// <param name="targetCombatant">Target combatant under the status.</param>
+    /// <param name="combatantStatusToRemove">Target status to remove.</param>
+    [PublicAPI]
+    public void DispelCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantStatusToRemove)
     {
-        targetCombatant.RemoveStatus(combatantEffect, new CombatantEffectLifetimeDispelContext(this));
-        CombatantEffectHasBeenDispeled?.Invoke(this, new CombatantEffectEventArgs(targetCombatant, combatantEffect));
+        targetCombatant.RemoveStatus(combatantStatusToRemove, new CombatantStatusLifetimeDispelContext(this));
+        CombatantStatusHasBeenDispelled?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
     public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
@@ -170,11 +176,11 @@ public abstract class CombatEngineBase
         return remains;
     }
 
-    public void ImposeCombatantEffect(ICombatant targetCombatant, ICombatantStatus combatantEffect)
+    public void ImposeCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantEffect)
     {
-        targetCombatant.AddStatus(combatantEffect, new CombatantEffectImposeContext(this),
-            new CombatantEffectLifetimeImposeContext(targetCombatant, this));
-        CombatantEffectHasBeenImposed?.Invoke(this, new CombatantEffectEventArgs(targetCombatant, combatantEffect));
+        targetCombatant.AddStatus(combatantEffect, new CombatantStatusImposeContext(this),
+            new CombatantStatusLifetimeImposeContext(targetCombatant, this));
+        CombatantStatusHasBeenImposed?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantEffect));
     }
 
     /// <summary>
@@ -190,12 +196,12 @@ public abstract class CombatEngineBase
 
         foreach (var combatant in AllCombatantList)
         {
-            var startUpContext = new CombatantStartupContext(new CombatantEffectImposeContext(this),
-                new CombatantEffectLifetimeImposeContext(combatant, this));
+            var startUpContext = new CombatantStartupContext(new CombatantStatusImposeContext(this),
+                new CombatantStatusLifetimeImposeContext(combatant, this));
             combatant.PrepareToCombat(startUpContext);
         }
 
-        var context = new CombatantEffectLifetimeDispelContext(this);
+        var context = new CombatantStatusLifetimeDispelContext(this);
         StartRound(context, true);
 
         CombatRoundStarted?.Invoke(this, EventArgs.Empty);
@@ -513,10 +519,10 @@ public abstract class CombatEngineBase
     public event EventHandler<CombatantHandChangedEventArgs>? CombatantUsedMove;
 
     [PublicAPI]
-    public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenImposed;
+    public event EventHandler<CombatantStatusEventArgs>? CombatantStatusHasBeenImposed;
 
     [PublicAPI]
-    public event EventHandler<CombatantEffectEventArgs>? CombatantEffectHasBeenDispeled;
+    public event EventHandler<CombatantStatusEventArgs>? CombatantStatusHasBeenDispelled;
 
     public event EventHandler? CombatRoundStarted;
 
