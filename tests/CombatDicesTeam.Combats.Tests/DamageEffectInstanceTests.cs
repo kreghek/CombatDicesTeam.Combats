@@ -2,8 +2,6 @@
 using CombatDicesTeam.Dices;
 using CombatDicesTeam.GenericRanges;
 
-using FluentAssertions;
-
 using static CombatDicesTeam.Combats.CombatEngineBase;
 
 namespace CombatDicesTeam.Combats.Tests

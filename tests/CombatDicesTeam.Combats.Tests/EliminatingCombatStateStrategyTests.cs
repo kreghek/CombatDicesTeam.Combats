@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-
-namespace CombatDicesTeam.Combats.Tests;
+﻿namespace CombatDicesTeam.Combats.Tests;
 
 [TestFixture]
 public sealed class EliminatingCombatStateStrategyTests
