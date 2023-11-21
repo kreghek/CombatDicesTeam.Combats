@@ -96,7 +96,7 @@ public abstract class CombatEngineBase
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
                 StartRound(context, false);
-                
+
                 var combatState = CalculateCurrentCombatState();
                 if (CalculateCurrentCombatState().IsFinalState)
                 {
@@ -432,7 +432,8 @@ public abstract class CombatEngineBase
         _roundQueue.RemoveAt(0);
     }
 
-    private void StartRound(ICombatantStatusLifetimeDispelContext combatantEffectLifetimeDispelContext, bool isFirstRound)
+    private void StartRound(ICombatantStatusLifetimeDispelContext combatantEffectLifetimeDispelContext,
+        bool isFirstRound)
     {
         MakeCombatantRoundQueue();
         PrepareCombatantsToNextRound();

@@ -4,7 +4,8 @@ namespace CombatDicesTeam.Combats.Tests;
 
 public sealed class TestableCombatEngine : CombatEngineBase
 {
-    public TestableCombatEngine(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy) : base(dice, roundQueueResolver, stateStrategy)
+    public TestableCombatEngine(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy)
+        : base(dice, roundQueueResolver, stateStrategy)
     {
     }
 
@@ -20,16 +21,13 @@ public sealed class TestableCombatEngine : CombatEngineBase
 
     protected override void PrepareCombatantsToNextRound()
     {
-        
     }
 
     protected override void RestoreStatsOnWait()
     {
-        
     }
 
     protected override void SpendManeuverResources()
     {
-        
     }
 }

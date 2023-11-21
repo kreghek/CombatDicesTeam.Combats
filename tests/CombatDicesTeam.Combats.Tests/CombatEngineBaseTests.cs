@@ -10,9 +10,11 @@ public class CombatEngineBaseTests
     {
         // ARRANGE
 
-        var roundQueueResolver = Mock.Of<IRoundQueueResolver>(x => x.GetCurrentRoundQueue(It.IsAny<IReadOnlyCollection<ICombatant>>()) == new[] { Mock.Of<ICombatant>() });
+        var roundQueueResolver = Mock.Of<IRoundQueueResolver>(x =>
+            x.GetCurrentRoundQueue(It.IsAny<IReadOnlyCollection<ICombatant>>()) == new[] { Mock.Of<ICombatant>() });
         var combatState = Mock.Of<ICombatState>(cs => cs.IsFinalState == true);
-        var stateStrategy = Mock.Of<ICombatStateStrategy>(x => x.CalculateCurrentState(It.IsAny<ICombatStateStrategyContext>()) == combatState);
+        var stateStrategy = Mock.Of<ICombatStateStrategy>(x =>
+            x.CalculateCurrentState(It.IsAny<ICombatStateStrategyContext>()) == combatState);
         var combat = new TestableCombatEngine(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
 
         var heroes = new[] { new FormationSlot(0, 0) { Combatant = Mock.Of<ICombatant>() } };
@@ -29,6 +31,7 @@ public class CombatEngineBaseTests
 
         // ASSERT
 
-        monitor.Should().Raise(nameof(combat.CombatFinished)).WithArgs<CombatFinishedEventArgs>(e => e.Result.IsFinalState == true);
+        monitor.Should().Raise(nameof(combat.CombatFinished))
+            .WithArgs<CombatFinishedEventArgs>(e => e.Result.IsFinalState == true);
     }
 }
