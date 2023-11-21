@@ -25,6 +25,8 @@ public abstract class CombatEngineBase
 
         AllCombatantList = new Collection<ICombatant>();
         _roundQueue = new List<ICombatant>();
+
+        CurrentRoundNumber = 1;
     }
 
     /// <summary>
@@ -93,14 +95,14 @@ public abstract class CombatEngineBase
             {
                 UpdateAllCombatantEffects(CombatantStatusUpdateType.EndRound, context);
 
+                StartRound(context, false);
+                
                 var combatState = CalculateCurrentCombatState();
                 if (CalculateCurrentCombatState().IsFinalState)
                 {
                     CombatFinished?.Invoke(this, new CombatFinishedEventArgs(combatState));
                     return;
                 }
-
-                StartRound(context);
 
                 CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
 
@@ -194,7 +196,7 @@ public abstract class CombatEngineBase
         }
 
         var context = new CombatantEffectLifetimeDispelContext(this);
-        StartRound(context);
+        StartRound(context, true);
 
         CombatRoundStarted?.Invoke(this, EventArgs.Empty);
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
@@ -430,7 +432,7 @@ public abstract class CombatEngineBase
         _roundQueue.RemoveAt(0);
     }
 
-    private void StartRound(ICombatantStatusLifetimeDispelContext combatantEffectLifetimeDispelContext)
+    private void StartRound(ICombatantStatusLifetimeDispelContext combatantEffectLifetimeDispelContext, bool isFirstRound)
     {
         MakeCombatantRoundQueue();
         PrepareCombatantsToNextRound();
@@ -439,7 +441,11 @@ public abstract class CombatEngineBase
         CurrentCombatant.UpdateStatuses(CombatantStatusUpdateType.StartCombatantTurn,
             combatantEffectLifetimeDispelContext);
 
-        CurrentRoundNumber++;
+        if (!isFirstRound)
+        {
+            CurrentRoundNumber++;
+        }
+
         CombatRoundStarted?.Invoke(this, EventArgs.Empty);
     }
 
