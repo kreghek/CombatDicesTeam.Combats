@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace CombatDicesTeam.Combats.Tests;
 
 [TestFixture]
