@@ -224,7 +224,7 @@ public abstract class CombatEngineBase
 
         var side = GetCurrentSelectorContext().ActorSide;
 
-        HandleSwapFieldPositions(currentCoords, side, targetCoords, side);
+        HandleSwapFieldPositions(currentCoords, side, targetCoords, side, CommonPositionChangeReasons.Maneuver);
 
         SpendManeuverResources();
     }
@@ -284,7 +284,7 @@ public abstract class CombatEngineBase
     }
 
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
-        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
+        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
     {
         if (sourceCoords == destinationCoords && sourceFieldSide == destinationFieldSide)
         {
@@ -298,16 +298,28 @@ public abstract class CombatEngineBase
 
         if (sourceCombatant is not null)
         {
+            var args = new CombatantHasChangedPositionEventArgs(
+                sourceCombatant, 
+                destinationFieldSide,
+                destinationCoords,
+                moveReason);
+
             CombatantHasChangePosition?.Invoke(this,
-                new CombatantHasChangedPositionEventArgs(sourceCombatant, destinationFieldSide, destinationCoords));
+                args);
         }
 
         sourceFieldSide[sourceCoords].Combatant = targetCombatant;
 
         if (targetCombatant is not null)
         {
+            var args = new CombatantHasChangedPositionEventArgs(
+                targetCombatant, 
+                sourceFieldSide,
+                sourceCoords,
+                moveReason);
+
             CombatantHasChangePosition?.Invoke(this,
-                new CombatantHasChangedPositionEventArgs(targetCombatant, sourceFieldSide, sourceCoords));
+                args);
         }
     }
 
