@@ -306,7 +306,7 @@ public abstract class CombatEngineBase
         if (sourceCombatant is not null)
         {
             var args = new CombatantHasChangedPositionEventArgs(
-                sourceCombatant, 
+                sourceCombatant,
                 destinationFieldSide,
                 destinationCoords,
                 moveReason);
@@ -320,7 +320,7 @@ public abstract class CombatEngineBase
         if (targetCombatant is not null)
         {
             var args = new CombatantHasChangedPositionEventArgs(
-                targetCombatant, 
+                targetCombatant,
                 sourceFieldSide,
                 sourceCoords,
                 moveReason);

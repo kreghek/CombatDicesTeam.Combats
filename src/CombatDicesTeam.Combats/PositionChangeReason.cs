@@ -3,4 +3,4 @@
 namespace CombatDicesTeam.Combats;
 
 [DebuggerDisplay("{DebugSid}")]
-public sealed record PositionChangeReason(string? DebugSid = null): IPositionChangingReason;
+public sealed record PositionChangeReason(string? DebugSid = null) : IPositionChangingReason;
