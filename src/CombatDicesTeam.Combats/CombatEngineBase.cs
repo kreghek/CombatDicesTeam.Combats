@@ -145,7 +145,8 @@ public abstract class CombatEngineBase
     public void DispelCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantStatusToRemove)
     {
         targetCombatant.RemoveStatus(combatantStatusToRemove, new CombatantStatusLifetimeDispelContext(this));
-        CombatantStatusHasBeenDispelled?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
+        CombatantStatusHasBeenDispelled?.Invoke(this,
+            new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
     public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
