@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats;
 
+[PublicAPI]
 public sealed class CombatantStatValue : IStatValue
 {
     private readonly IStatValue _baseValue;

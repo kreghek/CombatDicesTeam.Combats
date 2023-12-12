@@ -4,6 +4,7 @@ using static CombatDicesTeam.Combats.CombatEngineBase;
 
 namespace CombatDicesTeam.Combats;
 
+[PublicAPI]
 public sealed class CombatantDamagedEventArgs : EventArgs
 {
     public CombatantDamagedEventArgs(ICombatant combatant, ICombatantStatType statType, StatDamage damage)

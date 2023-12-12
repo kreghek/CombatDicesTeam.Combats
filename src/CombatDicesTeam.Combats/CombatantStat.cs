@@ -1,6 +1,6 @@
 namespace CombatDicesTeam.Combats;
 
-public sealed class CombatantStat : IUnitStat
+public sealed class CombatantStat : ICombatantStat
 {
     public CombatantStat(ICombatantStatType type, IStatValue value)
     {

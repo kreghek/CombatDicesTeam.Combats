@@ -76,11 +76,11 @@ namespace CombatDicesTeam.Combats.Tests
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
@@ -119,11 +119,11 @@ namespace CombatDicesTeam.Combats.Tests
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
@@ -164,11 +164,11 @@ namespace CombatDicesTeam.Combats.Tests
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
@@ -212,11 +212,11 @@ namespace CombatDicesTeam.Combats.Tests
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1))
                 });
 
@@ -260,11 +260,11 @@ namespace CombatDicesTeam.Combats.Tests
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == absorptionStatType &&
                         s.Value == Mock.Of<IStatValue>(v => v.Current == 1 && v.ActualMax == 2))
                 });
@@ -309,11 +309,11 @@ namespace CombatDicesTeam.Combats.Tests
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
@@ -358,9 +358,9 @@ namespace CombatDicesTeam.Combats.Tests
             targetMock.Setup(t => t.Stats)
                 .Returns(new[]
                 {
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == mainStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10)),
-                    Mock.Of<IUnitStat>(s =>
+                    Mock.Of<ICombatantStat>(s =>
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10))
                 });
 
