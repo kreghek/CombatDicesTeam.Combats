@@ -47,7 +47,8 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
                 {
                     LineIndex = currentCoords.LineIndex - 1
                 },
-                targetSide);
+                targetSide,
+                new PositionChangeReason());
         }
         else if (isHeroBelow)
         {
@@ -56,7 +57,8 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
                 {
                     LineIndex = currentCoords.LineIndex + 1
                 },
-                targetSide);
+                targetSide,
+                new PositionChangeReason());
         }
         else
         {
@@ -65,7 +67,8 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
                 {
                     LineIndex = 1
                 },
-                targetSide);
+                targetSide,
+                new PositionChangeReason());
         }
     }
 

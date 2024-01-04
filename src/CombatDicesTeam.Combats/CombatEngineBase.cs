@@ -219,10 +219,10 @@ public abstract class CombatEngineBase
     }
 
     /// <summary>
-    /// Maneuvering of combatant.
+    /// Maneuvering of the current combatant.
     /// </summary>
-    /// <param name="combatStepDirection"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <param name="combatStepDirection">Move direction.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Direction is unknown. Use only Up, Down, Right or Left.</exception>
     public void UseManeuver(CombatStepDirection combatStepDirection)
     {
         var currentCoords = GetCurrentCoords();

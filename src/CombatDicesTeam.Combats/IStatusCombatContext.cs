@@ -16,7 +16,7 @@ public interface IStatusCombatContext
     int DamageCombatantStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage);
 
     void NotifySwapFieldPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
-        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide);
+        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason);
 
     void PassTurn(ICombatant target);
     void RestoreCombatantStat(ICombatant combatant, ICombatantStatType statType, int value);
