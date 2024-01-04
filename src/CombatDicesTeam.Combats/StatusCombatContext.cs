@@ -37,7 +37,8 @@ public sealed class StatusCombatContext : IStatusCombatContext
     public void NotifySwapFieldPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
     {
-        NotifyCombatantMovedDelegate(sourceCoords, sourceFieldSide, destinationCoords, destinationFieldSide, moveReason);
+        NotifyCombatantMovedDelegate(sourceCoords, sourceFieldSide, destinationCoords, destinationFieldSide,
+            moveReason);
     }
 
     public void PassTurn(ICombatant target)
