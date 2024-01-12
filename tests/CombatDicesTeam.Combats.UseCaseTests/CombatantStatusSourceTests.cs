@@ -18,7 +18,8 @@ public class CombatantStatusSourceTests
             .Returns<IReadOnlyCollection<ICombatant>>(combatants => new List<ICombatant>(combatants));
 
         var roundQueueResolver = roundQueueResolverMock.Object;
-        var stateStrategy = Mock.Of<ICombatStateStrategy>(x=>x.CalculateCurrentState(It.IsAny<ICombatStateStrategyContext>()) == CommonCombatStates.InProgress);
+        var stateStrategy = Mock.Of<ICombatStateStrategy>(x =>
+            x.CalculateCurrentState(It.IsAny<ICombatStateStrategyContext>()) == CommonCombatStates.InProgress);
         var combat = new TestableCombatEngine2(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
 
         var statuses = new List<ICombatantStatus>();
@@ -34,7 +35,7 @@ public class CombatantStatusSourceTests
                 context, _) =>
             {
                 status.Impose(heroCombatantMock.Object, context);
-                
+
                 statuses.Add(status);
             });
         var heroCombatant = heroCombatantMock.Object;
@@ -51,17 +52,17 @@ public class CombatantStatusSourceTests
 
         combat.Initialize(heroes, monsters);
 
-
-        var statusFactory = new CombatStatusFactory((source) => new TestCombatantStatus(
+        var statusFactory = new CombatStatusFactory(source => new TestCombatantStatus(
             new CombatantStatusSid("PowerUpByStat"),
             new OwnerBoundCombatantEffectLifetime(),
             source,
             combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current));
 
-        var targetSelector = Mock.Of<ITargetSelector>(x=>x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<ITargetSelectorContext>()) == new[]
-        {
-            heroCombatant
-        });
+        var targetSelector = Mock.Of<ITargetSelector>(x =>
+            x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<ITargetSelectorContext>()) == new[]
+            {
+                heroCombatant
+            });
 
         var combatMovement = new CombatMovementInstance(
             new CombatMovement(new CombatMovementSid("TestCombatMovement"),
@@ -101,7 +102,7 @@ public class CombatantStatusSourceTests
         }
 
         public int Value => (_statModifier?.Value).GetValueOrDefault();
-        
+
         public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
         {
             base.Impose(combatant, context);

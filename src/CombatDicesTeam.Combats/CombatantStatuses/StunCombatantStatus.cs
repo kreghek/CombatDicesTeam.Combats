@@ -5,7 +5,8 @@
 /// </summary>
 public class StunCombatantStatus : CombatantStatusBase
 {
-    public StunCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime, ICombatantStatusSource source) : base(sid, lifetime, source)
+    public StunCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
+        ICombatantStatusSource source) : base(sid, lifetime, source)
     {
     }
 
