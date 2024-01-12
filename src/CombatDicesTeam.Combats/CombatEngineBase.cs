@@ -177,6 +177,11 @@ public abstract class CombatEngineBase
         return remains;
     }
 
+    /// <summary>
+    /// Impose the status to target combatant.
+    /// </summary>
+    /// <param name="targetCombatant">The combatant to which the status will be imposed.</param>
+    /// <param name="combatantStatus">Status to impose.</param>
     public void ImposeCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantStatus)
     {
         targetCombatant.AddStatus(combatantStatus, new CombatantStatusImposeContext(this),

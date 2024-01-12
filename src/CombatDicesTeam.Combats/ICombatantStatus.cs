@@ -16,8 +16,3 @@ public interface ICombatantStatus
     /// </summary>
     ICombatantStatusSource Source { get; }
 }
-
-public interface ICombatantStatusSource
-{
-    
-}

@@ -12,20 +12,19 @@ public class CombatantStatusSourceTests
     {
         // ARRANGE
 
-        const int MAX_ROUNDS = 1;
-
         var roundQueueResolverMock = new Mock<IRoundQueueResolver>();
         roundQueueResolverMock
             .Setup(resolver => resolver.GetCurrentRoundQueue(It.IsAny<IReadOnlyCollection<ICombatant>>()))
             .Returns<IReadOnlyCollection<ICombatant>>(combatants => new List<ICombatant>(combatants));
 
         var roundQueueResolver = roundQueueResolverMock.Object;
-        var stateStrategy = new LimitedRoundsCombatStateStrategy(new EliminatingCombatStateStrategy(), MAX_ROUNDS);
+        var stateStrategy = Mock.Of<ICombatStateStrategy>(x=>x.CalculateCurrentState(It.IsAny<ICombatStateStrategyContext>()) == CommonCombatStates.InProgress);
         var combat = new TestableCombatEngine2(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
 
         var statuses = new List<ICombatantStatus>();
         var combatantStatType = new CombatantStatType("test-stat");
-        var stat = new CombatantStat(combatantStatType, new StatValue(10));
+        const int STAT_VALUE = 10;
+        var stat = new CombatantStat(combatantStatType, new StatValue(STAT_VALUE));
         var heroCombatantMock = new Mock<ICombatant>();
         heroCombatantMock.SetupGet(x => x.IsPlayerControlled).Returns(true);
         heroCombatantMock.SetupGet(x => x.Stats).Returns(new[] { stat });
@@ -53,8 +52,10 @@ public class CombatantStatusSourceTests
         combat.Initialize(heroes, monsters);
 
 
-        var statusFactory = new DelegateCombatStatusFactory((source) => new TestCombatantStatus(
-            new CombatantStatusSid("1"), new OwnerBoundCombatantEffectLifetime(), source,
+        var statusFactory = new CombatStatusFactory((source) => new TestCombatantStatus(
+            new CombatantStatusSid("PowerUpByStat"),
+            new OwnerBoundCombatantEffectLifetime(),
+            source,
             combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current));
 
         var targetSelector = Mock.Of<ITargetSelector>(x=>x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<ITargetSelectorContext>()) == new[]
@@ -63,14 +64,12 @@ public class CombatantStatusSourceTests
         });
 
         var combatMovement = new CombatMovementInstance(
-            new CombatMovement(new CombatMovementSid("1"),
+            new CombatMovement(new CombatMovementSid("TestCombatMovement"),
                 new CombatMovementCost(0),
                 CombatMovementEffectConfig.Create(new[]
                 {
                     new AddCombatantStatusEffect(targetSelector, statusFactory)
                 })));
-
-        using var monitor = combat.Monitor();
 
         // ACT
 
@@ -86,7 +85,7 @@ public class CombatantStatusSourceTests
 
         // ASSERT
 
-        ((TestCombatantStatus)statuses[0]).Value.Should().Be(10);
+        ((TestCombatantStatus)statuses[0]).Value.Should().Be(STAT_VALUE);
     }
 
     private sealed class TestCombatantStatus : CombatantStatusBase
@@ -101,7 +100,7 @@ public class CombatantStatusSourceTests
             _valueDelegate = valueDelegate;
         }
 
-        public int Value => _statModifier.Value;
+        public int Value => (_statModifier?.Value).GetValueOrDefault();
         
         public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
         {
