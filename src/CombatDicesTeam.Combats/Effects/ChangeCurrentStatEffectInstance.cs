@@ -8,7 +8,7 @@ public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeC
     {
     }
 
-    public override void Influence(ICombatant target, IStatusCombatContext context)
+    public override void Influence(ICombatant target, ICombatMovementContext context)
     {
         var rolledValue = context.Dice.Roll(BaseEffect.StatValue.Min, BaseEffect.StatValue.Max);
 

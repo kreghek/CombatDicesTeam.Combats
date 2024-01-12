@@ -5,9 +5,14 @@ namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 [PublicAPI]
 public sealed class OwnerBoundCombatantEffectLifetime : ICombatantStatusLifetime
 {
+    private ICombatant? _owner;
+
     private void CombatCore_CombatantHasBeenDefeated(object? sender, CombatantDefeatedEventArgs e)
     {
-        IsExpired = true;
+        if (_owner == sender)
+        {
+            IsExpired = true;
+        }
     }
 
     /// <inheritdoc />
@@ -20,6 +25,7 @@ public sealed class OwnerBoundCombatantEffectLifetime : ICombatantStatusLifetime
 
     public void HandleImposed(ICombatantStatus combatantEffect, ICombatantStatusLifetimeImposeContext context)
     {
+        _owner = context.TargetCombatant;
         context.Combat.CombatantHasBeenDefeated += CombatCore_CombatantHasBeenDefeated;
     }
 

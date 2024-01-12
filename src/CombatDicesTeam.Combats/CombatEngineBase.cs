@@ -145,7 +145,8 @@ public abstract class CombatEngineBase
     public void DispelCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantStatusToRemove)
     {
         targetCombatant.RemoveStatus(combatantStatusToRemove, new CombatantStatusLifetimeDispelContext(this));
-        CombatantStatusHasBeenDispelled?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
+        CombatantStatusHasBeenDispelled?.Invoke(this,
+            new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
     public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
@@ -176,11 +177,16 @@ public abstract class CombatEngineBase
         return remains;
     }
 
-    public void ImposeCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantEffect)
+    /// <summary>
+    /// Impose the status to target combatant.
+    /// </summary>
+    /// <param name="targetCombatant">The combatant to which the status will be imposed.</param>
+    /// <param name="combatantStatus">Status to impose.</param>
+    public void ImposeCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantStatus)
     {
-        targetCombatant.AddStatus(combatantEffect, new CombatantStatusImposeContext(this),
+        targetCombatant.AddStatus(combatantStatus, new CombatantStatusImposeContext(this),
             new CombatantStatusLifetimeImposeContext(targetCombatant, this));
-        CombatantStatusHasBeenImposed?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantEffect));
+        CombatantStatusHasBeenImposed?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantStatus));
     }
 
     /// <summary>
@@ -218,10 +224,10 @@ public abstract class CombatEngineBase
     }
 
     /// <summary>
-    /// Maneuvering of combatant.
+    /// Maneuvering of the current combatant.
     /// </summary>
-    /// <param name="combatStepDirection"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <param name="combatStepDirection">Move direction.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Direction is unknown. Use only Up, Down, Right or Left.</exception>
     public void UseManeuver(CombatStepDirection combatStepDirection)
     {
         var currentCoords = GetCurrentCoords();
@@ -230,7 +236,7 @@ public abstract class CombatEngineBase
 
         var side = GetCurrentSelectorContext().ActorSide;
 
-        HandleSwapFieldPositions(currentCoords, side, targetCoords, side);
+        HandleSwapFieldPositions(currentCoords, side, targetCoords, side, CommonPositionChangeReasons.Maneuver);
 
         SpendManeuverResources();
     }
@@ -290,7 +296,7 @@ public abstract class CombatEngineBase
     }
 
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
-        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
+        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
     {
         if (sourceCoords == destinationCoords && sourceFieldSide == destinationFieldSide)
         {
@@ -304,16 +310,28 @@ public abstract class CombatEngineBase
 
         if (sourceCombatant is not null)
         {
+            var args = new CombatantHasChangedPositionEventArgs(
+                sourceCombatant,
+                destinationFieldSide,
+                destinationCoords,
+                moveReason);
+
             CombatantHasChangePosition?.Invoke(this,
-                new CombatantHasChangedPositionEventArgs(sourceCombatant, destinationFieldSide, destinationCoords));
+                args);
         }
 
         sourceFieldSide[sourceCoords].Combatant = targetCombatant;
 
         if (targetCombatant is not null)
         {
+            var args = new CombatantHasChangedPositionEventArgs(
+                targetCombatant,
+                sourceFieldSide,
+                sourceCoords,
+                moveReason);
+
             CombatantHasChangePosition?.Invoke(this,
-                new CombatantHasChangedPositionEventArgs(targetCombatant, sourceFieldSide, sourceCoords));
+                args);
         }
     }
 

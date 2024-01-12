@@ -6,7 +6,7 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
     {
     }
 
-    public override void Influence(ICombatant target, IStatusCombatContext context)
+    public override void Influence(ICombatant target, ICombatMovementContext context)
     {
         var targetSide = GetTargetSide(target, context.Field);
 
@@ -47,7 +47,8 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
                 {
                     LineIndex = currentCoords.LineIndex - 1
                 },
-                targetSide);
+                targetSide,
+                new PositionChangeReason());
         }
         else if (isHeroBelow)
         {
@@ -56,7 +57,8 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
                 {
                     LineIndex = currentCoords.LineIndex + 1
                 },
-                targetSide);
+                targetSide,
+                new PositionChangeReason());
         }
         else
         {
@@ -65,7 +67,8 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
                 {
                     LineIndex = 1
                 },
-                targetSide);
+                targetSide,
+                new PositionChangeReason());
         }
     }
 

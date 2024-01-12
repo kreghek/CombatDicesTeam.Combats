@@ -2,10 +2,11 @@ namespace CombatDicesTeam.Combats.CombatantStatuses;
 
 public abstract class CombatantStatusBase : ICombatantStatus
 {
-    protected CombatantStatusBase(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime)
+    protected CombatantStatusBase(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime, ICombatantStatusSource source)
     {
         Sid = sid;
         Lifetime = lifetime;
+        Source = source;
     }
 
     public ICombatantStatusSid Sid { get; }
@@ -23,4 +24,6 @@ public abstract class CombatantStatusBase : ICombatantStatus
     {
         Lifetime.Update(updateType, context);
     }
+
+    public ICombatantStatusSource Source { get; }
 }

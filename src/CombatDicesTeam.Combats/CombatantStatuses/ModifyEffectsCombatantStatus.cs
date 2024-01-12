@@ -7,8 +7,8 @@ public sealed class ModifyEffectsCombatantStatus : CombatantStatusBase
 {
     private readonly IStatModifier _statModifier;
 
-    public ModifyEffectsCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime, int value) :
-        base(sid, lifetime)
+    public ModifyEffectsCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime, ICombatantStatusSource source, int value) :
+        base(sid, lifetime, source)
     {
         Value = value;
         _statModifier = new StatModifier(Value, Singleton<NullStatModifierSource>.Instance);

@@ -9,7 +9,7 @@ public sealed class GroupEffectInstance : EffectInstanceBase<GroupEffect>
         _concreteEffects = concreteEffects;
     }
 
-    public override void Influence(ICombatant target, IStatusCombatContext context)
+    public override void Influence(ICombatant target, ICombatMovementContext context)
     {
         foreach (var effect in _concreteEffects)
         {

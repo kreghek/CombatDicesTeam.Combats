@@ -6,11 +6,12 @@ namespace CombatDicesTeam.Combats;
 public sealed class CombatantHasChangedPositionEventArgs : CombatantEventArgsBase
 {
     public CombatantHasChangedPositionEventArgs(ICombatant combatant, CombatFieldSide fieldSide,
-        FieldCoords newFieldCoords) :
+        FieldCoords newFieldCoords, IPositionChangingReason reason) :
         base(combatant)
     {
         FieldSide = fieldSide;
         NewFieldCoords = newFieldCoords;
+        Reason = reason;
     }
 
     [PublicAPI]
@@ -18,4 +19,7 @@ public sealed class CombatantHasChangedPositionEventArgs : CombatantEventArgsBas
 
     [PublicAPI]
     public FieldCoords NewFieldCoords { get; }
+
+    [PublicAPI]
+    public IPositionChangingReason Reason { get; }
 }

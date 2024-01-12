@@ -22,7 +22,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
         Damage.Max.AddModifier(modifier);
     }
 
-    public override void Influence(ICombatant target, IStatusCombatContext context)
+    public override void Influence(ICombatant target, ICombatMovementContext context)
     {
         var rolledDamage = context.Dice.Roll(Damage.Min.ActualMax, Damage.Max.ActualMax);
 

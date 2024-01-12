@@ -84,7 +84,7 @@ namespace CombatDicesTeam.Combats.Tests
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
-            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+            var statusCombatContextMock = new Mock<ICombatMovementContext>();
 
             var dice = new Mock<IDice>();
 
@@ -127,7 +127,7 @@ namespace CombatDicesTeam.Combats.Tests
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
-            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+            var statusCombatContextMock = new Mock<ICombatMovementContext>();
 
             var dice = new Mock<IDice>();
 
@@ -172,7 +172,7 @@ namespace CombatDicesTeam.Combats.Tests
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
-            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+            var statusCombatContextMock = new Mock<ICombatMovementContext>();
             statusCombatContextMock.Setup(c =>
                     c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
                         It.IsAny<StatDamage>()))
@@ -220,7 +220,7 @@ namespace CombatDicesTeam.Combats.Tests
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 1))
                 });
 
-            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+            var statusCombatContextMock = new Mock<ICombatMovementContext>();
             statusCombatContextMock.Setup(c =>
                     c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
                         It.IsAny<StatDamage>()))
@@ -269,7 +269,7 @@ namespace CombatDicesTeam.Combats.Tests
                         s.Value == Mock.Of<IStatValue>(v => v.Current == 1 && v.ActualMax == 2))
                 });
 
-            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+            var statusCombatContextMock = new Mock<ICombatMovementContext>();
 
             var dice = new Mock<IDice>();
 
@@ -317,7 +317,7 @@ namespace CombatDicesTeam.Combats.Tests
                         s.Type == absorptionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 0))
                 });
 
-            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+            var statusCombatContextMock = new Mock<ICombatMovementContext>();
             statusCombatContextMock.Setup(c =>
                     c.DamageCombatantStat(targetMock.Object, damageEffectConfig.ProtectionStatType,
                         It.IsAny<StatDamage>()))
@@ -364,7 +364,7 @@ namespace CombatDicesTeam.Combats.Tests
                         s.Type == protectionStatType && s.Value == Mock.Of<IStatValue>(v => v.Current == 10))
                 });
 
-            var statusCombatContextMock = new Mock<IStatusCombatContext>();
+            var statusCombatContextMock = new Mock<ICombatMovementContext>();
 
             var dice = new Mock<IDice>();
 

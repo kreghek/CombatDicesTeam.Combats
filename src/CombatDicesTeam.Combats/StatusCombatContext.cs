@@ -4,9 +4,9 @@ using static CombatDicesTeam.Combats.CombatEngineBase;
 
 namespace CombatDicesTeam.Combats;
 
-public sealed class EffectCombatContext : IStatusCombatContext
+public sealed class StatusCombatContext : ICombatMovementContext
 {
-    public EffectCombatContext(
+    public StatusCombatContext(
         ICombatant targetCombatant,
         CombatField field,
         IDice dice,
@@ -35,9 +35,10 @@ public sealed class EffectCombatContext : IStatusCombatContext
     }
 
     public void NotifySwapFieldPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
-        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide)
+        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
     {
-        NotifyCombatantMovedDelegate(sourceCoords, sourceFieldSide, destinationCoords, destinationFieldSide);
+        NotifyCombatantMovedDelegate(sourceCoords, sourceFieldSide, destinationCoords, destinationFieldSide,
+            moveReason);
     }
 
     public void PassTurn(ICombatant target)
