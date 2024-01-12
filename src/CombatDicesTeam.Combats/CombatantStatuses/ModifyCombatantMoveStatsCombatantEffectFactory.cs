@@ -17,8 +17,8 @@ public sealed class ModifyCombatantMoveStatsCombatantStatusFactory : ICombatantS
         _value = value;
     }
 
-    public ICombatantStatus Create()
+    public ICombatantStatus Create(ICombatantStatusSource source)
     {
-        return new ModifyCombatantMoveStatsCombatantStatus(_sid, _lifetimeFactory.Create(), _stats, _value);
+        return new ModifyCombatantMoveStatsCombatantStatus(_sid, _lifetimeFactory.Create(), source, _stats, _value);
     }
 }

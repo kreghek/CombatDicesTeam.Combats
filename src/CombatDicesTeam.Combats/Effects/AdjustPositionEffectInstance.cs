@@ -6,7 +6,7 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
     {
     }
 
-    public override void Influence(ICombatant target, IStatusCombatContext context)
+    public override void Influence(ICombatant target, ICombatMovementContext context)
     {
         var targetSide = GetTargetSide(target, context.Field);
 

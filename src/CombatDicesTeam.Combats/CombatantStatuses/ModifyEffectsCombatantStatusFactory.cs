@@ -14,8 +14,8 @@ public sealed class ModifyEffectsCombatantStatusFactory : ICombatantStatusFactor
         _value = value;
     }
 
-    public ICombatantStatus Create()
+    public ICombatantStatus Create(ICombatantStatusSource source)
     {
-        return new ModifyEffectsCombatantStatus(_sid, _lifetimeFactory.Create(), _value);
+        return new ModifyEffectsCombatantStatus(_sid, _lifetimeFactory.Create(), source, _value);
     }
 }

@@ -18,7 +18,7 @@ public interface IEffectInstance
     /// </summary>
     /// <param name="target">The target from the selector.</param>
     /// <param name="context"> Context to interact with combat. </param>
-    void Influence(ICombatant target, IStatusCombatContext context);
+    void Influence(ICombatant target, ICombatMovementContext context);
 
     /// <summary>
     /// Remove effect modifier.

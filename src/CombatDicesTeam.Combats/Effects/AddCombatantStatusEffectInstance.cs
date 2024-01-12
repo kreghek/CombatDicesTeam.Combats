@@ -12,8 +12,9 @@ public sealed class AddCombatantStatusEffectInstance : EffectInstanceBase<AddCom
         _combatantStatusFactory = combatantStatusFactory;
     }
 
-    public override void Influence(ICombatant target, IStatusCombatContext context)
+    public override void Influence(ICombatant target, ICombatMovementContext context)
     {
-        context.StatusImposedContext.ImposeCombatantStatus(target, _combatantStatusFactory);
+        context.StatusImposedContext.ImposeCombatantStatus(target,
+            new CombatMovementCombatantStatusSource(context.Actor), _combatantStatusFactory);
     }
 }

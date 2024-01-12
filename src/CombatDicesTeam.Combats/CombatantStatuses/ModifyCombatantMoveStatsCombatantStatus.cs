@@ -13,8 +13,9 @@ public sealed class ModifyCombatantMoveStatsCombatantStatus : CombatantStatusBas
 
     public ModifyCombatantMoveStatsCombatantStatus(ICombatantStatusSid sid,
         ICombatantStatusLifetime lifetime,
+        ICombatantStatusSource source,
         CombatantMoveStats stats,
-        int value) : base(sid, lifetime)
+        int value) : base(sid, lifetime, source)
     {
         _stats = stats;
 
