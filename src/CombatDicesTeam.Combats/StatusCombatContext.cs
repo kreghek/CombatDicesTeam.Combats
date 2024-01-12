@@ -4,7 +4,7 @@ using static CombatDicesTeam.Combats.CombatEngineBase;
 
 namespace CombatDicesTeam.Combats;
 
-public sealed class StatusCombatContext : IStatusCombatContext
+public sealed class StatusCombatContext : ICombatMovementContext
 {
     public StatusCombatContext(
         ICombatant targetCombatant,

@@ -2,5 +2,5 @@
 
 public interface ICombatantStatusFactory
 {
-    public ICombatantStatus Create();
+    public ICombatantStatus Create(ICombatantStatusSource source);
 }

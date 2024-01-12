@@ -177,11 +177,11 @@ public abstract class CombatEngineBase
         return remains;
     }
 
-    public void ImposeCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantEffect)
+    public void ImposeCombatantStatus(ICombatant targetCombatant, ICombatantStatus combatantStatus)
     {
-        targetCombatant.AddStatus(combatantEffect, new CombatantStatusImposeContext(this),
+        targetCombatant.AddStatus(combatantStatus, new CombatantStatusImposeContext(this),
             new CombatantStatusLifetimeImposeContext(targetCombatant, this));
-        CombatantStatusHasBeenImposed?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantEffect));
+        CombatantStatusHasBeenImposed?.Invoke(this, new CombatantStatusEventArgs(targetCombatant, combatantStatus));
     }
 
     /// <summary>

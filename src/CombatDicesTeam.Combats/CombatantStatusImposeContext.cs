@@ -12,8 +12,8 @@ public sealed class CombatantStatusImposeContext : ICombatantStatusImposeContext
 
     public CombatEngineBase Combat { get; }
 
-    public void ImposeCombatantStatus(ICombatant target, ICombatantStatusFactory combatantStatusFactory)
+    public void ImposeCombatantStatus(ICombatant target, ICombatantStatusSource source, ICombatantStatusFactory combatantStatusFactory)
     {
-        Combat.ImposeCombatantStatus(target, combatantStatusFactory.Create());
+        Combat.ImposeCombatantStatus(target, combatantStatusFactory.Create(source));
     }
 }
