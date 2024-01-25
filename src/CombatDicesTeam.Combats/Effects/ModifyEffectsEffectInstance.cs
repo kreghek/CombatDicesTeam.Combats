@@ -10,6 +10,9 @@ public sealed class ModifyEffectsEffectInstance : EffectInstanceBase<ModifyEffec
         base(baseEffect)
     {
         _imposedStatusSid = imposedStatusSid;
+
+        BuffPower = new StatValue(BaseEffect.Value);
+        Duration = new StatValue(1);
     }
 
     public override void Influence(ICombatant target, ICombatMovementContext context)
@@ -17,7 +20,11 @@ public sealed class ModifyEffectsEffectInstance : EffectInstanceBase<ModifyEffec
         context.StatusImposedContext.ImposeCombatantStatus(target,
             new CombatMovementCombatantStatusSource(context.Actor),
             new ModifyEffectsCombatantStatusFactory(_imposedStatusSid,
-                new MultipleCombatantTurnEffectLifetimeFactory(1),
-                BaseEffect.Value));
+                new MultipleCombatantTurnEffectLifetimeFactory(Duration.ActualMax),
+                BuffPower.ActualMax));
     }
+
+    public IStatValue BuffPower { get; }
+
+    public IStatValue Duration { get; }
 }
