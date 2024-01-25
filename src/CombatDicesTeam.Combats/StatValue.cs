@@ -53,15 +53,20 @@ public class StatValue : IStatValue
     {
         Current += value;
 
-        if (Current > Base)
+        if (Current > ActualMax)
         {
-            Current = Base;
+            Current = ActualMax;
         }
     }
 
     public void RemoveModifier(IStatModifier modifier)
     {
         _modifiers.Remove(modifier);
+
+        if (Current > ActualMax)
+        {
+            Current = ActualMax;
+        }
     }
 
     public event EventHandler? ModifierAdded;
