@@ -15,6 +15,10 @@ public sealed class ModifyEffectsEffectInstance : EffectInstanceBase<ModifyEffec
         Duration = new StatValue(1);
     }
 
+    public IStatValue BuffPower { get; }
+
+    public IStatValue Duration { get; }
+
     public override void Influence(ICombatant target, ICombatMovementContext context)
     {
         context.StatusImposedContext.ImposeCombatantStatus(target,
@@ -23,8 +27,4 @@ public sealed class ModifyEffectsEffectInstance : EffectInstanceBase<ModifyEffec
                 new MultipleCombatantTurnEffectLifetimeFactory(Duration.ActualMax),
                 BuffPower.ActualMax));
     }
-
-    public IStatValue BuffPower { get; }
-
-    public IStatValue Duration { get; }
 }

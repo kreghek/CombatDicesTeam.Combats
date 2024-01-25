@@ -5,13 +5,13 @@ namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeCurrentStatEffect>
 {
-    public GenericRange<IStatValue> StatValue { get; }
-
     public ChangeCurrentStatEffectInstance(ChangeCurrentStatEffect baseEffect) : base(baseEffect)
     {
         StatValue = new GenericRange<IStatValue>(new StatValue(baseEffect.StatValue.Min),
             new StatValue(baseEffect.StatValue.Max));
     }
+
+    public GenericRange<IStatValue> StatValue { get; }
 
     public override void Influence(ICombatant target, ICombatMovementContext context)
     {
