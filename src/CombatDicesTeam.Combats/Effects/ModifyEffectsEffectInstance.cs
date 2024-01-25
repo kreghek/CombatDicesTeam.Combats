@@ -20,8 +20,8 @@ public sealed class ModifyEffectsEffectInstance : EffectInstanceBase<ModifyEffec
         context.StatusImposedContext.ImposeCombatantStatus(target,
             new CombatMovementCombatantStatusSource(context.Actor),
             new ModifyEffectsCombatantStatusFactory(_imposedStatusSid,
-                new MultipleCombatantTurnEffectLifetimeFactory(Duration.Current),
-                BuffPower.Current));
+                new MultipleCombatantTurnEffectLifetimeFactory(Duration.ActualMax),
+                BuffPower.ActualMax));
     }
 
     public IStatValue BuffPower { get; }
