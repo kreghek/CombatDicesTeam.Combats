@@ -7,9 +7,8 @@ public delegate int StatusValueCalculatorDelegate(ICombatantStatus status);
 /// </summary>
 public sealed class ModifyStatCombatantStatus : CombatantStatusBase
 {
-    private readonly StatusValueCalculatorDelegate _valueCalculator;
-    
     private readonly IStatModifier _statModifier;
+    private readonly StatusValueCalculatorDelegate _valueCalculator;
 
     public ModifyStatCombatantStatus(ICombatantStatusSid sid,
         ICombatantStatusLifetime lifetime,
