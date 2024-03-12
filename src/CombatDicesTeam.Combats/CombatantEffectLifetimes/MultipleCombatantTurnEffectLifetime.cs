@@ -21,7 +21,7 @@ public sealed class MultipleCombatantTurnEffectLifetime : ICombatantStatusLifeti
             _currentRoundEnd = true;
         }
 
-        if (_currentRoundEnd && updateType == CombatantStatusUpdateType.EndRound)
+        if (updateType == CombatantStatusUpdateType.EndCombatantTurn && _currentRoundEnd)
         {
             Counter--;
             if (Counter == 0)
