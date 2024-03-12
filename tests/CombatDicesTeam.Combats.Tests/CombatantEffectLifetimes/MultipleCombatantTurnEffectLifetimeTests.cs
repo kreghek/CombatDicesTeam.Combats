@@ -1,19 +1,10 @@
-﻿using NUnit.Framework;
-using CombatDicesTeam.Combats.CombatantEffectLifetimes;
+﻿namespace CombatDicesTeam.Combats.CombatantEffectLifetimes.Tests;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CombatDicesTeam.Combats.CombatantEffectLifetimes.Tests;
-
-[TestFixture()]
+[TestFixture]
 public class MultipleCombatantTurnEffectLifetimeTests
 {
-    [Test()]
-    public void UpdateTest()
+    [Test]
+    public void Update_on_this_combatant_turn_does_not_make_lifetime_expired()
     {
         // ARRANGE
 
@@ -28,8 +19,8 @@ public class MultipleCombatantTurnEffectLifetimeTests
         sut.IsExpired.Should().BeFalse();
     }
 
-    [Test()]
-    public void UpdateTest2()
+    [Test]
+    public void Update_on_second_combatant_turn_make_lifetime_expired()
     {
         // ARRANGE
 
@@ -46,8 +37,8 @@ public class MultipleCombatantTurnEffectLifetimeTests
         sut.IsExpired.Should().BeTrue();
     }
 
-    [Test()]
-    public void UpdateTest3()
+    [Test]
+    public void Update_on_this_round_does_not_make_lifetime_expired()
     {
         // ARRANGE
 
