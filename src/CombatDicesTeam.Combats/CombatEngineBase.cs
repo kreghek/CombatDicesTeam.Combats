@@ -167,7 +167,7 @@ public abstract class CombatEngineBase
             }
 
             combatant.SetDead();
-            CombatantHasBeenDefeated?.Invoke(this, new CombatantDefeatedEventArgs(combatant));
+            DoCombatantHasBeenDefeated(combatant);
 
             var targetSide = GetTargetSide(combatant, Field);
             var coords = targetSide.GetCombatantCoords(combatant);
@@ -175,6 +175,11 @@ public abstract class CombatEngineBase
         }
 
         return remains;
+    }
+
+    protected void DoCombatantHasBeenDefeated(ICombatant combatant)
+    {
+        CombatantHasBeenDefeated?.Invoke(this, new CombatantDefeatedEventArgs(combatant));
     }
 
     /// <summary>
