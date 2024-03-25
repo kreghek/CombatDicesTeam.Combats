@@ -24,18 +24,17 @@ public class TargetCombatantsBoundCombatantStatusLifetime: ICombatantStatusLifet
 
     private void Combat_CombatantHasBeenDefeated(object? sender, CombatantDefeatedEventArgs e)
     {
-        if (sender is ICombatant defeatedCombatant)
+        if (!_openBoundCombatants.Contains(e.Combatant))
         {
-            if (_openBoundCombatants.Contains(defeatedCombatant))
-            {
-                _openBoundCombatants.Remove(defeatedCombatant);
+            return;
+        }
 
-                // Then all bound combatant is defeated
-                if (!_openBoundCombatants.Any())
-                {
-                    IsExpired = true;
-                }
-            }
+        _openBoundCombatants.Remove(e.Combatant);
+
+        // Then all bound combatant is defeated
+        if (!_openBoundCombatants.Any())
+        {
+            IsExpired = true;
         }
     }
 
