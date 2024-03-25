@@ -4,12 +4,13 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
 {
     private readonly ICombatantStatusFactory _auraStatus;
     private readonly IAuraTargetSelector _auraTargetSelector;
-    
-    private ICombatant? _owner;
     private CombatEngineBase? _combat;
 
+    private ICombatant? _owner;
+
     public AuraCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
-        ICombatantStatusSource source, ICombatantStatusFactory auraStatus, IAuraTargetSelector auraTargetSelector) : base(sid, lifetime, source)
+        ICombatantStatusSource source, ICombatantStatusFactory auraStatus, IAuraTargetSelector auraTargetSelector) :
+        base(sid, lifetime, source)
     {
         _auraStatus = auraStatus;
         _auraTargetSelector = auraTargetSelector;
@@ -18,27 +19,28 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
     public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
     {
         base.Impose(combatant, context);
-        
+
         _owner = combatant;
         _combat = context.Combat;
 
-        var auraTargets = context.Combat.CurrentCombatants.Where(x => _auraTargetSelector.IsCombatantUnderAura(x, combatant));
+        var auraTargets =
+            context.Combat.CurrentCombatants.Where(x => _auraTargetSelector.IsCombatantUnderAura(x, combatant));
 
         // Add status to current combatants
         foreach (var target in auraTargets)
         {
             AddReduceStatus(target, combatant, context.Combat);
         }
-        
-        context.Combat.CombatantHasBeenAdded += Combat_CombatantHasBeenAdded; 
+
+        context.Combat.CombatantHasBeenAdded += Combat_CombatantHasBeenAdded;
     }
-    
+
     private void AddReduceStatus(ICombatant enemy, ICombatant combatant, CombatEngineBase combat)
     {
         enemy.AddStatus(_auraStatus.Create(Source), new CombatantStatusImposeContext(combat),
             new CombatantStatusLifetimeImposeContext(combatant, combat));
     }
-    
+
     private void Combat_CombatantHasBeenAdded(object? sender, CombatantHasBeenAddedEventArgs e)
     {
         var combatant = e.Combatant;

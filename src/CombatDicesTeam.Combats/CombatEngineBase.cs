@@ -177,11 +177,6 @@ public abstract class CombatEngineBase
         return remains;
     }
 
-    protected void DoCombatantHasBeenDefeated(ICombatant combatant)
-    {
-        CombatantHasBeenDefeated?.Invoke(this, new CombatantDefeatedEventArgs(combatant));
-    }
-
     /// <summary>
     /// Impose the status to target combatant.
     /// </summary>
@@ -258,6 +253,11 @@ public abstract class CombatEngineBase
     }
 
     protected abstract bool DetectCombatantIsDead(ICombatant combatant);
+
+    protected void DoCombatantHasBeenDefeated(ICombatant combatant)
+    {
+        CombatantHasBeenDefeated?.Invoke(this, new CombatantDefeatedEventArgs(combatant));
+    }
 
     [PublicAPI]
     protected void DoCombatantUsedMovement(ICombatant combatant, CombatMovementInstance movement, int handSlotIndex)

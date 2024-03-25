@@ -63,7 +63,6 @@ public class AuraCombatStatusTests
 
         protected override void PrepareCombatantsToNextRound()
         {
-
         }
 
         protected override void RestoreStatsOnWait()
