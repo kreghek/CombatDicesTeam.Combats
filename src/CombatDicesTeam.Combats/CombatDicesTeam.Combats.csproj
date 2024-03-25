@@ -36,6 +36,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CombatDicesTeam.Dices" Version="1.0.0" />
+		<PackageReference Include="CombatDicesTeam.GenericRanges" Version="1.0.0" />
 		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -55,9 +56,5 @@
 		<None Include="icon.png" Pack="true" PackagePath="" />
 		<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\CombatDicesTeam.GenericRanges\CombatDicesTeam.GenericRanges.csproj" />
-    </ItemGroup>
 
 </Project>
