@@ -42,13 +42,15 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
     private void Combat_CombatantHasBeenAdded(object? sender, CombatantHasBeenAddedEventArgs e)
     {
         var combatant = e.Combatant;
-        
+
         if (_combat is not null)
         {
             if (_owner is null)
             {
 #if DEBUG
                 throw new InvalidOperationException("Status owner was not assigned in Impose method.");
+#else
+                return;
 #endif
             }
 
@@ -59,14 +61,15 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
             }
 
             // Add status to new combatant
-                    
-            AddReduceStatus(combatant,  combatant, _combat);
 
+            AddReduceStatus(combatant, combatant, _combat);
         }
         else
         {
 #if DEBUG
             throw new InvalidOperationException("Combat engine was not assigned in Impose method");
+#else
+            return;
 #endif
         }
     }
