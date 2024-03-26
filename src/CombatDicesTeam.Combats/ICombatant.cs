@@ -44,7 +44,7 @@ public interface ICombatant
     /// <summary>
     /// Add effect to combatant.
     /// </summary>
-    /// <param name="effect">Effect instance.</param>
+    /// <param name="status">Effect instance.</param>
     /// <param name="statusImposeContext">
     /// Context to add status. To handle some reaction on new effects (change stats, moves, other
     /// effects).
@@ -53,7 +53,7 @@ public interface ICombatant
     /// Context to add status. To handle some reaction on new effects (change stats, moves, other
     /// effects).
     /// </param>
-    void AddStatus(ICombatantStatus effect, ICombatantStatusImposeContext statusImposeContext,
+    void AddStatus(ICombatantStatus status, ICombatantStatusImposeContext statusImposeContext,
         ICombatantStatusLifetimeImposeContext lifetimeImposeContext);
 
     /// <summary>
