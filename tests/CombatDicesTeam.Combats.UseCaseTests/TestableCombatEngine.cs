@@ -30,4 +30,9 @@ public sealed class TestableCombatEngine : CombatEngineBase
     protected override void SpendManeuverResources()
     {
     }
+
+    public void DefeatCombatant(ICombatant target)
+    {
+        DoCombatantHasBeenDefeated(target);
+    }
 }
