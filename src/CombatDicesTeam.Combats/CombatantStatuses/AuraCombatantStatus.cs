@@ -4,12 +4,13 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
 {
     private readonly Func<ICombatant, ICombatantStatusFactory> _auraStatusDelegate;
     private readonly IAuraTargetSelector _auraTargetSelector;
-    
-    private ICombatant? _owner;
     private CombatEngineBase? _combat;
 
+    private ICombatant? _owner;
+
     public AuraCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
-        ICombatantStatusSource source, Func<ICombatant, ICombatantStatusFactory> auraStatusDelegate, IAuraTargetSelector auraTargetSelector) : base(sid, lifetime, source)
+        ICombatantStatusSource source, Func<ICombatant, ICombatantStatusFactory> auraStatusDelegate, IAuraTargetSelector auraTargetSelector) :
+        base(sid, lifetime, source)
     {
         _auraStatusDelegate = auraStatusDelegate;
         _auraTargetSelector = auraTargetSelector;
@@ -18,19 +19,20 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
     public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
     {
         base.Impose(combatant, context);
-        
+
         _owner = combatant;
         _combat = context.Combat;
 
-        var auraTargets = context.Combat.CurrentCombatants.Where(x => _auraTargetSelector.IsCombatantUnderAura(x, combatant));
+        var auraTargets =
+            context.Combat.CurrentCombatants.Where(x => _auraTargetSelector.IsCombatantUnderAura(x, combatant));
 
         // Add status to current combatants
         foreach (var target in auraTargets)
         {
             AddAuraStatus(target, combatant, context.Combat);
         }
-        
-        context.Combat.CombatantHasBeenAdded += Combat_CombatantHasBeenAdded; 
+
+        context.Combat.CombatantHasBeenAdded += Combat_CombatantHasBeenAdded;
     }
 
     private void AddAuraStatus(ICombatant auraStatusTarget, ICombatant auraOwner, CombatEngineBase combat)
