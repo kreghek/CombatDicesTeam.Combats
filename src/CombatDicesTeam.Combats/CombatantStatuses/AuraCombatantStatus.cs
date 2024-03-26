@@ -24,8 +24,10 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
         _owner = combatant;
         _combat = context.Combat;
 
-        var auraTargets =
-            context.Combat.CurrentCombatants.Where(x => _auraTargetSelector.IsCombatantUnderAura(x, combatant));
+        var auraContext = new AuraTargetSelectorContext(_combat);
+
+        var auraTargets = context.Combat.CurrentCombatants
+                .Where(x => _auraTargetSelector.IsCombatantUnderAura(_owner, x, auraContext));
 
         // Add status to current combatants
         foreach (var target in auraTargets)
@@ -57,8 +59,10 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
                 return;
 #endif
             }
+            
+            var auraContext = new AuraTargetSelectorContext(_combat);
 
-            if (!_auraTargetSelector.IsCombatantUnderAura(_owner, combatant))
+            if (!_auraTargetSelector.IsCombatantUnderAura(_owner, combatant, auraContext))
             {
                 // Do not add status new allies
                 return;

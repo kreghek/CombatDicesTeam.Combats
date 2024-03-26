@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.8.0-alpha (2024-03-26)
+
+### Changed
+
+Aura can now select targets based on position on the field.
+
+For this purpose, the signature of IAuraTargetSelector was changed, which must be taken into account in ready-made implementations.
+
 ## 0.7.1-alpha (2024-03-26)
 
 ### Fixed
