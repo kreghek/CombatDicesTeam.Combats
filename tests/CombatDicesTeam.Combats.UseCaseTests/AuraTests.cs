@@ -103,7 +103,6 @@ public class AuraTests
         var stateStrategy = new LimitedRoundsCombatStateStrategy(new EliminatingCombatStateStrategy(), MAX_ROUNDS);
         var combat = new TestableCombatEngine(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
 
-        ICombatantStatus? imposedAuraStatusEffect = null;
         var heroMock = new Mock<ICombatant>();
         heroMock.Setup(x => x.IsPlayerControlled).Returns(true);
         heroMock.Setup(x => x.AddStatus(It.IsAny<ICombatantStatus>(), It.IsAny<ICombatantStatusImposeContext>(),
@@ -114,8 +113,6 @@ public class AuraTests
                     status.Impose(heroMock.Object, new CombatantStatusImposeContext(combat));
                     status.Lifetime.HandleImposed(status,
                         new CombatantStatusLifetimeImposeContext(heroMock.Object, combat));
-
-                    imposedAuraStatusEffect = status;
                 });
         var heroes = new[] { new FormationSlot(0, 0) { Combatant = heroMock.Object } };
 
@@ -160,7 +157,7 @@ public class AuraTests
         heroMock.Verify(x => x.AddStatus(It.Is<ICombatantStatus>(s => s.Sid.ToString() == "test-status-aura"),
             It.IsAny<ICombatantStatusImposeContext>(), It.IsAny<ICombatantStatusLifetimeImposeContext>()));
     }
-    
+
     [Test]
     public void Aura_only_for_enemy_vanguard_do_not_impose_to_rearguard()
     {
@@ -177,7 +174,6 @@ public class AuraTests
         var stateStrategy = new LimitedRoundsCombatStateStrategy(new EliminatingCombatStateStrategy(), MAX_ROUNDS);
         var combat = new TestableCombatEngine(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
 
-        ICombatantStatus? imposedAuraStatusEffect = null;
         var heroMock = new Mock<ICombatant>();
         heroMock.Setup(x => x.IsPlayerControlled).Returns(true);
         heroMock.Setup(x => x.AddStatus(It.IsAny<ICombatantStatus>(), It.IsAny<ICombatantStatusImposeContext>(),
@@ -188,8 +184,6 @@ public class AuraTests
                     status.Impose(heroMock.Object, new CombatantStatusImposeContext(combat));
                     status.Lifetime.HandleImposed(status,
                         new CombatantStatusLifetimeImposeContext(heroMock.Object, combat));
-
-                    imposedAuraStatusEffect = status;
                 });
         var heroes = new[] { new FormationSlot(1, 0) { Combatant = heroMock.Object } };
 
@@ -234,23 +228,26 @@ public class AuraTests
         heroMock.Verify(x => x.AddStatus(It.Is<ICombatantStatus>(s => s.Sid.ToString() == "test-status-aura"),
             It.IsAny<ICombatantStatusImposeContext>(), It.IsAny<ICombatantStatusLifetimeImposeContext>()), Times.Never);
     }
-    
+
     private sealed class EnemyVanguardAuraTargetSelector : IAuraTargetSelector
     {
-        public bool IsCombatantUnderAura(ICombatant auraOwner, ICombatant testCombatant, IAuraTargetSelectorContext context)
+        private IEnumerable<ICombatant> GetVanguardCombatant(CombatFieldSide side)
         {
-            return auraOwner.IsPlayerControlled != testCombatant.IsPlayerControlled && IsInVanguard(testCombatant, context);
+            return GetIterator(side).ToArray();
         }
 
-        private bool IsInVanguard(ICombatant testCombatant, IAuraTargetSelectorContext context)
+        private static IEnumerable<ICombatant> GetIterator(CombatFieldSide side)
         {
-            var testCombatantSide = GetTargetSide(testCombatant, context.Combat.Field);
-
-            var vanguards = GetVanguardCombatant(testCombatantSide);
-
-            return vanguards.Contains(testCombatant);
+            for (var lineIndex = 0; lineIndex < side.LineCount; lineIndex++)
+            {
+                var slot = side[new FieldCoords(0, lineIndex)];
+                if (slot.Combatant is not null)
+                {
+                    yield return slot.Combatant;
+                }
+            }
         }
-        
+
         private static CombatFieldSide GetTargetSide(ICombatant target, CombatField field)
         {
             try
@@ -264,22 +261,21 @@ public class AuraTests
                 return field.MonsterSide;
             }
         }
-        
-        private static IEnumerable<ICombatant> GetIterator(CombatFieldSide side)
+
+        private bool IsInVanguard(ICombatant testCombatant, IAuraTargetSelectorContext context)
         {
-            for (var lineIndex = 0; lineIndex < side.LineCount; lineIndex++)
-            {
-                var slot = side[new FieldCoords(0, lineIndex)];
-                if (slot.Combatant is not null)
-                {
-                    yield return slot.Combatant;
-                }
-            }
+            var testCombatantSide = GetTargetSide(testCombatant, context.Combat.Field);
+
+            var vanguards = GetVanguardCombatant(testCombatantSide);
+
+            return vanguards.Contains(testCombatant);
         }
 
-        public IReadOnlyList<ICombatant> GetVanguardCombatant(CombatFieldSide side)
+        public bool IsCombatantUnderAura(ICombatant auraOwner, ICombatant testCombatant,
+            IAuraTargetSelectorContext context)
         {
-            return GetIterator(side).ToArray();
+            return auraOwner.IsPlayerControlled != testCombatant.IsPlayerControlled &&
+                   IsInVanguard(testCombatant, context);
         }
     }
 }
