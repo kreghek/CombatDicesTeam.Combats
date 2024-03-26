@@ -2,16 +2,16 @@
 
 public sealed class AuraCombatantStatus : CombatantStatusBase
 {
-    private readonly ICombatantStatusFactory _auraStatus;
+    private readonly Func<ICombatant, ICombatantStatusFactory> _auraStatusDelegate;
     private readonly IAuraTargetSelector _auraTargetSelector;
     
     private ICombatant? _owner;
     private CombatEngineBase? _combat;
 
     public AuraCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
-        ICombatantStatusSource source, ICombatantStatusFactory auraStatus, IAuraTargetSelector auraTargetSelector) : base(sid, lifetime, source)
+        ICombatantStatusSource source, Func<ICombatant, ICombatantStatusFactory> auraStatusDelegate, IAuraTargetSelector auraTargetSelector) : base(sid, lifetime, source)
     {
-        _auraStatus = auraStatus;
+        _auraStatusDelegate = auraStatusDelegate;
         _auraTargetSelector = auraTargetSelector;
     }
 
@@ -27,18 +27,19 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
         // Add status to current combatants
         foreach (var target in auraTargets)
         {
-            AddReduceStatus(target, combatant, context.Combat);
+            AddAuraStatus(target, combatant, context.Combat);
         }
         
         context.Combat.CombatantHasBeenAdded += Combat_CombatantHasBeenAdded; 
     }
-    
-    private void AddReduceStatus(ICombatant enemy, ICombatant combatant, CombatEngineBase combat)
+
+    private void AddAuraStatus(ICombatant auraStatusTarget, ICombatant auraOwner, CombatEngineBase combat)
     {
-        enemy.AddStatus(_auraStatus.Create(Source), new CombatantStatusImposeContext(combat),
-            new CombatantStatusLifetimeImposeContext(combatant, combat));
+        auraStatusTarget.AddStatus(_auraStatusDelegate(auraOwner).Create(Source),
+            new CombatantStatusImposeContext(combat),
+            new CombatantStatusLifetimeImposeContext(auraOwner, combat));
     }
-    
+
     private void Combat_CombatantHasBeenAdded(object? sender, CombatantHasBeenAddedEventArgs e)
     {
         var combatant = e.Combatant;
@@ -62,7 +63,7 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
 
             // Add status to new combatant
 
-            AddReduceStatus(combatant, combatant, _combat);
+            AddAuraStatus(combatant, combatant, _combat);
         }
         else
         {

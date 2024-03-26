@@ -19,7 +19,7 @@ public class AuraCombatStatusTests
         var targetCombatant = targetCombatantMock.Object;
 
         var sut = new AuraCombatantStatus(Mock.Of<ICombatantStatusSid>(), Mock.Of<ICombatantStatusLifetime>(),
-            Mock.Of<ICombatantStatusSource>(), factoryMock.Object,
+            Mock.Of<ICombatantStatusSource>(), _=>factoryMock.Object,
             new EnemiesAuraTargetSelector());
 
         var auraOwnerCombatant = Mock.Of<ICombatant>(x => x.IsPlayerControlled == true);
