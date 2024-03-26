@@ -9,7 +9,8 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
     private ICombatant? _owner;
 
     public AuraCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
-        ICombatantStatusSource source, Func<ICombatant, ICombatantStatusFactory> auraStatusDelegate, IAuraTargetSelector auraTargetSelector) :
+        ICombatantStatusSource source, Func<ICombatant, ICombatantStatusFactory> auraStatusDelegate,
+        IAuraTargetSelector auraTargetSelector) :
         base(sid, lifetime, source)
     {
         _auraStatusDelegate = auraStatusDelegate;

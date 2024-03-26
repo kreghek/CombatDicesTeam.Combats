@@ -66,19 +66,21 @@ public class AuraTests
             ));
 
         var auraStatus = aura.Create(Mock.Of<ICombatantStatusSource>());
-        
+
         // ACT
-        
-        auraStatus.Impose(combat.CurrentCombatants.Single(x=>x == monsterMock.Object), new CombatantStatusImposeContext(combat));
-       
+
+        auraStatus.Impose(combat.CurrentCombatants.Single(x => x == monsterMock.Object),
+            new CombatantStatusImposeContext(combat));
+
         // ASSERT
-        
-        heroMock.Verify(x=>x.AddStatus(It.Is<ICombatantStatus>(s => s.Sid.ToString() == "test-status-aura"), It.IsAny<ICombatantStatusImposeContext>(), It.IsAny<ICombatantStatusLifetimeImposeContext>()));
-        
+
+        heroMock.Verify(x => x.AddStatus(It.Is<ICombatantStatus>(s => s.Sid.ToString() == "test-status-aura"),
+            It.IsAny<ICombatantStatusImposeContext>(), It.IsAny<ICombatantStatusLifetimeImposeContext>()));
+
         // ACT
-        
+
         combat.DefeatCombatant(monsterMock.Object);
-        
+
         // ASSERT
         imposedAuraStatusEffect.Lifetime.IsExpired.Should().BeTrue();
     }

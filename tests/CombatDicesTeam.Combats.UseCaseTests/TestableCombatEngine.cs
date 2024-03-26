@@ -14,6 +14,11 @@ public sealed class TestableCombatEngine : CombatEngineBase
         throw new NotImplementedException();
     }
 
+    public void DefeatCombatant(ICombatant target)
+    {
+        DoCombatantHasBeenDefeated(target);
+    }
+
     protected override bool DetectCombatantIsDead(ICombatant combatant)
     {
         return false;
@@ -29,10 +34,5 @@ public sealed class TestableCombatEngine : CombatEngineBase
 
     protected override void SpendManeuverResources()
     {
-    }
-
-    public void DefeatCombatant(ICombatant target)
-    {
-        DoCombatantHasBeenDefeated(target);
     }
 }
