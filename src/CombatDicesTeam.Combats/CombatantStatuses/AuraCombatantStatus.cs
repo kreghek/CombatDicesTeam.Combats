@@ -27,7 +27,7 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
         var auraContext = new AuraTargetSelectorContext(_combat);
 
         var auraTargets = context.Combat.CurrentCombatants
-                .Where(x => _auraTargetSelector.IsCombatantUnderAura(_owner, x, auraContext));
+            .Where(x => _auraTargetSelector.IsCombatantUnderAura(_owner, x, auraContext));
 
         // Add status to current combatants
         foreach (var target in auraTargets)
@@ -59,7 +59,7 @@ public sealed class AuraCombatantStatus : CombatantStatusBase
                 return;
 #endif
             }
-            
+
             var auraContext = new AuraTargetSelectorContext(_combat);
 
             if (!_auraTargetSelector.IsCombatantUnderAura(_owner, combatant, auraContext))

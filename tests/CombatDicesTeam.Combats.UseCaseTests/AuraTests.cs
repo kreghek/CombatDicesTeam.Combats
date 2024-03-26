@@ -231,11 +231,6 @@ public class AuraTests
 
     private sealed class EnemyVanguardAuraTargetSelector : IAuraTargetSelector
     {
-        private IEnumerable<ICombatant> GetVanguardCombatant(CombatFieldSide side)
-        {
-            return GetIterator(side).ToArray();
-        }
-
         private static IEnumerable<ICombatant> GetIterator(CombatFieldSide side)
         {
             for (var lineIndex = 0; lineIndex < side.LineCount; lineIndex++)
@@ -260,6 +255,11 @@ public class AuraTests
                 var _ = field.MonsterSide.GetCombatantCoords(target);
                 return field.MonsterSide;
             }
+        }
+
+        private IEnumerable<ICombatant> GetVanguardCombatant(CombatFieldSide side)
+        {
+            return GetIterator(side).ToArray();
         }
 
         private bool IsInVanguard(ICombatant testCombatant, IAuraTargetSelectorContext context)
