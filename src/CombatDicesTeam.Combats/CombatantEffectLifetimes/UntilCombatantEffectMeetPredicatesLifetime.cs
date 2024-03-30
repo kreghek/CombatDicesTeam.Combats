@@ -45,6 +45,7 @@ public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatu
     {
         _owner = context.TargetCombatant;
         _combat = context.Combat;
+
         context.Combat.CombatantUsedMove += Combat_CombatantUsedMove;
         context.Combat.CombatantHasBeenDamaged += Combat_CombatantChangedState;
         context.Combat.CombatantHasChangePosition += Combat_CombatantChangedState;
@@ -53,12 +54,15 @@ public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatu
 
     private void Combat_CombatantChangedState(object? sender, EventArgs e)
     {
-        if (_owner is not null && _combat is not null)
+        if (_owner is null || _combat is null)
         {
-            if (_combatantStatusPredicates.OfType<ICombatantStateLifetimeExpirationCondition>().All(x => x.Check(_owner, _combat)))
-            {
-                IsExpired = true;
-            }
+            //TODO Handle this as error
+            return;
+        }
+
+        if (_combatantStatusPredicates.OfType<ICombatantStateLifetimeExpirationCondition>().All(x => x.Check(_owner, _combat)))
+        {
+            IsExpired = true;
         }
     }
 
