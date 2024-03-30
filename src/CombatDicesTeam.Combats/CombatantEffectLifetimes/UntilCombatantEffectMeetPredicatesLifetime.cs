@@ -5,23 +5,31 @@ namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 [PublicAPI]
 public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatusLifetime
 {
-    private readonly IReadOnlyCollection<ICombatMovePredicate> _combatMovePredicates;
-    private ICombatant? _ownedCombatant;
+    private readonly IReadOnlyCollection<ICombatantStatusLifetimeExpirationCondition> _combatantStatusLifetimeExpirationCondition;
 
-    public UntilCombatantEffectMeetPredicatesLifetime(IReadOnlyCollection<ICombatMovePredicate> combatMovePredicates)
+    private ICombatant? _owner;
+    private CombatEngineBase? _combat;
+
+    public UntilCombatantEffectMeetPredicatesLifetime(
+        IReadOnlyCollection<ICombatantStatusLifetimeExpirationCondition> combatantStatusLifetimeExpirationCondition)
     {
-        _combatMovePredicates = combatMovePredicates;
+        _combatantStatusLifetimeExpirationCondition = combatantStatusLifetimeExpirationCondition;
     }
 
     private void Combat_CombatantUsedMove(object? sender, CombatantHandChangedEventArgs e)
     {
-        if (_ownedCombatant != e.Combatant)
+        if (_owner != e.Combatant)
         {
             // Check only if owner performs combat movements.
             return;
         }
 
-        if (_combatMovePredicates.All(x => x.Check(e.Move)))
+        if (_combat is null)
+        {
+            return;
+        }
+
+        if (_combatantStatusLifetimeExpirationCondition.OfType<IUsedCombatMovementLifetimeExpirationCondition>().All(x => x.Check(_owner, e.Move)))
         {
             IsExpired = true;
         }
@@ -35,12 +43,34 @@ public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatu
 
     public void HandleImposed(ICombatantStatus combatantEffect, ICombatantStatusLifetimeImposeContext context)
     {
-        _ownedCombatant = context.TargetCombatant;
+        _owner = context.TargetCombatant;
+        _combat = context.Combat;
+
         context.Combat.CombatantUsedMove += Combat_CombatantUsedMove;
+        context.Combat.CombatantHasBeenDamaged += Combat_CombatantChangedState;
+        context.Combat.CombatantHasChangePosition += Combat_CombatantChangedState;
+        context.Combat.CombatantHasBeenDefeated += Combat_CombatantChangedState;
+    }
+
+    private void Combat_CombatantChangedState(object? sender, EventArgs e)
+    {
+        if (_owner is null || _combat is null)
+        {
+            //TODO Handle this as error
+            return;
+        }
+
+        if (_combatantStatusLifetimeExpirationCondition.OfType<ICombatantStateLifetimeExpirationCondition>().All(x => x.Check(_owner, _combat)))
+        {
+            IsExpired = true;
+        }
     }
 
     public void HandleDispelling(ICombatantStatus combatantEffect, ICombatantStatusLifetimeDispelContext context)
     {
         context.Combat.CombatantUsedMove -= Combat_CombatantUsedMove;
+        context.Combat.CombatantHasBeenDamaged -= Combat_CombatantChangedState;
+        context.Combat.CombatantHasChangePosition -= Combat_CombatantChangedState;
+        context.Combat.CombatantHasBeenDefeated -= Combat_CombatantChangedState;
     }
 }
