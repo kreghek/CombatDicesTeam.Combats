@@ -5,15 +5,15 @@ namespace CombatDicesTeam.Combats.CombatantEffectLifetimes;
 [PublicAPI]
 public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatusLifetime
 {
-    private readonly IReadOnlyCollection<ICombatantStatusLifetimeExpirationCondition> _combatantStatusPredicates;
+    private readonly IReadOnlyCollection<ICombatantStatusLifetimeExpirationCondition> _combatantStatusLifetimeExpirationCondition;
 
     private ICombatant? _owner;
     private CombatEngineBase? _combat;
 
     public UntilCombatantEffectMeetPredicatesLifetime(
-        IReadOnlyCollection<ICombatantStatusLifetimeExpirationCondition> combatantStatusPredicates)
+        IReadOnlyCollection<ICombatantStatusLifetimeExpirationCondition> combatantStatusLifetimeExpirationCondition)
     {
-        _combatantStatusPredicates = combatantStatusPredicates;
+        _combatantStatusLifetimeExpirationCondition = combatantStatusLifetimeExpirationCondition;
     }
 
     private void Combat_CombatantUsedMove(object? sender, CombatantHandChangedEventArgs e)
@@ -29,7 +29,7 @@ public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatu
             return;
         }
 
-        if (_combatantStatusPredicates.OfType<IUsedCombatMovementLifetimeExpirationCondition>().All(x => x.Check(_owner, e.Move)))
+        if (_combatantStatusLifetimeExpirationCondition.OfType<IUsedCombatMovementLifetimeExpirationCondition>().All(x => x.Check(_owner, e.Move)))
         {
             IsExpired = true;
         }
@@ -60,7 +60,7 @@ public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatu
             return;
         }
 
-        if (_combatantStatusPredicates.OfType<ICombatantStateLifetimeExpirationCondition>().All(x => x.Check(_owner, _combat)))
+        if (_combatantStatusLifetimeExpirationCondition.OfType<ICombatantStateLifetimeExpirationCondition>().All(x => x.Check(_owner, _combat)))
         {
             IsExpired = true;
         }
