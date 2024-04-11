@@ -7,6 +7,9 @@ public interface IEffectInstance
     /// </summary>
     ITargetSelector Selector { get; }
 
+    /// <summary>
+    /// Conditions for the effect. The effect will be applied to the target only if all conditions are satisfied.
+    /// </summary>
     IReadOnlyCollection<IEffectCondition> ImposeConditions { get; }
 
     /// <summary>
