@@ -8,6 +8,11 @@ public interface IEffectInstance
     ITargetSelector Selector { get; }
 
     /// <summary>
+    /// Conditions for the effect. The effect will be applied to the target only if all conditions are satisfied.
+    /// </summary>
+    IReadOnlyCollection<IEffectCondition> ImposeConditions { get; }
+
+    /// <summary>
     /// Add effect modifier.
     /// </summary>
     /// <param name="modifier">Effect stat modifier to add.</param>

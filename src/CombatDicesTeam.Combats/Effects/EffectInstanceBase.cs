@@ -10,6 +10,8 @@ public abstract class EffectInstanceBase<TEffect> : IEffectInstance where TEffec
     public TEffect BaseEffect { get; }
     public ITargetSelector Selector => BaseEffect.Selector;
 
+    public IReadOnlyCollection<IEffectCondition> ImposeConditions => BaseEffect.ImposeConditions;
+
     public virtual void AddModifier(IStatModifier modifier)
     {
     }

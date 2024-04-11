@@ -14,7 +14,7 @@ public sealed class AddCombatantStatusEffect : IEffect
         Selector = targetSelector;
     }
 
-    public IReadOnlyCollection<IEffectCondition> ImposeConditions => Array.Empty<IEffectCondition>();
+    public IReadOnlyCollection<IEffectCondition> ImposeConditions { get; init; } = Array.Empty<IEffectCondition>();
     public ITargetSelector Selector { get; }
 
     public IEffectInstance CreateInstance()
