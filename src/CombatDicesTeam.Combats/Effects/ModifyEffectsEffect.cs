@@ -15,7 +15,7 @@ public sealed class ModifyEffectsEffect : IEffect
 
     public ITargetSelector Selector { get; }
 
-    public IReadOnlyCollection<IEffectCondition> ImposeConditions => Array.Empty<IEffectCondition>();
+    public IReadOnlyCollection<IEffectCondition> ImposeConditions { get; init; } = Array.Empty<IEffectCondition>();
 
     public IEffectInstance CreateInstance()
     {

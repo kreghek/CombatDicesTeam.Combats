@@ -7,6 +7,8 @@ public interface IEffectInstance
     /// </summary>
     ITargetSelector Selector { get; }
 
+    IReadOnlyCollection<IEffectCondition> ImposeConditions { get; }
+
     /// <summary>
     /// Add effect modifier.
     /// </summary>
