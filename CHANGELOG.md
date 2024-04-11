@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.10.0-alpha (2024-04-11)
+
+### Changed
+
+Now, when checking the conditions for imposing an effect, the actor and the battlefield are passed in so that it can be used when checking the conditions.
+
 ## 0.9.0-alpha (2024-03-30)
 
 ### Changed
