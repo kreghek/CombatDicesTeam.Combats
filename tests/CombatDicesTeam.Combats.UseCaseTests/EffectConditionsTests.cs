@@ -99,7 +99,7 @@ internal class EffectConditionsTests
 
         // ASSERT
 
-        statuses.Should().NotContain(x => x.Sid == statusSid);
+        statuses.Should().NotContain(x => x.Sid.Equals(statusSid));
     }
 
     [Test]
@@ -195,7 +195,7 @@ internal class EffectConditionsTests
 
         // ASSERT
 
-        statuses.Should().Contain(x => x.Sid == statusSid);
+        statuses.Should().Contain(x => x.Sid.Equals(statusSid));
     }
 
     private sealed class TestCombatantStatus : CombatantStatusBase
@@ -209,8 +209,6 @@ internal class EffectConditionsTests
         {
             _valueDelegate = valueDelegate;
         }
-
-        public int Value => (_statModifier?.Value).GetValueOrDefault();
 
         public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
         {
