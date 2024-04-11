@@ -4,6 +4,7 @@ using CombatDicesTeam.Combats.Effects;
 using CombatDicesTeam.Dices;
 
 namespace CombatDicesTeam.Combats.UseCaseTests;
+
 internal class EffectConditionsTests
 {
     [Test]
@@ -61,10 +62,10 @@ internal class EffectConditionsTests
         var statusFactory = new CombatStatusFactory(source =>
         {
             return new TestCombatantStatus(
-                        statusSid,
-                        new OwnerBoundCombatantEffectLifetime(),
-                        source,
-                        combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
+                statusSid,
+                new OwnerBoundCombatantEffectLifetime(),
+                source,
+                combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
         });
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
@@ -79,11 +80,14 @@ internal class EffectConditionsTests
                 CombatMovementEffectConfig.Create(new[]
                 {
                     new AddCombatantStatusEffect(targetSelector, statusFactory)
-                    { 
-                        ImposeConditions = new [] { Mock.Of<IEffectCondition>(x=>x.Check(It.IsAny<ICombatant>(), It.IsAny<CombatField>())== false) }
+                    {
+                        ImposeConditions = new[]
+                        {
+                            Mock.Of<IEffectCondition>(x =>
+                                x.Check(It.IsAny<ICombatant>(), It.IsAny<CombatField>()) == false)
+                        }
                     }
                 })));
-
 
         // ACT
 
@@ -157,10 +161,10 @@ internal class EffectConditionsTests
         var statusFactory = new CombatStatusFactory(source =>
         {
             return new TestCombatantStatus(
-                        statusSid,
-                        new OwnerBoundCombatantEffectLifetime(),
-                        source,
-                        combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
+                statusSid,
+                new OwnerBoundCombatantEffectLifetime(),
+                source,
+                combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
         });
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
@@ -176,10 +180,13 @@ internal class EffectConditionsTests
                 {
                     new AddCombatantStatusEffect(targetSelector, statusFactory)
                     {
-                        ImposeConditions = new [] { Mock.Of<IEffectCondition>(x=>x.Check(It.IsAny<ICombatant>(), It.IsAny<CombatField>())== true) }
+                        ImposeConditions = new[]
+                        {
+                            Mock.Of<IEffectCondition>(x =>
+                                x.Check(It.IsAny<ICombatant>(), It.IsAny<CombatField>()) == true)
+                        }
                     }
                 })));
-
 
         // ACT
 
