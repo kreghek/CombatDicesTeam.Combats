@@ -1,7 +1,5 @@
 ﻿using JetBrains.Annotations;
 
-using static CombatDicesTeam.Combats.CombatEngineBase;
-
 namespace CombatDicesTeam.Combats;
 
 [PublicAPI]

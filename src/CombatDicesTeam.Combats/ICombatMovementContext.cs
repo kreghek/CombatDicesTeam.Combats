@@ -1,7 +1,5 @@
 ﻿using CombatDicesTeam.Dices;
 
-using static CombatDicesTeam.Combats.CombatEngineBase;
-
 namespace CombatDicesTeam.Combats;
 
 public interface ICombatMovementContext

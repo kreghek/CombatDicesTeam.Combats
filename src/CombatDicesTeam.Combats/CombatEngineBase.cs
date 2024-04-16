@@ -146,38 +146,6 @@ public abstract class CombatEngineBase
             new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
-    protected int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
-    {
-        var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
-
-        if (damage.SourceAmount > 0 && wasTaken)
-        {
-            var damageNormalized = damage with
-            {
-                Amount = damage.Amount - remains
-            };
-            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageNormalized));
-        }
-
-        if (DetectCombatantIsDead(combatant))
-        {
-            var shiftShape = DetectShapeShifting();
-            if (shiftShape)
-            {
-                CombatantShiftShaped?.Invoke(this, new CombatantShiftShapedEventArgs(combatant));
-            }
-
-            combatant.SetDead();
-            DoCombatantHasBeenDefeated(combatant);
-
-            var targetSide = GetTargetSide(combatant, Field);
-            var coords = targetSide.GetCombatantCoords(combatant);
-            targetSide[coords].Combatant = null;
-        }
-
-        return remains;
-    }
-
     /// <summary>
     /// Impose the status to target combatant.
     /// </summary>
@@ -301,6 +269,38 @@ public abstract class CombatEngineBase
         }
 
         return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, Dice, attacker);
+    }
+
+    protected int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    {
+        var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
+
+        if (damage.SourceAmount > 0 && wasTaken)
+        {
+            var damageNormalized = damage with
+            {
+                Amount = damage.Amount - remains
+            };
+            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageNormalized));
+        }
+
+        if (DetectCombatantIsDead(combatant))
+        {
+            var shiftShape = DetectShapeShifting();
+            if (shiftShape)
+            {
+                CombatantShiftShaped?.Invoke(this, new CombatantShiftShapedEventArgs(combatant));
+            }
+
+            combatant.SetDead();
+            DoCombatantHasBeenDefeated(combatant);
+
+            var targetSide = GetTargetSide(combatant, Field);
+            var coords = targetSide.GetCombatantCoords(combatant);
+            targetSide[coords].Combatant = null;
+        }
+
+        return remains;
     }
 
     protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,

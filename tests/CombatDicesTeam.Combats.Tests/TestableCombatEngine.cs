@@ -9,6 +9,11 @@ public sealed class TestableCombatEngine : CombatEngineBase
     {
     }
 
+    public int TestHandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    {
+        return HandleCombatantDamagedToStat(combatant, statType, damage);
+    }
+
     protected override bool DetectCombatantIsDead(ICombatant combatant)
     {
         return false;
@@ -24,10 +29,5 @@ public sealed class TestableCombatEngine : CombatEngineBase
 
     protected override void SpendManeuverResources()
     {
-    }
-
-    public int TestHandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
-    {
-        return HandleCombatantDamagedToStat(combatant, statType, damage);
     }
 }
