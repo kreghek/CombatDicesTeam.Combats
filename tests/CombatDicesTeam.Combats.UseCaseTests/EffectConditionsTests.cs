@@ -59,14 +59,10 @@ internal class EffectConditionsTests
         combat.Initialize(heroes, monsters);
 
         var statusSid = new CombatantStatusSid("PowerUpByStat");
-        var statusFactory = new CombatStatusFactory(source =>
-        {
-            return new TestCombatantStatus(
-                statusSid,
-                new OwnerBoundCombatantEffectLifetime(),
-                source,
-                combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
-        });
+        var statusFactory = new CombatStatusFactory(source => new TestCombatantStatus(
+            statusSid,
+            new OwnerBoundCombatantEffectLifetime(),
+            source));
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
             x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<ITargetSelectorContext>()) == new[]
@@ -158,14 +154,10 @@ internal class EffectConditionsTests
         combat.Initialize(heroes, monsters);
 
         var statusSid = new CombatantStatusSid("PowerUpByStat");
-        var statusFactory = new CombatStatusFactory(source =>
-        {
-            return new TestCombatantStatus(
-                statusSid,
-                new OwnerBoundCombatantEffectLifetime(),
-                source,
-                combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
-        });
+        var statusFactory = new CombatStatusFactory(source => new TestCombatantStatus(
+            statusSid,
+            new OwnerBoundCombatantEffectLifetime(),
+            source));
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
             x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<ITargetSelectorContext>()) == new[]
@@ -207,22 +199,10 @@ internal class EffectConditionsTests
 
     private sealed class TestCombatantStatus : CombatantStatusBase
     {
-        private readonly Func<ICombatant, int> _valueDelegate;
-        private IStatModifier? _statModifier;
-
         public TestCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
-            ICombatantStatusSource source, Func<ICombatant, int> valueDelegate) :
+            ICombatantStatusSource source) :
             base(sid, lifetime, source)
         {
-            _valueDelegate = valueDelegate;
-        }
-
-        public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
-        {
-            base.Impose(combatant, context);
-
-            _statModifier = new StatModifier(_valueDelegate(((CombatMovementCombatantStatusSource)Source).Actor),
-                new NullStatModifierSource());
         }
     }
 }

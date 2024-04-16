@@ -1,4 +1,6 @@
-﻿namespace CombatDicesTeam.Combats.CombatantEffectLifetimes.Tests;
+﻿using CombatDicesTeam.Combats.CombatantEffectLifetimes;
+
+namespace CombatDicesTeam.Combats.Tests.CombatantEffectLifetimes;
 
 [TestFixture]
 public class MultipleCombatantTurnEffectLifetimeTests

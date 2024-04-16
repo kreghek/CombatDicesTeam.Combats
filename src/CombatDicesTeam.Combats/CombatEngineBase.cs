@@ -33,6 +33,7 @@ public abstract class CombatEngineBase
     /// Current active combatant.
     /// </summary>
     /// <exception cref="InvalidOperationException"></exception>
+    [PublicAPI]
     public ICombatant CurrentCombatant => _roundQueue.FirstOrDefault() ?? throw new InvalidOperationException();
 
     /// <summary>
@@ -52,6 +53,7 @@ public abstract class CombatEngineBase
     /// - Display round number in your game client.
     /// - Override conditions to finish combat based on round number.
     /// </remarks>
+    [PublicAPI]
     public int CurrentRoundNumber { get; private set; }
 
     /// <summary>
@@ -132,11 +134,6 @@ public abstract class CombatEngineBase
     }
 
     /// <summary>
-    /// Create combat move execution to visualize and apply effects in the right way.
-    /// </summary>
-    public abstract CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement);
-
-    /// <summary>
     /// Remove combatant status.
     /// </summary>
     /// <param name="targetCombatant">Target combatant under the status.</param>
@@ -149,13 +146,17 @@ public abstract class CombatEngineBase
             new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
-    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    protected int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
 
-        if (damage.SourceAmount > 0)
+        if (damage.SourceAmount > 0 && wasTaken)
         {
-            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damage));
+            var damageNormalized = damage with
+            {
+                Amount = damage.Amount - remains
+            };
+            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageNormalized));
         }
 
         if (DetectCombatantIsDead(combatant))
@@ -228,6 +229,7 @@ public abstract class CombatEngineBase
     /// </summary>
     /// <param name="combatStepDirection">Move direction.</param>
     /// <exception cref="ArgumentOutOfRangeException">Direction is unknown. Use only Up, Down, Right or Left.</exception>
+    [PublicAPI]
     public void UseManeuver(CombatStepDirection combatStepDirection)
     {
         var currentCoords = GetCurrentCoords();
@@ -252,6 +254,7 @@ public abstract class CombatEngineBase
         CompleteTurn();
     }
 
+    [PublicAPI]
     protected abstract bool DetectCombatantIsDead(ICombatant combatant);
 
     protected void DoCombatantHasBeenDefeated(ICombatant combatant)
@@ -342,6 +345,7 @@ public abstract class CombatEngineBase
 
     protected abstract void PrepareCombatantsToNextRound();
 
+    [PublicAPI]
     protected void RemoveCombatantFromQueue(ICombatant combatant)
     {
         _roundQueue.Remove(combatant);
@@ -479,7 +483,7 @@ public abstract class CombatEngineBase
         CombatRoundStarted?.Invoke(this, EventArgs.Empty);
     }
 
-    private static (int result, bool isTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
+    private static (int result, bool wasTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
     {
         var stat = combatant.Stats.SingleOrDefault(x => x.Type == statType);
 
@@ -547,10 +551,6 @@ public abstract class CombatEngineBase
     [PublicAPI]
     public event EventHandler<CombatantStatusEventArgs>? CombatantStatusHasBeenDispelled;
 
+    [PublicAPI]
     public event EventHandler? CombatRoundStarted;
-
-    public sealed record StatDamage(int Amount, int SourceAmount)
-    {
-        public static implicit operator StatDamage(int monoValue) { return new StatDamage(monoValue, monoValue); }
-    }
 }
