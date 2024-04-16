@@ -9,7 +9,7 @@ public sealed class TestableCombatEngine3 : CombatEngineBase
     {
     }
 
-    public CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
+    public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
     {
         var statusContext =
             new StatusCombatContext(CurrentCombatant, Field, Dice, HandleCombatantDamagedToStat,

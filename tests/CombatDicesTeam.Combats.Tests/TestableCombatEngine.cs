@@ -9,6 +9,11 @@ public sealed class TestableCombatEngine : CombatEngineBase
     {
     }
 
+    public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
+    {
+        throw new NotImplementedException();
+    }
+
     public int TestHandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
     {
         return HandleCombatantDamagedToStat(combatant, statType, damage);

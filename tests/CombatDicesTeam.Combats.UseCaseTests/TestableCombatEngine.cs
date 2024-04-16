@@ -9,6 +9,11 @@ public sealed class TestableCombatEngine : CombatEngineBase
     {
     }
 
+    public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
+    {
+        throw new NotImplementedException();
+    }
+
     public void DefeatCombatant(ICombatant target)
     {
         DoCombatantHasBeenDefeated(target);
