@@ -1,7 +1,5 @@
 ﻿using CombatDicesTeam.Dices;
 
-using NUnit.Framework.Internal;
-
 namespace CombatDicesTeam.Combats.Tests;
 
 [TestFixture]

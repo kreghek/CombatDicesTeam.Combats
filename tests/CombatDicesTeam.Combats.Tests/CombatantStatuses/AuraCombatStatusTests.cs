@@ -51,11 +51,6 @@ public class AuraCombatStatusTests
         {
         }
 
-        public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override bool DetectCombatantIsDead(ICombatant combatant)
         {
             throw new NotImplementedException();

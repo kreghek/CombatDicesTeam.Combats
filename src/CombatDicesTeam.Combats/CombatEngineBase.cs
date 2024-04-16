@@ -134,11 +134,6 @@ public abstract class CombatEngineBase
     }
 
     /// <summary>
-    /// Create combat move execution to visualize and apply effects in the right way.
-    /// </summary>
-    public abstract CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement);
-
-    /// <summary>
     /// Remove combatant status.
     /// </summary>
     /// <param name="targetCombatant">Target combatant under the status.</param>
@@ -234,6 +229,7 @@ public abstract class CombatEngineBase
     /// </summary>
     /// <param name="combatStepDirection">Move direction.</param>
     /// <exception cref="ArgumentOutOfRangeException">Direction is unknown. Use only Up, Down, Right or Left.</exception>
+    [PublicAPI]
     public void UseManeuver(CombatStepDirection combatStepDirection)
     {
         var currentCoords = GetCurrentCoords();
