@@ -152,6 +152,80 @@ public abstract class CombatEngineBase
             new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
+    [PublicAPI]
+    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    {
+        var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
+
+        if (damage.SourceAmount > 0 && wasTaken)
+        {
+            var damageNormalized = damage with
+            {
+                Amount = damage.Amount - remains
+            };
+            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageNormalized));
+        }
+
+        if (DetectCombatantIsDead(combatant))
+        {
+            var shiftShape = DetectShapeShifting();
+            if (shiftShape)
+            {
+                CombatantShiftShaped?.Invoke(this, new CombatantShiftShapedEventArgs(combatant));
+            }
+
+            combatant.SetDead();
+            DoCombatantHasBeenDefeated(combatant);
+
+            var targetSide = GetTargetSide(combatant, Field);
+            var coords = targetSide.GetCombatantCoords(combatant);
+            targetSide[coords].Combatant = null;
+        }
+
+        return remains;
+    }
+
+    [PublicAPI]
+    public void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
+        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
+    {
+        if (sourceCoords == destinationCoords && sourceFieldSide == destinationFieldSide)
+        {
+            return;
+        }
+
+        var sourceCombatant = sourceFieldSide[sourceCoords].Combatant;
+        var targetCombatant = destinationFieldSide[destinationCoords].Combatant;
+
+        destinationFieldSide[destinationCoords].Combatant = sourceCombatant;
+
+        if (sourceCombatant is not null)
+        {
+            var args = new CombatantHasChangedPositionEventArgs(
+                sourceCombatant,
+                destinationFieldSide,
+                destinationCoords,
+                moveReason);
+
+            CombatantHasChangePosition?.Invoke(this,
+                args);
+        }
+
+        sourceFieldSide[sourceCoords].Combatant = targetCombatant;
+
+        if (targetCombatant is not null)
+        {
+            var args = new CombatantHasChangedPositionEventArgs(
+                targetCombatant,
+                sourceFieldSide,
+                sourceCoords,
+                moveReason);
+
+            CombatantHasChangePosition?.Invoke(this,
+                args);
+        }
+    }
+
     /// <summary>
     /// Impose the status to target combatant.
     /// </summary>
@@ -275,80 +349,6 @@ public abstract class CombatEngineBase
         }
 
         return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, Dice, attacker);
-    }
-
-    [PublicAPI]
-    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
-    {
-        var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
-
-        if (damage.SourceAmount > 0 && wasTaken)
-        {
-            var damageNormalized = damage with
-            {
-                Amount = damage.Amount - remains
-            };
-            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageNormalized));
-        }
-
-        if (DetectCombatantIsDead(combatant))
-        {
-            var shiftShape = DetectShapeShifting();
-            if (shiftShape)
-            {
-                CombatantShiftShaped?.Invoke(this, new CombatantShiftShapedEventArgs(combatant));
-            }
-
-            combatant.SetDead();
-            DoCombatantHasBeenDefeated(combatant);
-
-            var targetSide = GetTargetSide(combatant, Field);
-            var coords = targetSide.GetCombatantCoords(combatant);
-            targetSide[coords].Combatant = null;
-        }
-
-        return remains;
-    }
-
-    [PublicAPI]
-    public void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
-        FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
-    {
-        if (sourceCoords == destinationCoords && sourceFieldSide == destinationFieldSide)
-        {
-            return;
-        }
-
-        var sourceCombatant = sourceFieldSide[sourceCoords].Combatant;
-        var targetCombatant = destinationFieldSide[destinationCoords].Combatant;
-
-        destinationFieldSide[destinationCoords].Combatant = sourceCombatant;
-
-        if (sourceCombatant is not null)
-        {
-            var args = new CombatantHasChangedPositionEventArgs(
-                sourceCombatant,
-                destinationFieldSide,
-                destinationCoords,
-                moveReason);
-
-            CombatantHasChangePosition?.Invoke(this,
-                args);
-        }
-
-        sourceFieldSide[sourceCoords].Combatant = targetCombatant;
-
-        if (targetCombatant is not null)
-        {
-            var args = new CombatantHasChangedPositionEventArgs(
-                targetCombatant,
-                sourceFieldSide,
-                sourceCoords,
-                moveReason);
-
-            CombatantHasChangePosition?.Invoke(this,
-                args);
-        }
     }
 
     protected abstract void PrepareCombatantsToNextRound();
