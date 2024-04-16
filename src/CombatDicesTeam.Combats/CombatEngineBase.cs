@@ -134,6 +134,12 @@ public abstract class CombatEngineBase
     }
 
     /// <summary>
+    /// Create combat move execution to visualize and apply effects in the right way.
+    /// </summary>
+    [PublicAPI]
+    public abstract CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement);
+
+    /// <summary>
     /// Remove combatant status.
     /// </summary>
     /// <param name="targetCombatant">Target combatant under the status.</param>
