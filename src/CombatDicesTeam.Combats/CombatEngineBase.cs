@@ -33,6 +33,7 @@ public abstract class CombatEngineBase
     /// Current active combatant.
     /// </summary>
     /// <exception cref="InvalidOperationException"></exception>
+    [PublicAPI]
     public ICombatant CurrentCombatant => _roundQueue.FirstOrDefault() ?? throw new InvalidOperationException();
 
     /// <summary>
@@ -52,6 +53,7 @@ public abstract class CombatEngineBase
     /// - Display round number in your game client.
     /// - Override conditions to finish combat based on round number.
     /// </remarks>
+    [PublicAPI]
     public int CurrentRoundNumber { get; private set; }
 
     /// <summary>
@@ -256,6 +258,7 @@ public abstract class CombatEngineBase
         CompleteTurn();
     }
 
+    [PublicAPI]
     protected abstract bool DetectCombatantIsDead(ICombatant combatant);
 
     protected void DoCombatantHasBeenDefeated(ICombatant combatant)
@@ -346,6 +349,7 @@ public abstract class CombatEngineBase
 
     protected abstract void PrepareCombatantsToNextRound();
 
+    [PublicAPI]
     protected void RemoveCombatantFromQueue(ICombatant combatant)
     {
         _roundQueue.Remove(combatant);
@@ -551,5 +555,6 @@ public abstract class CombatEngineBase
     [PublicAPI]
     public event EventHandler<CombatantStatusEventArgs>? CombatantStatusHasBeenDispelled;
 
+    [PublicAPI]
     public event EventHandler? CombatRoundStarted;
 }
