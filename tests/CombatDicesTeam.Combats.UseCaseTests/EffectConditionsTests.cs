@@ -59,13 +59,10 @@ internal class EffectConditionsTests
         combat.Initialize(heroes, monsters);
 
         var statusSid = new CombatantStatusSid("PowerUpByStat");
-        var statusFactory = new CombatStatusFactory(source =>
-        {
-            return new TestCombatantStatus(
-                statusSid,
-                new OwnerBoundCombatantEffectLifetime(),
-                source);
-        });
+        var statusFactory = new CombatStatusFactory(source => new TestCombatantStatus(
+            statusSid,
+            new OwnerBoundCombatantEffectLifetime(),
+            source));
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
             x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<ITargetSelectorContext>()) == new[]
@@ -157,13 +154,10 @@ internal class EffectConditionsTests
         combat.Initialize(heroes, monsters);
 
         var statusSid = new CombatantStatusSid("PowerUpByStat");
-        var statusFactory = new CombatStatusFactory(source =>
-        {
-            return new TestCombatantStatus(
-                statusSid,
-                new OwnerBoundCombatantEffectLifetime(),
-                source);
-        });
+        var statusFactory = new CombatStatusFactory(source => new TestCombatantStatus(
+            statusSid,
+            new OwnerBoundCombatantEffectLifetime(),
+            source));
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
             x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<ITargetSelectorContext>()) == new[]
