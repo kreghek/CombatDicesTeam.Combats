@@ -149,13 +149,17 @@ public abstract class CombatEngineBase
             new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
-    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    protected int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
 
-        if (damage.SourceAmount > 0)
+        if (damage.SourceAmount > 0 && wasTaken)
         {
-            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damage));
+            var damageNormalized = damage with
+            {
+                Amount = damage.Amount - remains
+            };
+            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageNormalized));
         }
 
         if (DetectCombatantIsDead(combatant))
@@ -479,7 +483,7 @@ public abstract class CombatEngineBase
         CombatRoundStarted?.Invoke(this, EventArgs.Empty);
     }
 
-    private static (int result, bool isTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
+    private static (int result, bool wasTaken) TakeStat(ICombatant combatant, ICombatantStatType statType, int value)
     {
         var stat = combatant.Stats.SingleOrDefault(x => x.Type == statType);
 
@@ -548,9 +552,4 @@ public abstract class CombatEngineBase
     public event EventHandler<CombatantStatusEventArgs>? CombatantStatusHasBeenDispelled;
 
     public event EventHandler? CombatRoundStarted;
-
-    public sealed record StatDamage(int Amount, int SourceAmount)
-    {
-        public static implicit operator StatDamage(int monoValue) { return new StatDamage(monoValue, monoValue); }
-    }
 }
