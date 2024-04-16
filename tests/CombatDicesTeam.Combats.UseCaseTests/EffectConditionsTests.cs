@@ -64,8 +64,7 @@ internal class EffectConditionsTests
             return new TestCombatantStatus(
                 statusSid,
                 new OwnerBoundCombatantEffectLifetime(),
-                source,
-                combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
+                source);
         });
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
@@ -163,8 +162,7 @@ internal class EffectConditionsTests
             return new TestCombatantStatus(
                 statusSid,
                 new OwnerBoundCombatantEffectLifetime(),
-                source,
-                combatant => combatant.Stats.Single(x => ReferenceEquals(x.Type, combatantStatType)).Value.Current);
+                source);
         });
 
         var targetSelector = Mock.Of<ITargetSelector>(x =>
@@ -207,22 +205,10 @@ internal class EffectConditionsTests
 
     private sealed class TestCombatantStatus : CombatantStatusBase
     {
-        private readonly Func<ICombatant, int> _valueDelegate;
-        private IStatModifier? _statModifier;
-
         public TestCombatantStatus(ICombatantStatusSid sid, ICombatantStatusLifetime lifetime,
-            ICombatantStatusSource source, Func<ICombatant, int> valueDelegate) :
+            ICombatantStatusSource source) :
             base(sid, lifetime, source)
         {
-            _valueDelegate = valueDelegate;
-        }
-
-        public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
-        {
-            base.Impose(combatant, context);
-
-            _statModifier = new StatModifier(_valueDelegate(((CombatMovementCombatantStatusSource)Source).Actor),
-                new NullStatModifierSource());
         }
     }
 }
