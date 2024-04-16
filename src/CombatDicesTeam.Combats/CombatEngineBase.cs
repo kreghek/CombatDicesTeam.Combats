@@ -277,7 +277,8 @@ public abstract class CombatEngineBase
         return new TargetSelectorContext(Field.MonsterSide, Field.HeroSide, Dice, attacker);
     }
 
-    protected int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    [PublicAPI]
+    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
 
@@ -309,7 +310,8 @@ public abstract class CombatEngineBase
         return remains;
     }
 
-    protected void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
+    [PublicAPI]
+    public void HandleSwapFieldPositions(FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
     {
         if (sourceCoords == destinationCoords && sourceFieldSide == destinationFieldSide)
