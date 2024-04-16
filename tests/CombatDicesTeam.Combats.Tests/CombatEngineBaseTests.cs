@@ -34,4 +34,61 @@ public class CombatEngineBaseTests
         monitor.Should().Raise(nameof(combat.CombatFinished))
             .WithArgs<CombatFinishedEventArgs>(e => e.Result.IsFinalState == true);
     }
+
+    [Test]
+    public void HandleCombatantDamagedToStat()
+    {
+        const int DAMAGE = 10;
+        const int STAT = 1;
+        
+        var roundQueueResolver = Mock.Of<IRoundQueueResolver>(x =>
+            x.GetCurrentRoundQueue(It.IsAny<IReadOnlyCollection<ICombatant>>()) == new[] { Mock.Of<ICombatant>() });
+        var combatState = Mock.Of<ICombatState>(cs => cs.IsFinalState == true);
+        var stateStrategy = Mock.Of<ICombatStateStrategy>(x =>
+            x.CalculateCurrentState(It.IsAny<ICombatStateStrategyContext>()) == combatState);
+        var sut = new TestableCombatEngine(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
+
+        using var monitor = sut.Monitor();
+
+        var statType = Mock.Of<ICombatantStatType>();
+        var stat = new CombatantStat(statType, new StatValue(STAT));
+        var combatant = Mock.Of<ICombatant>(x=>x.Stats == new[]{ stat });
+
+        // ACT
+
+        var _ = sut.TestHandleCombatantDamagedToStat(combatant, statType, DAMAGE);
+
+        // ASSERT
+
+        monitor.Should().Raise(nameof(sut.CombatantHasBeenDamaged))
+            .WithArgs<CombatantDamagedEventArgs>(x => x.Damage.Amount == STAT);
+    }
+    [Test]
+    public void HandleCombatantDamagedToStat2()
+    {
+        const int DAMAGE = 1;
+        const int STAT = 10;
+        
+        var roundQueueResolver = Mock.Of<IRoundQueueResolver>(x =>
+            x.GetCurrentRoundQueue(It.IsAny<IReadOnlyCollection<ICombatant>>()) == new[] { Mock.Of<ICombatant>() });
+        var combatState = Mock.Of<ICombatState>(cs => cs.IsFinalState == true);
+        var stateStrategy = Mock.Of<ICombatStateStrategy>(x =>
+            x.CalculateCurrentState(It.IsAny<ICombatStateStrategyContext>()) == combatState);
+        var sut = new TestableCombatEngine(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
+
+        using var monitor = sut.Monitor();
+
+        var statType = Mock.Of<ICombatantStatType>();
+        var stat = new CombatantStat(statType, new StatValue(STAT));
+        var combatant = Mock.Of<ICombatant>(x=>x.Stats == new[]{ stat });
+
+        // ACT
+
+        var _ = sut.TestHandleCombatantDamagedToStat(combatant, statType, DAMAGE);
+
+        // ASSERT
+
+        monitor.Should().Raise(nameof(sut.CombatantHasBeenDamaged))
+            .WithArgs<CombatantDamagedEventArgs>(x => x.Damage.Amount == DAMAGE);
+    }
 }

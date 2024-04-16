@@ -2,9 +2,9 @@
 
 namespace CombatDicesTeam.Combats.UseCaseTests;
 
-public sealed class TestableCombatEngine2 : CombatEngineBase
+public sealed class TestableCombatEngine3 : CombatEngineBase
 {
-    public TestableCombatEngine2(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy)
+    public TestableCombatEngine3(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy)
         : base(dice, roundQueueResolver, stateStrategy)
     {
     }
@@ -19,6 +19,13 @@ public sealed class TestableCombatEngine2 : CombatEngineBase
 
         foreach (var effectInstance in movement.Effects)
         {
+            if (!effectInstance.ImposeConditions.All(x => x.Check(CurrentCombatant, Field)))
+            {
+                // It is not meet the conditions.
+                // Ignore this effect.
+                continue;
+            }
+
             var effectInstanceClosure = effectInstance;
 
             void EffectInfluenceDelegate(ICombatant materializedTarget)

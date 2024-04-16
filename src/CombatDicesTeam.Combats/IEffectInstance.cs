@@ -3,6 +3,11 @@ namespace CombatDicesTeam.Combats;
 public interface IEffectInstance
 {
     /// <summary>
+    /// Conditions for the effect. The effect will be applied to the target only if all conditions are satisfied.
+    /// </summary>
+    IReadOnlyCollection<IEffectCondition> ImposeConditions { get; }
+
+    /// <summary>
     /// Effect target selector.
     /// </summary>
     ITargetSelector Selector { get; }

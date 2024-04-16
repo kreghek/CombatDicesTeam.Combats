@@ -19,7 +19,7 @@ public class AuraCombatStatusTests
         var targetCombatant = targetCombatantMock.Object;
 
         var sut = new AuraCombatantStatus(Mock.Of<ICombatantStatusSid>(), Mock.Of<ICombatantStatusLifetime>(),
-            Mock.Of<ICombatantStatusSource>(), _=>factoryMock.Object,
+            Mock.Of<ICombatantStatusSource>(), _ => factoryMock.Object,
             new EnemiesAuraTargetSelector());
 
         var auraOwnerCombatant = Mock.Of<ICombatant>(x => x.IsPlayerControlled == true);
@@ -49,11 +49,6 @@ public class AuraCombatStatusTests
         public TestCombat(IDice dice, IRoundQueueResolver roundQueueResolver, ICombatStateStrategy stateStrategy) :
             base(dice, roundQueueResolver, stateStrategy)
         {
-        }
-
-        public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
-        {
-            throw new NotImplementedException();
         }
 
         protected override bool DetectCombatantIsDead(ICombatant combatant)

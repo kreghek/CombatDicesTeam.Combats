@@ -1,6 +1,8 @@
 using CombatDicesTeam.Dices;
 using CombatDicesTeam.GenericRanges;
 
+using JetBrains.Annotations;
+
 namespace CombatDicesTeam.Combats.Effects;
 
 public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeCurrentStatEffect>
@@ -11,6 +13,7 @@ public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeC
             new StatValue(baseEffect.StatValue.Max));
     }
 
+    [PublicAPI]
     public GenericRange<IStatValue> StatValue { get; }
 
     public override void Influence(ICombatant target, ICombatMovementContext context)
@@ -27,7 +30,6 @@ public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeC
             statValue.Consume(rolledValue);
         }
 
-        context.DamageCombatantStat(target, BaseEffect.TargetStatType,
-            new CombatEngineBase.StatDamage(rolledValue, rolledValue));
+        context.DamageCombatantStat(target, BaseEffect.TargetStatType, new StatDamage(rolledValue, rolledValue));
     }
 }

@@ -9,11 +9,6 @@ public sealed class TestableCombatEngine : CombatEngineBase
     {
     }
 
-    public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
-    {
-        throw new NotImplementedException();
-    }
-
     protected override bool DetectCombatantIsDead(ICombatant combatant)
     {
         return false;
@@ -29,5 +24,10 @@ public sealed class TestableCombatEngine : CombatEngineBase
 
     protected override void SpendManeuverResources()
     {
+    }
+
+    public int TestHandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    {
+        return HandleCombatantDamagedToStat(combatant, statType, damage);
     }
 }

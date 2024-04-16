@@ -39,11 +39,6 @@ public class TargetCombatantsBoundCombatantStatusLifetimeTests
         {
         }
 
-        public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
-        {
-            throw new NotImplementedException();
-        }
-
         public void DefeatCombatant(ICombatant combatant)
         {
             DoCombatantHasBeenDefeated(combatant);

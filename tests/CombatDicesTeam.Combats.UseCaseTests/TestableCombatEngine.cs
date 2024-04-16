@@ -9,9 +9,9 @@ public sealed class TestableCombatEngine : CombatEngineBase
     {
     }
 
-    public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
+    public void DefeatCombatant(ICombatant target)
     {
-        throw new NotImplementedException();
+        DoCombatantHasBeenDefeated(target);
     }
 
     protected override bool DetectCombatantIsDead(ICombatant combatant)
@@ -29,10 +29,5 @@ public sealed class TestableCombatEngine : CombatEngineBase
 
     protected override void SpendManeuverResources()
     {
-    }
-
-    public void DefeatCombatant(ICombatant target)
-    {
-        DoCombatantHasBeenDefeated(target);
     }
 }

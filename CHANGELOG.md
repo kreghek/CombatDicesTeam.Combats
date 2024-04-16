@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.10.0-alpha (2024-04-11)
+
+### Changed
+
+Now, when checking the conditions for imposing an effect, the actor and the battlefield are passed in so that it can be used when checking the conditions.
+
+## 0.9.0-alpha (2024-03-30)
+
+### Changed
+
+Status lifetime UntilCombatantEffectMeetPredicatesLifetime can detect combatant change his state like HP or position. This is needed to enter statuses like Last Breath. The idea is for the status to last as long as the combatant's health is above a threshold. And then the status disappears.
+
+## 0.8.0-alpha (2024-03-26)
+
+### Changed
+
+Aura can now select targets based on position on the field.
+
+For this purpose, the signature of IAuraTargetSelector was changed, which must be taken into account in ready-made implementations.
+
 ## 0.7.1-alpha (2024-03-26)
 
 ### Fixed
