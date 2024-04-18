@@ -30,6 +30,10 @@ public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeC
             statValue.Consume(rolledValue);
         }
 
-        context.DamageCombatantStat(target, BaseEffect.TargetStatType, new StatDamage(rolledValue, rolledValue));
+        context.DamageCombatantStat(
+            target,
+            new CombatantDamageSource(context.Actor),
+            BaseEffect.TargetStatType,
+            new StatDamage(rolledValue, rolledValue));
     }
 }
