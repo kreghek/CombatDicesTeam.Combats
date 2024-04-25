@@ -51,14 +51,15 @@ public class CounterTests
                     status.Lifetime.HandleImposed(status,
                         new CombatantStatusLifetimeImposeContext(monsterMock.Object, combat));
                 });
-        
+
         var monsters = new[] { new FormationSlot(0, 0) { Combatant = monsterMock.Object } };
 
         combat.Initialize(heroes, monsters);
 
         var resultStatusSid = Mock.Of<ICombatantStatusSid>();
         var resultStatusFactory =
-            new CombatStatusFactory(_ => Mock.Of<ICombatantStatus>(s => s.Sid == resultStatusSid && s.Lifetime == new OwnerBoundCombatantEffectLifetime()));
+            new CombatStatusFactory(_ => Mock.Of<ICombatantStatus>(s =>
+                s.Sid == resultStatusSid && s.Lifetime == new OwnerBoundCombatantEffectLifetime()));
 
         var counterStatusFactory = new CombatStatusFactory(source =>
             new CounterCombatantStatus(
