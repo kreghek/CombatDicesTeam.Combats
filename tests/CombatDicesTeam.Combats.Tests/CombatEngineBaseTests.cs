@@ -56,7 +56,7 @@ public class CombatEngineBaseTests
 
         // ACT
 
-        var _ = sut.TestHandleCombatantDamagedToStat(combatant, statType, DAMAGE);
+        var _ = sut.TestHandleCombatantDamagedToStat(combatant, Mock.Of<IDamageSource>(), statType, DAMAGE);
 
         // ASSERT
 
@@ -85,7 +85,7 @@ public class CombatEngineBaseTests
 
         // ACT
 
-        var _ = sut.TestHandleCombatantDamagedToStat(combatant, statType, DAMAGE);
+        var _ = sut.TestHandleCombatantDamagedToStat(combatant,Mock.Of<IDamageSource>(), statType, DAMAGE);
 
         // ASSERT
 
