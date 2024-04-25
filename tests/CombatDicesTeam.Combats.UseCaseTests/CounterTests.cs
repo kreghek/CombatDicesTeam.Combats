@@ -22,7 +22,6 @@ public class CounterTests
         var stateStrategy = new LimitedRoundsCombatStateStrategy(new EliminatingCombatStateStrategy(), MAX_ROUNDS);
         var combat = new TestableCombatEngine(Mock.Of<IDice>(), roundQueueResolver, stateStrategy);
 
-        ICombatantStatus? imposedAuraStatusEffect = null;
         var heroMock = new Mock<ICombatant>();
         heroMock.Setup(x => x.IsPlayerControlled).Returns(true);
         heroMock.Setup(x => x.AddStatus(It.IsAny<ICombatantStatus>(), It.IsAny<ICombatantStatusImposeContext>(),
@@ -33,9 +32,12 @@ public class CounterTests
                     status.Impose(heroMock.Object, new CombatantStatusImposeContext(combat));
                     status.Lifetime.HandleImposed(status,
                         new CombatantStatusLifetimeImposeContext(heroMock.Object, combat));
-
-                    imposedAuraStatusEffect = status;
                 });
+        var statType = Mock.Of<ICombatantStatType>();
+        heroMock.Setup(x => x.Stats).Returns(new[]
+        {
+            Mock.Of<ICombatantStat>(cs => cs.Type == statType && cs.Value == Mock.Of<IStatValue>(v => v.Current == 1))
+        });
         var heroes = new[] { new FormationSlot(0, 0) { Combatant = heroMock.Object } };
 
         var monsterMock = new Mock<ICombatant>();
@@ -49,41 +51,33 @@ public class CounterTests
                     status.Lifetime.HandleImposed(status,
                         new CombatantStatusLifetimeImposeContext(monsterMock.Object, combat));
                 });
+        
         var monsters = new[] { new FormationSlot(0, 0) { Combatant = monsterMock.Object } };
 
         combat.Initialize(heroes, monsters);
 
-        var aura = new CombatStatusFactory(source =>
-            new AuraCombatantStatus(new CombatantStatusSid("test-aura"),
+        var resultStatusSid = Mock.Of<ICombatantStatusSid>();
+        var resultStatusFactory =
+            new CombatStatusFactory(_ => Mock.Of<ICombatantStatus>(s => s.Sid == resultStatusSid && s.Lifetime == new OwnerBoundCombatantEffectLifetime()));
+
+        var counterStatusFactory = new CombatStatusFactory(source =>
+            new CounterCombatantStatus(
+                Mock.Of<ICombatantStatusSid>(),
                 new OwnerBoundCombatantEffectLifetime(),
                 source,
-                owner => new CombatStatusFactory(_ =>
-                    Mock.Of<ICombatantStatus>(s =>
-#pragma warning disable CS0252, CS0253
-                        s.Sid == new CombatantStatusSid("test-status-aura") &&
-#pragma warning restore CS0252, CS0253
-                        s.Lifetime == new TargetCombatantsBoundCombatantStatusLifetime(owner))
-                ),
-                new EnemiesAuraTargetSelector()
-            ));
+                new AddStatusCounterReaction(resultStatusFactory, new EnemiesAuraTargetSelector())));
 
-        var auraStatus = aura.Create(Mock.Of<ICombatantStatusSource>());
+        var counterStatus = counterStatusFactory.Create(Mock.Of<ICombatantStatusSource>());
+
+        counterStatus.Impose(heroMock.Object, new CombatantStatusImposeContext(combat));
 
         // ACT
 
-        auraStatus.Impose(combat.CurrentCombatants.Single(x => x == monsterMock.Object),
-            new CombatantStatusImposeContext(combat));
+        combat.DamageCombatant(heroMock.Object, monsterMock.Object, statType, 1);
 
         // ASSERT
 
-        heroMock.Verify(x => x.AddStatus(It.Is<ICombatantStatus>(s => s.Sid.ToString() == "test-status-aura"),
+        monsterMock.Verify(x => x.AddStatus(It.Is<ICombatantStatus>(s => s.Sid == resultStatusSid),
             It.IsAny<ICombatantStatusImposeContext>(), It.IsAny<ICombatantStatusLifetimeImposeContext>()));
-
-        // ACT
-
-        combat.DefeatCombatant(monsterMock.Object);
-
-        // ASSERT
-        imposedAuraStatusEffect?.Lifetime.IsExpired.Should().BeTrue();
     }
 }

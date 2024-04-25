@@ -5,21 +5,21 @@ namespace CombatDicesTeam.Combats;
 public sealed class CombatMovementContext : ICombatMovementContext
 {
     public CombatMovementContext(
-        ICombatant targetCombatant,
+        ICombatant movementActor,
         CombatField field,
         IDice dice,
         CombatantHasTakenDamagedCallback notifyCombatantDamagedDelegate,
         CombatantHasMovedCallback notifyCombatantMovedDelegate,
         CombatEngineBase combatCore)
     {
-        Actor = targetCombatant;
+        Actor = movementActor;
         Field = field;
         Dice = dice;
         NotifyCombatantDamagedDelegate = notifyCombatantDamagedDelegate;
         NotifyCombatantMovedDelegate = notifyCombatantMovedDelegate;
 
         StatusImposedContext = new CombatantStatusImposeContext(combatCore);
-        StatusLifetimeImposedContext = new CombatantStatusLifetimeImposeContext(targetCombatant, combatCore);
+        StatusLifetimeImposedContext = new CombatantStatusLifetimeImposeContext(movementActor, combatCore);
     }
 
     public CombatantHasTakenDamagedCallback NotifyCombatantDamagedDelegate { get; }
