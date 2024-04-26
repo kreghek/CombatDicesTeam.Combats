@@ -11,7 +11,8 @@ public interface ICombatMovementContext
     ICombatantStatusImposeContext StatusImposedContext { get; }
     ICombatantStatusLifetimeImposeContext StatusLifetimeImposedContext { get; }
 
-    int DamageCombatantStat(ICombatant target, IDamageSource damageSource, ICombatantStatType statType, StatDamage damage);
+    int DamageCombatantStat(ICombatant target, IDamageSource damageSource, ICombatantStatType statType,
+        StatDamage damage);
 
     void NotifySwapFieldPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason);

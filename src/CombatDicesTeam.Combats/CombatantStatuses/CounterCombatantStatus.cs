@@ -1,6 +1,6 @@
 ﻿namespace CombatDicesTeam.Combats.CombatantStatuses;
 
-public sealed class CounterCombatantStatus: CombatantStatusBase
+public sealed class CounterCombatantStatus : CombatantStatusBase
 {
     private readonly ICounterReaction _counterReaction;
     private CombatEngineBase? _combat;
