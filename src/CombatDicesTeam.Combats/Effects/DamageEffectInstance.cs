@@ -30,7 +30,10 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
         var currentAbsorptionValue = absorptionStat?.Value.Current;
         var absorbedDamage = Math.Max(rolledDamage - currentAbsorptionValue.GetValueOrDefault(), 0);
 
-        var damageRemains = context.DamageCombatantStat(target, _damageEffectConfig.ProtectionStatType,
+        var damageRemains = context.DamageCombatantStat(
+            target,
+            new CombatantDamageSource(context.Actor),
+            _damageEffectConfig.ProtectionStatType,
             new StatDamage(absorbedDamage, rolledDamage));
 
         if (BaseEffect.DamageType == DamageType.ProtectionOnly)
@@ -40,7 +43,10 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 
         if (damageRemains > 0)
         {
-            context.DamageCombatantStat(target, _damageEffectConfig.MainStatType,
+            context.DamageCombatantStat(
+                target,
+                new CombatantDamageSource(context.Actor),
+                _damageEffectConfig.MainStatType,
                 new StatDamage(damageRemains, rolledDamage));
         }
     }

@@ -153,7 +153,7 @@ public abstract class CombatEngineBase
     }
 
     [PublicAPI]
-    public int HandleCombatantDamagedToStat(ICombatant combatant, ICombatantStatType statType, StatDamage damage)
+    public int HandleCombatantDamagedToStat(ICombatant combatant, IDamageSource damageSource, ICombatantStatType statType, StatDamage damage)
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
 
@@ -163,7 +163,7 @@ public abstract class CombatEngineBase
             {
                 Amount = damage.Amount - remains
             };
-            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, statType, damageNormalized));
+            CombatantHasBeenDamaged?.Invoke(this, new CombatantDamagedEventArgs(combatant, damageSource, statType, damageNormalized));
         }
 
         if (DetectCombatantIsDead(combatant))
