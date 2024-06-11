@@ -256,6 +256,11 @@ public abstract class CombatEngineBase
             var startUpContext = new CombatantStartupContext(new CombatantStatusImposeContext(this),
                 new CombatantStatusLifetimeImposeContext(combatant, this));
             combatant.PrepareToCombat(startUpContext);
+
+            foreach (var stat in combatant.Stats)
+            {
+                stat.Changed += Stat_Changed;
+            }
         }
 
         var context = new CombatantStatusLifetimeDispelContext(this);
@@ -263,6 +268,13 @@ public abstract class CombatEngineBase
 
         CombatRoundStarted?.Invoke(this, EventArgs.Empty);
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
+    }
+
+    private void Stat_Changed(object? sender, CombatantStatChangedEventArgs e)
+    {
+        var combatant = AllCombatantList.Single(x => x.Stats.Contains(sender));
+        
+        HandleCombatantDamagedToStat()
     }
 
     /// <summary>

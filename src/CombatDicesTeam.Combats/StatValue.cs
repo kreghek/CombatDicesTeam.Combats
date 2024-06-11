@@ -34,14 +34,16 @@ public class StatValue : IStatValue
         Base = newBase;
     }
 
-    public void Consume(int value)
+    public void Consume(int amount)
     {
-        Current -= value;
+        Current -= amount;
 
         if (Current < 0)
         {
             Current = 0;
         }
+        
+        CurrentChanged?.Invoke(this, new StatChangedEventArgs(-amount));
     }
 
     public void CurrentChange(int newCurrent)
@@ -49,14 +51,16 @@ public class StatValue : IStatValue
         Current = Math.Min(newCurrent, ActualMax);
     }
 
-    public void Restore(int value)
+    public void Restore(int amount)
     {
-        Current += value;
+        Current += amount;
 
         if (Current > ActualMax)
         {
             Current = ActualMax;
         }
+        
+        CurrentChanged?.Invoke(this, new StatChangedEventArgs(amount));
     }
 
     public void RemoveModifier(IStatModifier modifier)
@@ -70,4 +74,5 @@ public class StatValue : IStatValue
     }
 
     public event EventHandler? ModifierAdded;
+    public event EventHandler<StatChangedEventArgs>? CurrentChanged;
 }
