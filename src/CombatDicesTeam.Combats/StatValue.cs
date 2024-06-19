@@ -42,8 +42,6 @@ public class StatValue : IStatValue
         {
             Current = 0;
         }
-        
-        CurrentChanged?.Invoke(this, new StatChangedEventArgs(-amount));
     }
 
     public void CurrentChange(int newCurrent)
@@ -59,8 +57,6 @@ public class StatValue : IStatValue
         {
             Current = ActualMax;
         }
-        
-        CurrentChanged?.Invoke(this, new StatChangedEventArgs(amount));
     }
 
     public void RemoveModifier(IStatModifier modifier)
@@ -74,5 +70,4 @@ public class StatValue : IStatValue
     }
 
     public event EventHandler? ModifierAdded;
-    public event EventHandler<StatChangedEventArgs>? CurrentChanged;
 }
