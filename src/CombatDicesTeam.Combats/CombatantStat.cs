@@ -6,14 +6,8 @@ public sealed class CombatantStat : ICombatantStat
     {
         Type = type;
         Value = value;
-
-        Value.CurrentChanged += (_, args) =>
-        {
-            Changed?.Invoke(this, new CombatantStatChangedEventArgs(type, args.Amount));
-        };
     }
 
     public ICombatantStatType Type { get; }
     public IStatValue Value { get; }
-    public event EventHandler<CombatantStatChangedEventArgs>? Changed;
 }

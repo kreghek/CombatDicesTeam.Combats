@@ -18,12 +18,6 @@ public sealed class CombatantStatValue : IStatValue
         Current = ActualMax;
 
         _baseValue.ModifierAdded += BaseValue_ModifierAdded;
-        _baseValue.CurrentChanged += BaseValue_CurrentChanged;
-    }
-
-    private void BaseValue_CurrentChanged(object? sender, StatChangedEventArgs e)
-    {
-        CurrentChanged?.Invoke(this, e);
     }
 
     private void BaseValue_ModifierAdded(object? sender, EventArgs e)
@@ -87,5 +81,4 @@ public sealed class CombatantStatValue : IStatValue
     }
 
     public event EventHandler? ModifierAdded;
-    public event EventHandler<StatChangedEventArgs>? CurrentChanged;
 }

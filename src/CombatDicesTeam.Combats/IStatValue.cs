@@ -18,6 +18,4 @@ public interface IStatValue
     void Restore(int amount);
 
     event EventHandler? ModifierAdded;
-
-    event EventHandler<StatChangedEventArgs> CurrentChanged;
 }
