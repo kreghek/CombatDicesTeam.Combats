@@ -56,11 +56,11 @@ public class CombatEngineBaseTests
 
         // ACT
 
-        var _ = sut.TestHandleCombatantDamagedToStat(combatant, Mock.Of<IDamageSource>(), statType, DAMAGE);
+        var _ = sut.TestHandleCombatantDamagedToStat(combatant, Mock.Of<IStatChangingSource>(), statType, DAMAGE);
 
         // ASSERT
 
-        monitor.Should().Raise(nameof(sut.CombatantHasBeenDamaged))
+        monitor.Should().Raise(nameof(sut.CombatantStatChanged))
             .WithArgs<CombatantDamagedEventArgs>(x => x.Damage.Amount == STAT);
     }
 
@@ -85,11 +85,11 @@ public class CombatEngineBaseTests
 
         // ACT
 
-        var _ = sut.TestHandleCombatantDamagedToStat(combatant, Mock.Of<IDamageSource>(), statType, DAMAGE);
+        var _ = sut.TestHandleCombatantDamagedToStat(combatant, Mock.Of<IStatChangingSource>(), statType, DAMAGE);
 
         // ASSERT
 
-        monitor.Should().Raise(nameof(sut.CombatantHasBeenDamaged))
+        monitor.Should().Raise(nameof(sut.CombatantStatChanged))
             .WithArgs<CombatantDamagedEventArgs>(x => x.Damage.Amount == DAMAGE);
     }
 }

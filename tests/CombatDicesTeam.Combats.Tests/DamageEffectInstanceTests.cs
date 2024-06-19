@@ -97,7 +97,7 @@ public sealed class DamageEffectInstanceTests
         // Assert
 
         statusCombatContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IDamageSource>(),
+            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IStatChangingSource>(),
                 damageEffectConfig.ProtectionStatType, 10), Times.Once);
     }
 
@@ -142,7 +142,7 @@ public sealed class DamageEffectInstanceTests
 
         // Because protection consumes all of the damage.
         statusCombatContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, Mock.Of<IDamageSource>(), damageEffectConfig.MainStatType,
+            c => c.DamageCombatantStat(targetMock.Object, Mock.Of<IStatChangingSource>(), damageEffectConfig.MainStatType,
                 It.IsAny<StatDamage>()),
             Times.Never);
     }
@@ -174,7 +174,7 @@ public sealed class DamageEffectInstanceTests
 
         var statusCombatContextMock = new Mock<ICombatMovementContext>();
         statusCombatContextMock.Setup(c =>
-                c.DamageCombatantStat(targetMock.Object, It.IsAny<IDamageSource>(),
+                c.DamageCombatantStat(targetMock.Object, It.IsAny<IStatChangingSource>(),
                     damageEffectConfig.ProtectionStatType,
                     It.IsAny<StatDamage>()))
             .Returns(10);
@@ -192,7 +192,7 @@ public sealed class DamageEffectInstanceTests
         // Assert
 
         statusCombatContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IDamageSource>(), damageEffectConfig.MainStatType,
+            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IStatChangingSource>(), damageEffectConfig.MainStatType,
                 It.Is<StatDamage>(x => x.Amount == 10)), Times.Once);
     }
 
@@ -223,7 +223,7 @@ public sealed class DamageEffectInstanceTests
 
         var combatMovementContextMock = new Mock<ICombatMovementContext>();
         combatMovementContextMock.Setup(c =>
-                c.DamageCombatantStat(targetMock.Object, Mock.Of<IDamageSource>(),
+                c.DamageCombatantStat(targetMock.Object, Mock.Of<IStatChangingSource>(),
                     damageEffectConfig.ProtectionStatType,
                     It.IsAny<StatDamage>()))
             .Returns(10);
@@ -241,7 +241,7 @@ public sealed class DamageEffectInstanceTests
         // Assert
 
         combatMovementContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IDamageSource>(),
+            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IStatChangingSource>(),
                 damageEffectConfig.ProtectionStatType,
                 It.Is<StatDamage>(x => x.Amount == 9)), Times.Once);
     }
@@ -287,11 +287,11 @@ public sealed class DamageEffectInstanceTests
         // Assert
 
         statusCombatContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IDamageSource>(),
+            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IStatChangingSource>(),
                 damageEffectConfig.ProtectionStatType,
                 It.Is<StatDamage>(x => x.Amount == 9)), Times.Once);
         statusCombatContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IDamageSource>(),
+            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IStatChangingSource>(),
                 damageEffectConfig.ProtectionStatType,
                 It.Is<StatDamage>(x => x.Amount == 8)), Times.Never);
     }
@@ -324,7 +324,7 @@ public sealed class DamageEffectInstanceTests
 
         var statusCombatContextMock = new Mock<ICombatMovementContext>();
         statusCombatContextMock.Setup(c =>
-                c.DamageCombatantStat(targetMock.Object, Mock.Of<IDamageSource>(),
+                c.DamageCombatantStat(targetMock.Object, Mock.Of<IStatChangingSource>(),
                     damageEffectConfig.ProtectionStatType,
                     It.IsAny<StatDamage>()))
             .Returns(10);
@@ -342,7 +342,7 @@ public sealed class DamageEffectInstanceTests
         // Assert
 
         statusCombatContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, Mock.Of<IDamageSource>(), damageEffectConfig.MainStatType,
+            c => c.DamageCombatantStat(targetMock.Object, Mock.Of<IStatChangingSource>(), damageEffectConfig.MainStatType,
                 It.Is<StatDamage>(x => x.Amount == 0 && x.SourceAmount != 0)),
             Times.Never);
     }
@@ -385,7 +385,7 @@ public sealed class DamageEffectInstanceTests
         // Assert
 
         statusCombatContextMock.Verify(
-            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IDamageSource>(),
+            c => c.DamageCombatantStat(targetMock.Object, It.IsAny<IStatChangingSource>(),
                 damageEffectConfig.ProtectionStatType,
                 It.IsAny<StatDamage>()),
             Times.Once);

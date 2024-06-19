@@ -152,8 +152,20 @@ public abstract class CombatEngineBase
             new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
+    public void ChangeCombatantStat(ICombatant combatant, IStatChangingSource damageSource,
+        ICombatantStatType statType, int amount)
+    {
+        var (remains, wasTaken) = TakeStat(combatant, statType, amount);
+
+        if (wasTaken)
+        {
+            CombatantStatChanged?.Invoke(this,
+                new CombatantDamagedEventArgs(combatant, damageSource, statType, amount - remains));
+        }
+    }
+    
     [PublicAPI]
-    public int HandleCombatantDamagedToStat(ICombatant combatant, IDamageSource damageSource,
+    public int HandleCombatantDamagedToStat(ICombatant combatant, IStatChangingSource damageSource,
         ICombatantStatType statType, StatDamage damage)
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
@@ -164,7 +176,7 @@ public abstract class CombatEngineBase
             {
                 Amount = damage.Amount - remains
             };
-            CombatantHasBeenDamaged?.Invoke(this,
+            CombatantStatChanged?.Invoke(this,
                 new CombatantDamagedEventArgs(combatant, damageSource, statType, damageNormalized));
         }
 
@@ -256,11 +268,6 @@ public abstract class CombatEngineBase
             var startUpContext = new CombatantStartupContext(new CombatantStatusImposeContext(this),
                 new CombatantStatusLifetimeImposeContext(combatant, this));
             combatant.PrepareToCombat(startUpContext);
-
-            foreach (var stat in combatant.Stats)
-            {
-                stat.Changed += Stat_Changed;
-            }
         }
 
         var context = new CombatantStatusLifetimeDispelContext(this);
@@ -268,13 +275,6 @@ public abstract class CombatEngineBase
 
         CombatRoundStarted?.Invoke(this, EventArgs.Empty);
         CombatantStartsTurn?.Invoke(this, new CombatantTurnStartedEventArgs(CurrentCombatant));
-    }
-
-    private void Stat_Changed(object? sender, CombatantStatChangedEventArgs e)
-    {
-        var combatant = AllCombatantList.Single(x => x.Stats.Contains(sender));
-        
-        HandleCombatantDamagedToStat()
     }
 
     /// <summary>
@@ -544,7 +544,7 @@ public abstract class CombatEngineBase
     public event EventHandler<CombatantEndsTurnEventArgs>? CombatantEndsTurn;
 
     [PublicAPI]
-    public event EventHandler<CombatantDamagedEventArgs>? CombatantHasBeenDamaged;
+    public event EventHandler<CombatantDamagedEventArgs>? CombatantStatChanged;
 
     [PublicAPI]
     public event EventHandler<CombatantDefeatedEventArgs>? CombatantHasBeenDefeated;

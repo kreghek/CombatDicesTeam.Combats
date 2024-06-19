@@ -12,8 +12,7 @@ public sealed class TestableCombatEngine2 : CombatEngineBase
     public override CombatMovementExecution CreateCombatMovementExecution(CombatMovementInstance movement)
     {
         var statusContext =
-            new CombatMovementContext(CurrentCombatant, Field, Dice, HandleCombatantDamagedToStat,
-                HandleSwapFieldPositions, this);
+            new CombatMovementContext(CurrentCombatant, Field, Dice, this);
 
         var effectImposeItems = new List<CombatEffectImposeItem>();
 

@@ -42,7 +42,7 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
 
         if (isHeroAbove)
         {
-            context.NotifySwapFieldPosition(target, currentCoords, targetSide,
+            context.MoveToPosition(target, currentCoords, targetSide,
                 currentCoords with
                 {
                     LineIndex = currentCoords.LineIndex - 1
@@ -52,7 +52,7 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
         }
         else if (isHeroBelow)
         {
-            context.NotifySwapFieldPosition(target, currentCoords, targetSide,
+            context.MoveToPosition(target, currentCoords, targetSide,
                 currentCoords with
                 {
                     LineIndex = currentCoords.LineIndex + 1
@@ -62,7 +62,7 @@ public sealed class AdjustPositionEffectInstance : EffectInstanceBase<AdjustPosi
         }
         else
         {
-            context.NotifySwapFieldPosition(target, currentCoords, targetSide,
+            context.MoveToPosition(target, currentCoords, targetSide,
                 currentCoords with
                 {
                     LineIndex = 1

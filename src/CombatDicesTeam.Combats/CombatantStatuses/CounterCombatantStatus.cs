@@ -14,7 +14,7 @@ public sealed class CounterCombatantStatus : CombatantStatusBase
 
     public override void Dispel(ICombatant combatant)
     {
-        _combat!.CombatantHasBeenDamaged -= Combat_CombatantHasBeenDamaged;
+        _combat!.CombatantStatChanged -= Combat_CombatantHasBeenDamaged;
     }
 
     public override void Impose(ICombatant combatant, ICombatantStatusImposeContext context)
@@ -22,7 +22,7 @@ public sealed class CounterCombatantStatus : CombatantStatusBase
         _combat = context.Combat;
         _ownerCombatant = combatant;
 
-        _combat.CombatantHasBeenDamaged += Combat_CombatantHasBeenDamaged;
+        _combat.CombatantStatChanged += Combat_CombatantHasBeenDamaged;
     }
 
     private void Combat_CombatantHasBeenDamaged(object? sender, CombatantDamagedEventArgs e)

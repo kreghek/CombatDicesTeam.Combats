@@ -4,49 +4,46 @@ namespace CombatDicesTeam.Combats;
 
 public sealed class CombatMovementContext : ICombatMovementContext
 {
+    private readonly CombatEngineBase _combatCore;
+
     public CombatMovementContext(
         ICombatant movementActor,
         CombatField field,
         IDice dice,
-        CombatantHasTakenDamagedCallback notifyCombatantDamagedDelegate,
-        CombatantHasMovedCallback notifyCombatantMovedDelegate,
         CombatEngineBase combatCore)
     {
+        _combatCore = combatCore;
+        
         Actor = movementActor;
         Field = field;
         Dice = dice;
-        NotifyCombatantDamagedDelegate = notifyCombatantDamagedDelegate;
-        NotifyCombatantMovedDelegate = notifyCombatantMovedDelegate;
 
         StatusImposedContext = new CombatantStatusImposeContext(combatCore);
         StatusLifetimeImposedContext = new CombatantStatusLifetimeImposeContext(movementActor, combatCore);
     }
 
-    public CombatantHasTakenDamagedCallback NotifyCombatantDamagedDelegate { get; }
-    public CombatantHasMovedCallback NotifyCombatantMovedDelegate { get; }
-
     public ICombatant Actor { get; }
 
-    public int DamageCombatantStat(ICombatant target, IDamageSource damageSource, ICombatantStatType statType,
+    public int DamageCombatantStat(ICombatant target, IStatChangingSource damageSource, ICombatantStatType statType,
         StatDamage damage)
     {
-        return NotifyCombatantDamagedDelegate(target, damageSource, statType, damage);
+        return _combatCore.HandleCombatantDamagedToStat(target, damageSource, statType, damage);
     }
 
-    public void NotifySwapFieldPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
+    public void ChangeCombatStat(ICombatant target, IStatChangingSource damageSource, ICombatantStatType statType, int amount)
+    {
+        _combatCore.ChangeCombatantStat(target, damageSource, statType, amount);
+    }
+
+    public void MoveToPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason)
     {
-        NotifyCombatantMovedDelegate(sourceCoords, sourceFieldSide, destinationCoords, destinationFieldSide,
+        _combatCore.HandleSwapFieldPositions(sourceCoords, sourceFieldSide, destinationCoords, destinationFieldSide,
             moveReason);
     }
 
     public void PassTurn(ICombatant target)
     {
-    }
-
-    public void RestoreCombatantStat(ICombatant combatant, ICombatantStatType statType, int value)
-    {
-        throw new NotImplementedException();
     }
 
     public ICombatantStatusLifetimeImposeContext StatusLifetimeImposedContext { get; }
