@@ -14,7 +14,7 @@ public sealed class TestableCombatEngine : CombatEngineBase
         throw new NotImplementedException();
     }
 
-    public int TestHandleCombatantDamagedToStat(ICombatant combatant, IDamageSource damageSource,
+    public int TestHandleCombatantDamagedToStat(ICombatant combatant, IStatChangingSource damageSource,
         ICombatantStatType statType, StatDamage damage)
     {
         return HandleCombatantDamagedToStat(combatant, damageSource, statType, damage);

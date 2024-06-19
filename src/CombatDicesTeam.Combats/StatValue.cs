@@ -34,9 +34,9 @@ public class StatValue : IStatValue
         Base = newBase;
     }
 
-    public void Consume(int value)
+    public void Consume(int amount)
     {
-        Current -= value;
+        Current -= amount;
 
         if (Current < 0)
         {
@@ -49,9 +49,9 @@ public class StatValue : IStatValue
         Current = Math.Min(newCurrent, ActualMax);
     }
 
-    public void Restore(int value)
+    public void Restore(int amount)
     {
-        Current += value;
+        Current += amount;
 
         if (Current > ActualMax)
         {

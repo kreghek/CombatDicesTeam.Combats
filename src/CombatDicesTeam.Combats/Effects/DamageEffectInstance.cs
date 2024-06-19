@@ -32,7 +32,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
 
         var damageRemains = context.DamageCombatantStat(
             target,
-            new CombatantDamageSource(context.Actor),
+            new CombatantMovementStatChangingSource(context.Actor),
             _damageEffectConfig.ProtectionStatType,
             new StatDamage(absorbedDamage, rolledDamage));
 
@@ -45,7 +45,7 @@ public sealed class DamageEffectInstance : EffectInstanceBase<DamageEffect>
         {
             context.DamageCombatantStat(
                 target,
-                new CombatantDamageSource(context.Actor),
+                new CombatantMovementStatChangingSource(context.Actor),
                 _damageEffectConfig.MainStatType,
                 new StatDamage(damageRemains, rolledDamage));
         }

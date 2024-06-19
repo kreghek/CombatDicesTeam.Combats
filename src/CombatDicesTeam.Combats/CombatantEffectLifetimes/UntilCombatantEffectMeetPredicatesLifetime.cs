@@ -65,7 +65,7 @@ public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatu
         _combat = context.Combat;
 
         context.Combat.CombatantUsedMove += Combat_CombatantUsedMove;
-        context.Combat.CombatantHasBeenDamaged += Combat_CombatantChangedState;
+        context.Combat.CombatantStatChanged += Combat_CombatantChangedState;
         context.Combat.CombatantHasChangePosition += Combat_CombatantChangedState;
         context.Combat.CombatantHasBeenDefeated += Combat_CombatantChangedState;
     }
@@ -73,7 +73,7 @@ public sealed class UntilCombatantEffectMeetPredicatesLifetime : ICombatantStatu
     public void HandleDispelling(ICombatantStatus combatantEffect, ICombatantStatusLifetimeDispelContext context)
     {
         context.Combat.CombatantUsedMove -= Combat_CombatantUsedMove;
-        context.Combat.CombatantHasBeenDamaged -= Combat_CombatantChangedState;
+        context.Combat.CombatantStatChanged -= Combat_CombatantChangedState;
         context.Combat.CombatantHasChangePosition -= Combat_CombatantChangedState;
         context.Combat.CombatantHasBeenDefeated -= Combat_CombatantChangedState;
     }

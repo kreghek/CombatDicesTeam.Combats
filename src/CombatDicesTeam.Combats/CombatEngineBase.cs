@@ -152,8 +152,26 @@ public abstract class CombatEngineBase
             new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
     }
 
+    public void ChangeCombatantStat(ICombatant combatant, IStatChangingSource damageSource,
+        ICombatantStatType statType, int amount)
+    {
+
+        var statValue = combatant.Stats.Single(x => x.Type == statType).Value;
+        if (amount > 0)
+        {
+            statValue.Restore(amount);
+        }
+        else
+        {
+            statValue.Consume(amount);
+        }
+
+        CombatantStatChanged?.Invoke(this,
+            new CombatantDamagedEventArgs(combatant, damageSource, statType, amount));
+    }
+
     [PublicAPI]
-    public int HandleCombatantDamagedToStat(ICombatant combatant, IDamageSource damageSource,
+    public int HandleCombatantDamagedToStat(ICombatant combatant, IStatChangingSource damageSource,
         ICombatantStatType statType, StatDamage damage)
     {
         var (remains, wasTaken) = TakeStat(combatant, statType, damage.Amount);
@@ -164,7 +182,7 @@ public abstract class CombatEngineBase
             {
                 Amount = damage.Amount - remains
             };
-            CombatantHasBeenDamaged?.Invoke(this,
+            CombatantStatChanged?.Invoke(this,
                 new CombatantDamagedEventArgs(combatant, damageSource, statType, damageNormalized));
         }
 
@@ -532,7 +550,7 @@ public abstract class CombatEngineBase
     public event EventHandler<CombatantEndsTurnEventArgs>? CombatantEndsTurn;
 
     [PublicAPI]
-    public event EventHandler<CombatantDamagedEventArgs>? CombatantHasBeenDamaged;
+    public event EventHandler<CombatantDamagedEventArgs>? CombatantStatChanged;
 
     [PublicAPI]
     public event EventHandler<CombatantDefeatedEventArgs>? CombatantHasBeenDefeated;
