@@ -74,6 +74,23 @@ public abstract class CombatEngineBase
     [PublicAPI]
     public ICombatStateStrategy StateStrategy { get; }
 
+    public void ChangeCombatantStat(ICombatant combatant, IStatChangingSource damageSource,
+        ICombatantStatType statType, int amount)
+    {
+        var statValue = combatant.Stats.Single(x => x.Type == statType).Value;
+        if (amount > 0)
+        {
+            statValue.Restore(amount);
+        }
+        else
+        {
+            statValue.Consume(amount);
+        }
+
+        CombatantStatChanged?.Invoke(this,
+            new CombatantDamagedEventArgs(combatant, damageSource, statType, amount));
+    }
+
     /// <summary>
     /// Complete current turn of combat.
     /// Use in the end of combat movement execution.
@@ -150,24 +167,6 @@ public abstract class CombatEngineBase
         targetCombatant.RemoveStatus(combatantStatusToRemove, new CombatantStatusLifetimeDispelContext(this));
         CombatantStatusHasBeenDispelled?.Invoke(this,
             new CombatantStatusEventArgs(targetCombatant, combatantStatusToRemove));
-    }
-
-    public void ChangeCombatantStat(ICombatant combatant, IStatChangingSource damageSource,
-        ICombatantStatType statType, int amount)
-    {
-
-        var statValue = combatant.Stats.Single(x => x.Type == statType).Value;
-        if (amount > 0)
-        {
-            statValue.Restore(amount);
-        }
-        else
-        {
-            statValue.Consume(amount);
-        }
-
-        CombatantStatChanged?.Invoke(this,
-            new CombatantDamagedEventArgs(combatant, damageSource, statType, amount));
     }
 
     [PublicAPI]

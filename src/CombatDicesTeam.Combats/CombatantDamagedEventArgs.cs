@@ -5,7 +5,8 @@ namespace CombatDicesTeam.Combats;
 [PublicAPI]
 public sealed class CombatantDamagedEventArgs : EventArgs
 {
-    public CombatantDamagedEventArgs(ICombatant combatant, IStatChangingSource damageSource, ICombatantStatType statType,
+    public CombatantDamagedEventArgs(ICombatant combatant, IStatChangingSource damageSource,
+        ICombatantStatType statType,
         StatDamage damage)
     {
         DamageSource = damageSource;

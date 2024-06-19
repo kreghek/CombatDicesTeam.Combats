@@ -19,7 +19,8 @@ public sealed class ChangeCurrentStatEffectInstance : EffectInstanceBase<ChangeC
     public override void Influence(ICombatant target, ICombatMovementContext context)
     {
         var rolledValue = context.Dice.Roll(StatValue.Min.ActualMax, StatValue.Max.ActualMax);
-        
-        context.ChangeCombatStat(target, new CombatantMovementStatChangingSource(context.Actor), BaseEffect.TargetStatType, rolledValue);
+
+        context.ChangeCombatStat(target, new CombatantMovementStatChangingSource(context.Actor),
+            BaseEffect.TargetStatType, rolledValue);
     }
 }

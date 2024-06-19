@@ -11,10 +11,10 @@ public interface ICombatMovementContext
     ICombatantStatusImposeContext StatusImposedContext { get; }
     ICombatantStatusLifetimeImposeContext StatusLifetimeImposedContext { get; }
 
+    void ChangeCombatStat(ICombatant target, IStatChangingSource damageSource, ICombatantStatType statType, int amount);
+
     int DamageCombatantStat(ICombatant target, IStatChangingSource damageSource, ICombatantStatType statType,
         StatDamage damage);
-
-    void ChangeCombatStat(ICombatant target, IStatChangingSource damageSource, ICombatantStatType statType, int amount);
 
     void MoveToPosition(ICombatant combatant, FieldCoords sourceCoords, CombatFieldSide sourceFieldSide,
         FieldCoords destinationCoords, CombatFieldSide destinationFieldSide, IPositionChangingReason moveReason);

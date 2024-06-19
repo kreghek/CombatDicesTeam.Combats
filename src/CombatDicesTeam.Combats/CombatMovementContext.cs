@@ -13,7 +13,7 @@ public sealed class CombatMovementContext : ICombatMovementContext
         CombatEngineBase combatCore)
     {
         _combatCore = combatCore;
-        
+
         Actor = movementActor;
         Field = field;
         Dice = dice;
@@ -30,7 +30,8 @@ public sealed class CombatMovementContext : ICombatMovementContext
         return _combatCore.HandleCombatantDamagedToStat(target, damageSource, statType, damage);
     }
 
-    public void ChangeCombatStat(ICombatant target, IStatChangingSource damageSource, ICombatantStatType statType, int amount)
+    public void ChangeCombatStat(ICombatant target, IStatChangingSource damageSource, ICombatantStatType statType,
+        int amount)
     {
         _combatCore.ChangeCombatantStat(target, damageSource, statType, amount);
     }

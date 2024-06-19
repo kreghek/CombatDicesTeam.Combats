@@ -51,13 +51,14 @@ internal class HealTests
                 new CombatMovementCost(0),
                 CombatMovementEffectConfig.Create(new[]
                 {
-                    new ChangeCurrentStatEffect(Mock.Of<ITargetSelector>(x=>
-                        x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<TargetSelectorContext>()) == new []{heroMock.Object}),
-                        combatantStatType, 
+                    new ChangeCurrentStatEffect(Mock.Of<ITargetSelector>(x =>
+                            x.GetMaterialized(It.IsAny<ICombatant>(), It.IsAny<TargetSelectorContext>()) ==
+                            new[] { heroMock.Object }),
+                        combatantStatType,
                         new GenericRange<int>(1, 1))
                 })));
 
-        using var monitor = combat.Monitor(); 
+        using var monitor = combat.Monitor();
 
         // ACT
 

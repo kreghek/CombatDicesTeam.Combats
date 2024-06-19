@@ -17,7 +17,8 @@ public sealed class TestableCombatEngine : CombatEngineBase
     public void DamageCombatant(ICombatant target, ICombatant actor, ICombatantStatType statTypeToDamage,
         int damageAmount)
     {
-        HandleCombatantDamagedToStat(target, new CombatantMovementStatChangingSource(actor), statTypeToDamage, damageAmount);
+        HandleCombatantDamagedToStat(target, new CombatantMovementStatChangingSource(actor), statTypeToDamage,
+            damageAmount);
     }
 
     public void DefeatCombatant(ICombatant target)
