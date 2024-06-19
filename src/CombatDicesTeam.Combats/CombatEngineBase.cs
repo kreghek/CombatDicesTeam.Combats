@@ -155,15 +155,21 @@ public abstract class CombatEngineBase
     public void ChangeCombatantStat(ICombatant combatant, IStatChangingSource damageSource,
         ICombatantStatType statType, int amount)
     {
-        var (remains, wasTaken) = TakeStat(combatant, statType, amount);
 
-        if (wasTaken)
+        var statValue = combatant.Stats.Single(x => x.Type == statType).Value;
+        if (amount > 0)
         {
-            CombatantStatChanged?.Invoke(this,
-                new CombatantDamagedEventArgs(combatant, damageSource, statType, amount - remains));
+            statValue.Restore(amount);
         }
+        else
+        {
+            statValue.Consume(amount);
+        }
+
+        CombatantStatChanged?.Invoke(this,
+            new CombatantDamagedEventArgs(combatant, damageSource, statType, amount));
     }
-    
+
     [PublicAPI]
     public int HandleCombatantDamagedToStat(ICombatant combatant, IStatChangingSource damageSource,
         ICombatantStatType statType, StatDamage damage)
